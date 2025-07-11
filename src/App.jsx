@@ -38,27 +38,31 @@ function App() {
 
       sceneObject.scene.add(boxMesh);
     }
-    function addBasePrateleira({
-      sceneObject,
-      andar = 1,
-      aaa = 13
-    }) {
+    function addBasePrateleira({ sceneObject, andar = 1, offsetX = 0 }) {
       const boxGeometry1 = new THREE.BoxGeometry(
         PROFUNDIDADE,
         RIPA_ALTURA,
-        RIPA_LARGURA // largura, altura, profundidade
+        RIPA_LARGURA
       );
       const boxMesh1 = new THREE.Mesh(boxGeometry1, boxMaterial);
-      boxMesh1.position.set(aaa, andar*(-RIPA_ALTURA), PROFUNDIDADE - RIPA_LARGURA / 2); // x=5, y=0, z=0
+      boxMesh1.position.set(
+        0,
+        andar * -RIPA_ALTURA,
+        LARGURA/2 - RIPA_LARGURA / 2
+      );
       sceneObject.scene.add(boxMesh1);
-
+      
       const boxGeometry2 = new THREE.BoxGeometry(
         PROFUNDIDADE,
         RIPA_ALTURA,
-        RIPA_LARGURA // largura, altura, profundidade
+        RIPA_LARGURA
       );
       const boxMesh2 = new THREE.Mesh(boxGeometry2, boxMaterial);
-      boxMesh2.position.set(aaa, andar*(-RIPA_ALTURA), -PROFUNDIDADE + (RIPA_LARGURA / 2)); // x=5, y=0, z=0
+      boxMesh2.position.set(
+        0,
+        andar * -RIPA_ALTURA,
+        -LARGURA/2 + RIPA_LARGURA / 2
+      );
       sceneObject.scene.add(boxMesh2);
     }
 
@@ -67,7 +71,10 @@ function App() {
       for (let i = 0; i < TIRAS_POR_PRATELEIRA; i++) {
         addTiraPrateleira({
           sceneObject,
-          offsetX: i * (ESPACO_ENTRE_TIRAS + RIPA_LARGURA),
+          offsetX:
+            -PROFUNDIDADE / 2 +
+            RIPA_LARGURA / 2 +
+            i * (ESPACO_ENTRE_TIRAS + RIPA_LARGURA),
         });
       }
 
@@ -82,7 +89,9 @@ function App() {
 
     addPrateleira();
 
-    sceneObject.camera.position.set(100, 100, 100); // posição diagonal de cima
+    // sceneObject.camera.position.set(100, 100, 100); // posição diagonal de cima
+    // sceneObject.camera.position.set(0, 0, 100); // posição lateral
+    sceneObject.camera.position.set(100, 50, -100); // posição diagonal de cima
     sceneObject.camera.lookAt(0, 0, 0); // olhando para o centro da cena
   }, []);
 
