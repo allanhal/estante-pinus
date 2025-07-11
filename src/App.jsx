@@ -34,10 +34,11 @@ function App() {
       );
       const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
 
-      boxMesh.position.set(offsetX, offsetY, offsetZ); // x=5, y=0, z=0
+      boxMesh.position.set(offsetX, offsetY, offsetZ);
 
       sceneObject.scene.add(boxMesh);
     }
+
     function addBasePrateleira({ sceneObject, andar = 1, offsetX = 0 }) {
       const boxGeometry1 = new THREE.BoxGeometry(
         PROFUNDIDADE,
@@ -48,10 +49,10 @@ function App() {
       boxMesh1.position.set(
         0,
         andar * -RIPA_ALTURA,
-        LARGURA/2 - RIPA_LARGURA / 2
+        LARGURA / 2 - RIPA_LARGURA / 2
       );
       sceneObject.scene.add(boxMesh1);
-      
+
       const boxGeometry2 = new THREE.BoxGeometry(
         PROFUNDIDADE,
         RIPA_ALTURA,
@@ -61,12 +62,14 @@ function App() {
       boxMesh2.position.set(
         0,
         andar * -RIPA_ALTURA,
-        -LARGURA/2 + RIPA_LARGURA / 2
+        -LARGURA / 2 + RIPA_LARGURA / 2
       );
       sceneObject.scene.add(boxMesh2);
     }
 
-    function addPrateleira() {
+    function addPrateleira({ andar = 1 }) {
+      
+      // andar 1
       // add tiras prateleiras
       for (let i = 0; i < TIRAS_POR_PRATELEIRA; i++) {
         addTiraPrateleira({
@@ -75,6 +78,32 @@ function App() {
             -PROFUNDIDADE / 2 +
             RIPA_LARGURA / 2 +
             i * (ESPACO_ENTRE_TIRAS + RIPA_LARGURA),
+        });
+      }
+      
+      // andar 2
+      // add tiras prateleiras
+      for (let i = 0; i < TIRAS_POR_PRATELEIRA; i++) {
+        addTiraPrateleira({
+          sceneObject,
+          offsetX:
+            -PROFUNDIDADE / 2 +
+            RIPA_LARGURA / 2 +
+            i * (ESPACO_ENTRE_TIRAS + RIPA_LARGURA),
+          offsetY: 10,
+        });
+      }
+
+      // andar 3
+      // add tiras prateleiras
+      for (let i = 0; i < TIRAS_POR_PRATELEIRA; i++) {
+        addTiraPrateleira({
+          sceneObject,
+          offsetX:
+            -PROFUNDIDADE / 2 +
+            RIPA_LARGURA / 2 +
+            i * (ESPACO_ENTRE_TIRAS + RIPA_LARGURA),
+          offsetY: 20,
         });
       }
 
@@ -87,7 +116,9 @@ function App() {
     sceneObject.initialize();
     sceneObject.animate();
 
-    addPrateleira();
+    addPrateleira({ andar: 1 });
+
+    // addPrateleira({ andar: 2 });
 
     // sceneObject.camera.position.set(100, 100, 100); // posição diagonal de cima
     // sceneObject.camera.position.set(0, 0, 100); // posição lateral
