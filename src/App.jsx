@@ -6,10 +6,10 @@ const RIPA_LARGURA = 4;
 const RIPA_ALTURA = 2;
 
 const ALTURA = 80;
-const LARGURA = 60;
-const PROFUNDIDADE = 30;
-const PRATELEIRAS = 4;
-const TIRAS_POR_PRATELEIRA = 4;
+const LARGURA = 70;
+const PROFUNDIDADE = 50;
+const PRATELEIRAS = 3;
+const TIRAS_POR_PRATELEIRA = 6;
 
 const MIN_TIRAS = 2;
 const MAX_TIRAS = Math.floor(PROFUNDIDADE / RIPA_LARGURA);
@@ -17,6 +17,8 @@ const MAX_TIRAS = Math.floor(PROFUNDIDADE / RIPA_LARGURA);
 const ESPACO_ENTRE_TIRAS =
   (PROFUNDIDADE - TIRAS_POR_PRATELEIRA * RIPA_LARGURA) /
   (TIRAS_POR_PRATELEIRA - 1);
+
+const DISTANCIA_ENTRE_PRATELEIRAS = 20; // Distância entre as prateleiras
 
 function App() {
   useEffect(() => {
@@ -48,7 +50,7 @@ function App() {
       const boxMesh1 = new THREE.Mesh(boxGeometry1, boxMaterial);
       boxMesh1.position.set(
         0,
-        andar * -RIPA_ALTURA,
+        -RIPA_ALTURA + andar * DISTANCIA_ENTRE_PRATELEIRAS,
         LARGURA / 2 - RIPA_LARGURA / 2
       );
       sceneObject.scene.add(boxMesh1);
@@ -61,55 +63,31 @@ function App() {
       const boxMesh2 = new THREE.Mesh(boxGeometry2, boxMaterial);
       boxMesh2.position.set(
         0,
-        andar * -RIPA_ALTURA,
+        -RIPA_ALTURA + andar * DISTANCIA_ENTRE_PRATELEIRAS,
         -LARGURA / 2 + RIPA_LARGURA / 2
       );
       sceneObject.scene.add(boxMesh2);
     }
 
     function addPrateleira({ andar = 1 }) {
-      
-      // andar 1
-      // add tiras prateleiras
-      for (let i = 0; i < TIRAS_POR_PRATELEIRA; i++) {
-        addTiraPrateleira({
-          sceneObject,
-          offsetX:
-            -PROFUNDIDADE / 2 +
-            RIPA_LARGURA / 2 +
-            i * (ESPACO_ENTRE_TIRAS + RIPA_LARGURA),
-        });
-      }
-      
-      // andar 2
-      // add tiras prateleiras
-      for (let i = 0; i < TIRAS_POR_PRATELEIRA; i++) {
-        addTiraPrateleira({
-          sceneObject,
-          offsetX:
-            -PROFUNDIDADE / 2 +
-            RIPA_LARGURA / 2 +
-            i * (ESPACO_ENTRE_TIRAS + RIPA_LARGURA),
-          offsetY: 10,
-        });
-      }
+      // Andares das tiras
+      for (let andarIndex = 0; andarIndex < PRATELEIRAS; andarIndex++) {
+        for (let i = 0; i < TIRAS_POR_PRATELEIRA; i++) {
+          addTiraPrateleira({
+            sceneObject,
+            offsetX:
+              -PROFUNDIDADE / 2 +
+              RIPA_LARGURA / 2 +
+              i * (ESPACO_ENTRE_TIRAS + RIPA_LARGURA),
+            offsetY: andarIndex * DISTANCIA_ENTRE_PRATELEIRAS,
+          });
+        }
 
-      // andar 3
-      // add tiras prateleiras
-      for (let i = 0; i < TIRAS_POR_PRATELEIRA; i++) {
-        addTiraPrateleira({
+        addBasePrateleira({
           sceneObject,
-          offsetX:
-            -PROFUNDIDADE / 2 +
-            RIPA_LARGURA / 2 +
-            i * (ESPACO_ENTRE_TIRAS + RIPA_LARGURA),
-          offsetY: 20,
+          andar: andarIndex,
         });
       }
-
-      addBasePrateleira({
-        sceneObject,
-      });
     }
 
     const sceneObject = new SceneInit("myThreeJsCanvas");
@@ -120,9 +98,9 @@ function App() {
 
     // addPrateleira({ andar: 2 });
 
-    // sceneObject.camera.position.set(100, 100, 100); // posição diagonal de cima
+    sceneObject.camera.position.set(200, 200, 200); // posição diagonal de cima
     // sceneObject.camera.position.set(0, 0, 100); // posição lateral
-    sceneObject.camera.position.set(100, 50, -100); // posição diagonal de cima
+    // sceneObject.camera.position.set(100, 50, -100); // posição diagonal de cima
     sceneObject.camera.lookAt(0, 0, 0); // olhando para o centro da cena
   }, []);
 
