@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as THREE from "three";
 import SceneInit from "./lib/SceneInit";
 import Shelf3D from "./Shelf3D";
+import Controls from "./Controls";
 
 const RIPA_LARGURA = 4;
 const RIPA_ALTURA = 2;
@@ -22,10 +23,29 @@ const ESPACO_ENTRE_TIRAS =
 const DISTANCIA_ENTRE_PRATELEIRAS = 20; // Distância entre as prateleiras
 
 function App() {
+  const [width, setWidth] = useState(300);
+  const [height, setHeight] = useState(250);
+  const [depth, setDepth] = useState(120);
+  const [shelves, setShelves] = useState(4);
+  const [slatsPerShelf, setSlatsPerShelf] = useState(6);
 
   return (
-    <div>
+    <div className="static ...">
       <Shelf3D />
+      <div className="absolute top-5 right-0 w-64">
+        <Controls
+          width={width}
+          height={height}
+          depth={depth}
+          shelves={shelves}
+          slatsPerShelf={slatsPerShelf}
+          setWidth={setWidth}
+          setHeight={setHeight}
+          setDepth={setDepth}
+          setShelves={setShelves}
+          setSlatsPerShelf={setSlatsPerShelf}
+        />
+      </div>
     </div>
   );
 }
