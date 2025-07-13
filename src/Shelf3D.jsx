@@ -69,9 +69,9 @@ function Shelf3D() {
       sceneObject.scene.add(boxMesh2);
     }
 
-    function addPrateleira({ andar = 1 }) {
-      // Andares das tiras
+    function addPrateleira() {
       for (let andarIndex = 0; andarIndex < PRATELEIRAS; andarIndex++) {
+        // Tiras da prateleira
         for (let i = 0; i < TIRAS_POR_PRATELEIRA; i++) {
           addTiraPrateleira({
             sceneObject,
@@ -83,6 +83,7 @@ function Shelf3D() {
           });
         }
 
+        // Base das tiras da prateleira
         addBasePrateleira({
           sceneObject,
           andar: andarIndex,
@@ -94,9 +95,7 @@ function Shelf3D() {
     sceneObject.initialize();
     sceneObject.animate();
 
-    addPrateleira({ andar: 1 });
-
-    // addPrateleira({ andar: 2 });
+    addPrateleira();
 
     sceneObject.camera.position.set(200, 200, 200); // posição diagonal de cima
     // sceneObject.camera.position.set(0, 0, 100); // posição lateral
@@ -106,7 +105,7 @@ function Shelf3D() {
 
   return (
     <div>
-      <canvas id="myThreeJsCanvas" />
+      <canvas id="myThreeJsCanvas" className="p-1" />
     </div>
   );
 }

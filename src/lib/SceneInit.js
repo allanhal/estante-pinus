@@ -1,6 +1,6 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import Stats from 'three/examples/jsm/libs/stats.module';
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import Stats from "three/examples/jsm/libs/stats.module";
 
 export default class SceneInit {
   constructor(canvasId) {
@@ -42,14 +42,23 @@ export default class SceneInit {
       // NOTE: Anti-aliasing smooths out the edges.
       antialias: true,
     });
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const container = document.getElementById("scene-wrapper");
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    this.renderer.setSize(width, height);
+
+    this.renderer.setClearColor(0xffffff); // white background
+
+    // this.renderer.setSize(window.innerWidth, window.innerHeight);
     // this.renderer.shadowMap.enabled = true;
-    document.body.appendChild(this.renderer.domElement);
+    // document.body.appendChild(this.renderer.domElement);
 
     this.clock = new THREE.Clock();
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.stats = Stats();
-    document.body.appendChild(this.stats.dom);
+    // document.body.appendChild(this.stats.dom);
 
     // ambient light which is for the whole scene
     this.ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -63,7 +72,7 @@ export default class SceneInit {
     this.scene.add(this.directionalLight);
 
     // if window resizes
-    window.addEventListener('resize', () => this.onWindowResize(), false);
+    // window.addEventListener('resize', () => this.onWindowResize(), false);
 
     // NOTE: Load space background.
     // this.loader = new THREE.TextureLoader();

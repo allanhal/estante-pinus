@@ -20,7 +20,7 @@ const Controls = ({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
+    <div className="bg-white rounded-xl shadow-lg p-6 space-y-6 inset-shadow-sm border border-gray-300 rounded-xl shadow-lg">
       <div className="flex items-center gap-3 mb-4">
         <Settings className="text-amber-600" size={24} />
         <h2 className="text-xs font-semibold text-gray-800">

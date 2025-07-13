@@ -30,9 +30,23 @@ function App() {
   const [slatsPerShelf, setSlatsPerShelf] = useState(6);
 
   return (
-    <div className="static ...">
-      <Shelf3D />
-      <div className="absolute top-5 right-0 w-64">
+    <div className="grid grid-cols-4 h-screen">
+      <div className="col-span-4 m-5 flex items-center justify-center border border-gray-300 rounded-xl shadow-lg">
+        <p className="text-[100px] font-tiktok">Estante Pinus</p>
+        {/* <p class="text-2xl">Estante Pinus</p> */}
+      </div>
+      <div
+        id="scene-wrapper"
+        // className="col-span-3 bg-blue-500 border border-black m-5"
+        className="col-span-3 rounded-xl shadow-xl m-5 border border-gray-300 rounded-xl shadow-lg"
+      >
+        <Shelf3D />
+      </div>
+      <div
+        // className="bg-cyan-500 border border-black m-5"
+        className="m-5 "
+        // className="bg-white rounded-xl shadow-lg m-5 space-y-6"
+      >
         <Controls
           width={width}
           height={height}
@@ -48,6 +62,25 @@ function App() {
       </div>
     </div>
   );
+  // return (
+  //   <div className="static">
+  //     <Shelf3D />
+  //     <div className="absolute top-5 right-0 w-64">
+  // <Controls
+  //   width={width}
+  //   height={height}
+  //   depth={depth}
+  //   shelves={shelves}
+  //   slatsPerShelf={slatsPerShelf}
+  //   setWidth={setWidth}
+  //   setHeight={setHeight}
+  //   setDepth={setDepth}
+  //   setShelves={setShelves}
+  //   setSlatsPerShelf={setSlatsPerShelf}
+  // />
+  //     </div>
+  //   </div>
+  // );
 }
 
 export default App;
