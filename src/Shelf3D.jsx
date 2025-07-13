@@ -69,6 +69,60 @@ function Shelf3D() {
       sceneObject.scene.add(boxMesh2);
     }
 
+    function addPes({ sceneObject }) {
+      const boxGeometry1 = new THREE.BoxGeometry(
+        RIPA_LARGURA,
+        100,
+        RIPA_ALTURA
+      );
+      const boxMesh1 = new THREE.Mesh(boxGeometry1, boxMaterial);
+      boxMesh1.position.set(
+        -PROFUNDIDADE / 2 + RIPA_LARGURA / 2,
+        0,
+        LARGURA / 2 - RIPA_ALTURA/2
+      );
+      sceneObject.scene.add(boxMesh1);
+
+      const boxGeometry2 = new THREE.BoxGeometry(
+        RIPA_LARGURA,
+        100,
+        RIPA_ALTURA
+      );
+      const boxMesh2 = new THREE.Mesh(boxGeometry2, boxMaterial);
+      boxMesh2.position.set(
+        -PROFUNDIDADE / 2 + RIPA_LARGURA / 2,
+        0,
+        -LARGURA / 2 + RIPA_ALTURA/2
+      );
+      sceneObject.scene.add(boxMesh2);
+
+      const boxGeometry3 = new THREE.BoxGeometry(
+        RIPA_LARGURA,
+        100,
+        RIPA_ALTURA
+      );
+      const boxMesh3 = new THREE.Mesh(boxGeometry3, boxMaterial);
+      boxMesh3.position.set(
+        +PROFUNDIDADE / 2 - RIPA_LARGURA / 2,
+        0,
+        -LARGURA / 2 + RIPA_ALTURA/2
+      );
+      sceneObject.scene.add(boxMesh3);
+
+      const boxGeometry4 = new THREE.BoxGeometry(
+        RIPA_LARGURA,
+        100,
+        RIPA_ALTURA
+      );
+      const boxMesh4 = new THREE.Mesh(boxGeometry4, boxMaterial);
+      boxMesh4.position.set(
+        +PROFUNDIDADE / 2 - RIPA_LARGURA / 2,
+        0,
+        +LARGURA / 2 - RIPA_ALTURA/2
+      );
+      sceneObject.scene.add(boxMesh4);
+    }
+
     function addPrateleira() {
       for (let andarIndex = 0; andarIndex < PRATELEIRAS; andarIndex++) {
         // Tiras da prateleira
@@ -88,6 +142,11 @@ function Shelf3D() {
           sceneObject,
           andar: andarIndex,
         });
+
+        // Pés
+        addPes({
+          sceneObject,
+        });
       }
     }
 
@@ -97,8 +156,9 @@ function Shelf3D() {
 
     addPrateleira();
 
-    sceneObject.camera.position.set(200, 200, 200); // posição diagonal de cima
+    // sceneObject.camera.position.set(200, 200, 200); // posição diagonal de cima
     // sceneObject.camera.position.set(0, 0, 100); // posição lateral
+    sceneObject.camera.position.set(-100, 0, 20); // posição lateral
     // sceneObject.camera.position.set(100, 50, -100); // posição diagonal de cima
     sceneObject.camera.lookAt(0, 0, 0); // olhando para o centro da cena
   }, []);
