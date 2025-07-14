@@ -1,4 +1,5 @@
 import { Settings, Ruler, Layers, Grid } from "lucide-react";
+import { RIPA_LARGURA } from "./App";
 
 const Controls = ({
   width,
@@ -6,11 +7,28 @@ const Controls = ({
   depth,
   shelves,
   slatsPerShelf,
+
   setWidth,
   setHeight,
   setDepth,
   setShelves,
   setSlatsPerShelf,
+
+  minWidth = 30,
+  maxWidth = 90,
+
+  minHeight = 60,
+  maxHeight = 180,
+
+  minDepth = 20,
+  maxDepth = 50,
+
+  minShelves = 3,
+  maxShelves = 8,
+
+  minSlatsPerShelf = 3,
+  maxSlatsPerShelf = Math.floor(depth / RIPA_LARGURA)
+  // maxSlatsPerShelf = depth / 4,
 }) => {
   const handleInputChange = (value, onChange, min, max) => {
     const numValue = parseInt(value);
@@ -41,11 +59,16 @@ const Controls = ({
             <div className="flex items-center gap-2">
               <input
                 type="number"
-                min="200"
-                max="400"
+                min={minWidth}
+                max={maxWidth}
                 value={width}
                 onChange={(e) =>
-                  handleInputChange(e.target.value, setWidth, 200, 400)
+                  handleInputChange(
+                    e.target.value,
+                    setWidth,
+                    minWidth,
+                    maxWidth
+                  )
                 }
                 className="w-16 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
@@ -54,8 +77,8 @@ const Controls = ({
           </div>
           <input
             type="range"
-            min="200"
-            max="400"
+            min={minWidth}
+            max={maxWidth}
             value={width}
             onChange={(e) => setWidth(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
@@ -74,11 +97,16 @@ const Controls = ({
             <div className="flex items-center gap-2">
               <input
                 type="number"
-                min="150"
-                max="350"
+                min={minHeight}
+                max={maxHeight}
                 value={height}
                 onChange={(e) =>
-                  handleInputChange(e.target.value, setHeight, 150, 350)
+                  handleInputChange(
+                    e.target.value,
+                    setHeight,
+                    minHeight,
+                    maxHeight
+                  )
                 }
                 className="w-16 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
@@ -87,8 +115,8 @@ const Controls = ({
           </div>
           <input
             type="range"
-            min="150"
-            max="350"
+            min={minHeight}
+            max={maxHeight}
             value={height}
             onChange={(e) => setHeight(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
@@ -107,11 +135,16 @@ const Controls = ({
             <div className="flex items-center gap-2">
               <input
                 type="number"
-                min="80"
-                max="200"
+                min={minDepth}
+                max={maxDepth}
                 value={depth}
                 onChange={(e) =>
-                  handleInputChange(e.target.value, setDepth, 80, 200)
+                  handleInputChange(
+                    e.target.value,
+                    setDepth,
+                    minDepth,
+                    maxDepth
+                  )
                 }
                 className="w-16 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
@@ -120,8 +153,8 @@ const Controls = ({
           </div>
           <input
             type="range"
-            min="80"
-            max="200"
+            min={minDepth}
+            max={maxDepth}
             value={depth}
             onChange={(e) => setDepth(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
@@ -140,11 +173,16 @@ const Controls = ({
             <div className="flex items-center gap-2">
               <input
                 type="number"
-                min="2"
-                max="8"
+                min={minShelves}
+                max={maxShelves}
                 value={shelves}
                 onChange={(e) =>
-                  handleInputChange(e.target.value, setShelves, 2, 8)
+                  handleInputChange(
+                    e.target.value,
+                    setShelves,
+                    minShelves,
+                    maxShelves
+                  )
                 }
                 className="w-12 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
@@ -152,8 +190,8 @@ const Controls = ({
           </div>
           <input
             type="range"
-            min="2"
-            max="8"
+            min={minShelves}
+            max={maxShelves}
             value={shelves}
             onChange={(e) => setShelves(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
@@ -172,11 +210,16 @@ const Controls = ({
             <div className="flex items-center gap-2">
               <input
                 type="number"
-                min="3"
-                max="10"
+                min={minSlatsPerShelf}
+                max={maxSlatsPerShelf}
                 value={slatsPerShelf}
                 onChange={(e) =>
-                  handleInputChange(e.target.value, setSlatsPerShelf, 3, 10)
+                  handleInputChange(
+                    e.target.value,
+                    setSlatsPerShelf,
+                    minSlatsPerShelf,
+                    maxSlatsPerShelf
+                  )
                 }
                 className="w-12 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
@@ -184,8 +227,8 @@ const Controls = ({
           </div>
           <input
             type="range"
-            min="3"
-            max="10"
+            min={minSlatsPerShelf}
+            max={maxSlatsPerShelf}
             value={slatsPerShelf}
             onChange={(e) => setSlatsPerShelf(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"

@@ -1,33 +1,33 @@
 import { useEffect, useState } from "react";
-import * as THREE from "three";
-import SceneInit from "./lib/SceneInit";
+// import * as THREE from "three";
+// import SceneInit from "./lib/SceneInit";
 import Shelf3D from "./Shelf3D";
 import Controls from "./Controls";
 
-const RIPA_LARGURA = 4;
-const RIPA_ALTURA = 2;
+export const RIPA_LARGURA = 4;
+export const RIPA_ALTURA = 2;
 
-const ALTURA = 80;
-const LARGURA = 70;
+const LARGURA = 80;
+const ALTURA = 165;
 const PROFUNDIDADE = 50;
-const PRATELEIRAS = 3;
-const TIRAS_POR_PRATELEIRA = 6;
+const PRATELEIRAS = 6;
+const TIRAS_POR_PRATELEIRA = 7;
 
-const MIN_TIRAS = 2;
-const MAX_TIRAS = Math.floor(PROFUNDIDADE / RIPA_LARGURA);
+export const MIN_TIRAS = 2;
+export const MAX_TIRAS = Math.floor(PROFUNDIDADE / RIPA_LARGURA);
 
-const ESPACO_ENTRE_TIRAS =
-  (PROFUNDIDADE - TIRAS_POR_PRATELEIRA * RIPA_LARGURA) /
-  (TIRAS_POR_PRATELEIRA - 1);
+// export const ESPACO_ENTRE_TIRAS =
+//   (PROFUNDIDADE - TIRAS_POR_PRATELEIRA * RIPA_LARGURA) /
+//   (TIRAS_POR_PRATELEIRA - 1);
 
-const DISTANCIA_ENTRE_PRATELEIRAS = 20; // Distância entre as prateleiras
+export const DISTANCIA_ENTRE_PRATELEIRAS = 20; // Distância entre as prateleiras
 
 function App() {
-  const [width, setWidth] = useState(300);
-  const [height, setHeight] = useState(250);
-  const [depth, setDepth] = useState(120);
-  const [shelves, setShelves] = useState(4);
-  const [slatsPerShelf, setSlatsPerShelf] = useState(6);
+  const [width, setWidth] = useState(LARGURA);
+  const [height, setHeight] = useState(ALTURA);
+  const [depth, setDepth] = useState(PROFUNDIDADE);
+  const [shelves, setShelves] = useState(PRATELEIRAS);
+  const [slatsPerShelf, setSlatsPerShelf] = useState(TIRAS_POR_PRATELEIRA);
 
   return (
     <div className="grid grid-cols-4 h-screen">
@@ -38,7 +38,13 @@ function App() {
         id="scene-wrapper"
         className="col-span-3 rounded-xl shadow-xl m-5 border border-gray-300 rounded-xl shadow-lg"
       >
-        <Shelf3D />
+        <Shelf3D
+          width={width}
+          height={height}
+          depth={depth}
+          shelves={shelves}
+          slatsPerShelf={slatsPerShelf}
+        />
       </div>
       <div className="m-5 ">
         <Controls
