@@ -31,16 +31,25 @@ const Controls = ({
   minSpacePerShelf,
   maxSpacePerShelf,
 }) => {
-  const [maxShelvesState, setMaxShelvesState] = useState();
+  // const [maxShelvesState, setMaxShelvesState] = useState();
+  const [maxSlatsPerShelfState, setMaxSlatsPerShelfState] = useState();
 
   useEffect(() => {
     const newMaxShelves = Math.floor(height / spacePerShelf);
-    setMaxShelvesState(newMaxShelves);
+    // setMaxShelvesState(newMaxShelves);
 
     // if (shelves > newMaxShelves) {
     setShelves(newMaxShelves);
     // }
   }, [height, spacePerShelf]);
+
+  useEffect(() => {
+    setMaxSlatsPerShelfState(Math.floor(depth / RIPA_LARGURA));
+
+    if (slatsPerShelf >= Math.floor(depth / RIPA_LARGURA)) {
+      setSlatsPerShelf(Math.floor(depth / RIPA_LARGURA) - 1);
+    }
+  }, [depth, RIPA_LARGURA]);
 
   const handleInputChange = (value, onChange, min, max) => {
     const numValue = parseInt(value);
@@ -229,14 +238,14 @@ const Controls = ({
               <input
                 type="number"
                 min={minSlatsPerShelf}
-                max={maxSlatsPerShelf}
+                max={maxSlatsPerShelfState}
                 value={slatsPerShelf}
                 onChange={(e) =>
                   handleInputChange(
                     e.target.value,
                     setSlatsPerShelf,
                     minSlatsPerShelf,
-                    maxSlatsPerShelf
+                    maxSlatsPerShelfState
                   )
                 }
                 className="w-12 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
