@@ -20,13 +20,10 @@ const Controls = ({
   minWidth,
   maxWidth,
 
-  minHeight,
   maxHeight,
 
   minDepth,
   maxDepth,
-
-  minShelves,
 
   minSlatsPerShelf = 3,
   maxSlatsPerShelf = Math.floor(depth / RIPA_LARGURA),
@@ -34,17 +31,15 @@ const Controls = ({
   minSpacePerShelf,
   maxSpacePerShelf,
 }) => {
-  const [maxShelvesState, setMaxShelvesState] = useState(
-    Math.floor(height / spacePerShelf)
-  );
+  const [maxShelvesState, setMaxShelvesState] = useState();
 
   useEffect(() => {
     const newMaxShelves = Math.floor(height / spacePerShelf);
     setMaxShelvesState(newMaxShelves);
 
-    if (shelves > newMaxShelves) {
-      setShelves(newMaxShelves);
-    }
+    // if (shelves > newMaxShelves) {
+    setShelves(newMaxShelves);
+    // }
   }, [height, spacePerShelf]);
 
   const handleInputChange = (value, onChange, min, max) => {
@@ -116,7 +111,7 @@ const Controls = ({
             <div className="flex items-center gap-2">
               <input
                 type="number"
-                min={minHeight}
+                min={spacePerShelf}
                 max={maxHeight}
                 value={height}
                 step={spacePerShelf}
@@ -124,7 +119,7 @@ const Controls = ({
                   handleInputChange(
                     e.target.value,
                     setHeight,
-                    minHeight,
+                    spacePerShelf,
                     maxHeight
                   )
                 }
@@ -135,7 +130,7 @@ const Controls = ({
           </div>
           <input
             type="range"
-            min={minHeight}
+            min={spacePerShelf}
             max={maxHeight}
             value={height}
             step={spacePerShelf}
@@ -196,14 +191,14 @@ const Controls = ({
             <div className="flex items-center gap-2">
               <input
                 type="number"
-                min={minShelves}
+                min={spacePerShelf}
                 max={maxShelvesState}
                 value={shelves}
                 onChange={(e) =>
                   handleInputChange(
                     e.target.value,
                     setShelves,
-                    minShelves,
+                    spacePerShelf,
                     maxShelvesState
                   )
                 }
@@ -213,7 +208,7 @@ const Controls = ({
           </div>
           <input
             type="range"
-            min={minShelves}
+            min={spacePerShelf}
             max={maxShelvesState}
             value={shelves}
             onChange={(e) => setShelves(Number(e.target.value))}
@@ -273,14 +268,22 @@ const Controls = ({
                 min={minSpacePerShelf}
                 max={maxSpacePerShelf}
                 value={spacePerShelf}
-                onChange={(e) =>
+                step={10}
+                onChange={(e) => {
                   handleInputChange(
                     e.target.value,
                     setSpacePerShelf,
                     minSpacePerShelf,
                     maxSpacePerShelf
-                  )
-                }
+                  );
+
+                  handleInputChange(
+                    shelves * Number(e.target.value),
+                    setHeight,
+                    spacePerShelf,
+                    maxHeight
+                  );
+                }}
                 className="w-12 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
             </div>
@@ -290,7 +293,12 @@ const Controls = ({
             min={minSpacePerShelf}
             max={maxSpacePerShelf}
             value={spacePerShelf}
-            onChange={(e) => setSpacePerShelf(Number(e.target.value))}
+            step={10}
+            onChange={(e) => {
+              setSpacePerShelf(Number(e.target.value));
+
+              setHeight(shelves * Number(e.target.value));
+            }}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
           />
         </div>

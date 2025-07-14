@@ -141,12 +141,17 @@ function Shelf3D({
     addPrateleira();
 
     // sceneObject.camera.position.set(200, 200, -200); // posição diagonal de cima
-    sceneObject.camera.position.set(120, 120, 120); // posição diagonal de cima
+    // sceneObject.camera.position.set(120, 120, 120); // posição diagonal de cima
+    sceneObject.camera.position.set(
+      20 + height * 2,
+      20 + height * 2,
+      20 + height * 2
+    );
     // sceneObject.camera.position.set(0, 0, 100); // posição lateral
     // sceneObject.camera.position.set(-100, 0, 20); // posição lateral
     // sceneObject.camera.position.set(100, 50, -100); // posição diagonal de cima
     sceneObject.camera.lookAt(0, 0, 0); // olhando para o centro da cena
-  }, [width, height, depth, shelves, slatsPerShelf]);
+  }, [width, height, depth, shelves, slatsPerShelf, spacePerShelf]);
 
   return (
     <div>

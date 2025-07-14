@@ -16,7 +16,7 @@ const TIRAS_POR_PRATELEIRA = 7;
 const LARGURA_MINIMA = 30;
 const LARGURA_MAXIMA = 90;
 
-const ALTURA_MINIMA = 40;
+// const ALTURA_MINIMA = 30;
 const ALTURA_MAXIMA = 250;
 
 const PROFUNDIDADE_MINIMA = 20;
@@ -26,9 +26,9 @@ const PRATELEIRAS_MINIMO = 2;
 
 const TIRAS_POR_PRATELEIRA_MINIMO = 3;
 
-const DISTANCIA_ENTRE_PRATELEIRAS = 10; // Distância entre as prateleiras
+const DISTANCIA_ENTRE_PRATELEIRAS = 20; // Distância entre as prateleiras
 const ESPACO_POR_PRATELEIRA_MINIMO = 10;
-const ESPACO_POR_PRATELEIRA_MAXIMO = 30;
+const ESPACO_POR_PRATELEIRA_MAXIMO = 50;
 
 function App() {
   const [width, setWidth] = useState(LARGURA);
@@ -72,14 +72,14 @@ function App() {
           setSpacePerShelf={setSpacePerShelf}
           minWidth={LARGURA_MINIMA}
           maxWidth={LARGURA_MAXIMA}
-          minHeight={ALTURA_MINIMA}
+          // minHeight={ALTURA_MINIMA}
           maxHeight={ALTURA_MAXIMA}
           minDepth={PROFUNDIDADE_MINIMA}
           maxDepth={PROFUNDIDADE_MAXIMA}
           minShelves={PRATELEIRAS_MINIMO}
           minSlatsPerShelf={TIRAS_POR_PRATELEIRA_MINIMO}
           minSpacePerShelf={ESPACO_POR_PRATELEIRA_MINIMO}
-          maxSpacePerShelf={ESPACO_POR_PRATELEIRA_MINIMO}
+          maxSpacePerShelf={ESPACO_POR_PRATELEIRA_MAXIMO}
         />
       </div>
     </div>
