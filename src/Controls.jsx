@@ -180,7 +180,7 @@ const Controls = ({
         </div>
 
         {/* Shelves Control */}
-        <div className="space-y-3">
+        {/* <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Layers className="text-amber-600" size={18} />
@@ -214,7 +214,7 @@ const Controls = ({
             onChange={(e) => setShelves(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
           />
-        </div>
+        </div> */}
 
         {/* Slats per Shelf Control */}
         <div className="space-y-3">
@@ -257,7 +257,8 @@ const Controls = ({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Grid className="text-amber-600" size={18} />
+              {/* <Grid className="text-amber-600" size={18} /> */}
+              <Layers className="text-amber-600" size={18} />
               <label className="text-xs font-medium text-gray-700">
                 Espaço entre Prateleiras
               </label>
