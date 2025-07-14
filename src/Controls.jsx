@@ -59,46 +59,6 @@ const Controls = ({
       </div>
 
       <div className="space-y-6">
-        {/* Width Control */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Ruler className="text-amber-600" size={18} />
-              <label className="text-xs font-medium text-gray-700">
-                Largura
-              </label>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                min={minWidth}
-                max={maxWidth}
-                value={width}
-                step={10}
-                onChange={(e) =>
-                  handleInputChange(
-                    e.target.value,
-                    setWidth,
-                    minWidth,
-                    maxWidth
-                  )
-                }
-                className="w-16 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-              />
-              <span className="text-xs text-gray-500">px</span>
-            </div>
-          </div>
-          <input
-            type="range"
-            min={minWidth}
-            max={maxWidth}
-            value={width}
-            step={10}
-            onChange={(e) => setWidth(Number(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-          />
-        </div>
-
         {/* Height Control */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -135,6 +95,46 @@ const Controls = ({
             value={height}
             step={spacePerShelf}
             onChange={(e) => setHeight(Number(e.target.value))}
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+          />
+        </div>
+
+        {/* Width Control */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Ruler className="text-amber-600" size={18} />
+              <label className="text-xs font-medium text-gray-700">
+                Largura
+              </label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                min={minWidth}
+                max={maxWidth}
+                value={width}
+                step={10}
+                onChange={(e) =>
+                  handleInputChange(
+                    e.target.value,
+                    setWidth,
+                    minWidth,
+                    maxWidth
+                  )
+                }
+                className="w-16 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              />
+              <span className="text-xs text-gray-500">px</span>
+            </div>
+          </div>
+          <input
+            type="range"
+            min={minWidth}
+            max={maxWidth}
+            value={width}
+            step={10}
+            onChange={(e) => setWidth(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
