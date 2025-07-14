@@ -1,5 +1,6 @@
 import { Settings, Ruler, Layers, Grid } from "lucide-react";
-import { RIPA_LARGURA } from "./App";
+import { RIPA_ALTURA, RIPA_LARGURA } from "./App";
+import { useEffect, useState } from "react";
 
 const Controls = ({
   width,
@@ -7,29 +8,45 @@ const Controls = ({
   depth,
   shelves,
   slatsPerShelf,
+  spacePerShelf,
 
   setWidth,
   setHeight,
   setDepth,
   setShelves,
   setSlatsPerShelf,
+  setSpacePerShelf,
 
-  minWidth = 30,
-  maxWidth = 90,
+  minWidth,
+  maxWidth,
 
-  minHeight = 60,
-  maxHeight = 180,
+  minHeight,
+  maxHeight,
 
-  minDepth = 20,
-  maxDepth = 50,
+  minDepth,
+  maxDepth,
 
-  minShelves = 3,
-  maxShelves = 8,
+  minShelves,
 
   minSlatsPerShelf = 3,
-  maxSlatsPerShelf = Math.floor(depth / RIPA_LARGURA)
-  // maxSlatsPerShelf = depth / 4,
+  maxSlatsPerShelf = Math.floor(depth / RIPA_LARGURA),
+
+  minSpacePerShelf,
+  maxSpacePerShelf,
 }) => {
+  const [maxShelvesState, setMaxShelvesState] = useState(
+    Math.floor(height / spacePerShelf)
+  );
+
+  useEffect(() => {
+    const newMaxShelves = Math.floor(height / spacePerShelf);
+    setMaxShelvesState(newMaxShelves);
+
+    if (shelves > newMaxShelves) {
+      setShelves(newMaxShelves);
+    }
+  }, [height, spacePerShelf]);
+
   const handleInputChange = (value, onChange, min, max) => {
     const numValue = parseInt(value);
     if (!isNaN(numValue) && numValue >= min && numValue <= max) {
@@ -62,6 +79,7 @@ const Controls = ({
                 min={minWidth}
                 max={maxWidth}
                 value={width}
+                step={10}
                 onChange={(e) =>
                   handleInputChange(
                     e.target.value,
@@ -80,6 +98,7 @@ const Controls = ({
             min={minWidth}
             max={maxWidth}
             value={width}
+            step={10}
             onChange={(e) => setWidth(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
           />
@@ -100,6 +119,7 @@ const Controls = ({
                 min={minHeight}
                 max={maxHeight}
                 value={height}
+                step={spacePerShelf}
                 onChange={(e) =>
                   handleInputChange(
                     e.target.value,
@@ -118,6 +138,7 @@ const Controls = ({
             min={minHeight}
             max={maxHeight}
             value={height}
+            step={spacePerShelf}
             onChange={(e) => setHeight(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
           />
@@ -138,6 +159,7 @@ const Controls = ({
                 min={minDepth}
                 max={maxDepth}
                 value={depth}
+                step={5}
                 onChange={(e) =>
                   handleInputChange(
                     e.target.value,
@@ -156,6 +178,7 @@ const Controls = ({
             min={minDepth}
             max={maxDepth}
             value={depth}
+            step={5}
             onChange={(e) => setDepth(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
           />
@@ -174,14 +197,14 @@ const Controls = ({
               <input
                 type="number"
                 min={minShelves}
-                max={maxShelves}
+                max={maxShelvesState}
                 value={shelves}
                 onChange={(e) =>
                   handleInputChange(
                     e.target.value,
                     setShelves,
                     minShelves,
-                    maxShelves
+                    maxShelvesState
                   )
                 }
                 className="w-12 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
@@ -191,7 +214,7 @@ const Controls = ({
           <input
             type="range"
             min={minShelves}
-            max={maxShelves}
+            max={maxShelvesState}
             value={shelves}
             onChange={(e) => setShelves(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
@@ -234,13 +257,54 @@ const Controls = ({
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
+
+        {/* Space per Shelf Control */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Grid className="text-amber-600" size={18} />
+              <label className="text-xs font-medium text-gray-700">
+                Espaço entre Prateleiras
+              </label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                min={minSpacePerShelf}
+                max={maxSpacePerShelf}
+                value={spacePerShelf}
+                onChange={(e) =>
+                  handleInputChange(
+                    e.target.value,
+                    setSpacePerShelf,
+                    minSpacePerShelf,
+                    maxSpacePerShelf
+                  )
+                }
+                className="w-12 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+          <input
+            type="range"
+            min={minSpacePerShelf}
+            max={maxSpacePerShelf}
+            value={spacePerShelf}
+            onChange={(e) => setSpacePerShelf(Number(e.target.value))}
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+          />
+        </div>
       </div>
 
       <div className="pt-4 border-t border-gray-200">
         <div className="text-xs text-gray-500 space-y-1">
+          <p className="font-bold text-amber-600">
+            • Podem haver variações de 1~2cm nas dimensões
+          </p>
           <p>• Use os sliders ou digite valores diretamente nos campos</p>
-          <p>• Ripas: 2cm (largura) × 5cm (profundidade)</p>
-          <p>• A estante rotaciona automaticamente para melhor visualização</p>
+          <p>
+            • Ripas: {RIPA_LARGURA}cm (largura) × {RIPA_ALTURA}cm (altura)
+          </p>
         </div>
       </div>
     </div>

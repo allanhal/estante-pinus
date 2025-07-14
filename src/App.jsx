@@ -8,19 +8,27 @@ export const RIPA_LARGURA = 4;
 export const RIPA_ALTURA = 2;
 
 const LARGURA = 80;
-const ALTURA = 165;
+const ALTURA = 80;
 const PROFUNDIDADE = 50;
-const PRATELEIRAS = 6;
+const PRATELEIRAS = 4;
 const TIRAS_POR_PRATELEIRA = 7;
 
-export const MIN_TIRAS = 2;
-export const MAX_TIRAS = Math.floor(PROFUNDIDADE / RIPA_LARGURA);
+const LARGURA_MINIMA = 30;
+const LARGURA_MAXIMA = 90;
 
-// export const ESPACO_ENTRE_TIRAS =
-//   (PROFUNDIDADE - TIRAS_POR_PRATELEIRA * RIPA_LARGURA) /
-//   (TIRAS_POR_PRATELEIRA - 1);
+const ALTURA_MINIMA = 40;
+const ALTURA_MAXIMA = 250;
 
-export const DISTANCIA_ENTRE_PRATELEIRAS = 20; // Distância entre as prateleiras
+const PROFUNDIDADE_MINIMA = 20;
+const PROFUNDIDADE_MAXIMA = 50;
+
+const PRATELEIRAS_MINIMO = 2;
+
+const TIRAS_POR_PRATELEIRA_MINIMO = 3;
+
+const DISTANCIA_ENTRE_PRATELEIRAS = 10; // Distância entre as prateleiras
+const ESPACO_POR_PRATELEIRA_MINIMO = 10;
+const ESPACO_POR_PRATELEIRA_MAXIMO = 30;
 
 function App() {
   const [width, setWidth] = useState(LARGURA);
@@ -28,6 +36,7 @@ function App() {
   const [depth, setDepth] = useState(PROFUNDIDADE);
   const [shelves, setShelves] = useState(PRATELEIRAS);
   const [slatsPerShelf, setSlatsPerShelf] = useState(TIRAS_POR_PRATELEIRA);
+  const [spacePerShelf, setSpacePerShelf] = useState(DISTANCIA_ENTRE_PRATELEIRAS);
 
   return (
     <div className="grid grid-cols-4 h-screen">
@@ -44,6 +53,7 @@ function App() {
           depth={depth}
           shelves={shelves}
           slatsPerShelf={slatsPerShelf}
+          spacePerShelf={spacePerShelf}
         />
       </div>
       <div className="m-5 ">
@@ -53,11 +63,23 @@ function App() {
           depth={depth}
           shelves={shelves}
           slatsPerShelf={slatsPerShelf}
+          spacePerShelf={spacePerShelf}
           setWidth={setWidth}
           setHeight={setHeight}
           setDepth={setDepth}
           setShelves={setShelves}
           setSlatsPerShelf={setSlatsPerShelf}
+          setSpacePerShelf={setSpacePerShelf}
+          minWidth={LARGURA_MINIMA}
+          maxWidth={LARGURA_MAXIMA}
+          minHeight={ALTURA_MINIMA}
+          maxHeight={ALTURA_MAXIMA}
+          minDepth={PROFUNDIDADE_MINIMA}
+          maxDepth={PROFUNDIDADE_MAXIMA}
+          minShelves={PRATELEIRAS_MINIMO}
+          minSlatsPerShelf={TIRAS_POR_PRATELEIRA_MINIMO}
+          minSpacePerShelf={ESPACO_POR_PRATELEIRA_MINIMO}
+          maxSpacePerShelf={ESPACO_POR_PRATELEIRA_MINIMO}
         />
       </div>
     </div>
