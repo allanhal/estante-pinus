@@ -43,8 +43,12 @@ function App() {
 
   return (
     <div className="grid grid-cols-5 h-screen">
-      <div className="col-span-5 m-5 flex items-center justify-center border border-gray-300 rounded-xl shadow-lg">
-        <p className="text-[100px] font-tiktok">Estante Pinus</p>
+      <div
+        // className="col-span-5 m-5 flex items-center justify-center border border-gray-300 rounded-xl shadow-lg"
+        className="col-span-5 m-5 flex items-center justify-center"
+      >
+        <p className="text-[100px] dancing-script text-amber-600">Estante Pinus</p>
+        {/* <p className="text-[100px] dancing-script text-sky-950 text-shadow-2xs text-shadow-sky-300">Estante Pinus</p> */}
       </div>
       <div
         id="scene-wrapper"

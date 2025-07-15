@@ -61,7 +61,7 @@ const Controls = ({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 space-y-6 inset-shadow-sm border border-gray-300 rounded-xl shadow-lg">
+    <div className="bg-white rounded-xl shadow-lg p-6 space-y-4 inset-shadow-sm border border-gray-300 rounded-xl shadow-lg">
       <div className="flex items-center gap-3 mb-4">
         <Settings className="text-amber-600" size={24} />
         <h2 className="text-xs font-semibold text-gray-800">
@@ -316,10 +316,20 @@ const Controls = ({
         </div>
       </div>
 
-      <div className="pt-2 border-t border-gray-200">
-        <p className="font-bold text-xl text-green-900">
+      <div className="pt-4 border-t border-gray-200 text-center">
+        <a
+          href={`https://api.whatsapp.com/send?phone=5585992820404&text=${encodeURIComponent(
+            "Olá, gostaria de fazer o pedido de uma estante de pinus com as medidas: " +
+              `Largura: ${width}px, Altura: ${height}px, Profundidade: ${depth}px, ` +
+              `Prateleiras: ${shelves}, Ripas por Prateleira: ${slatsPerShelf}, ` +
+              `Espaço entre Prateleiras: ${spacePerShelf}px. ` +
+              `Preço: R$ ${price * 2}`
+          )}`}
+          target="_blank"
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        >
           Preço: R$ {price * 2}
-        </p>
+        </a>
       </div>
       <div className="pt-2 border-t border-gray-200">
         <div className="text-xs text-gray-500 space-y-1">
@@ -327,8 +337,9 @@ const Controls = ({
             • Podem haver variações de 1~2cm nas dimensões
           </p>
           <p>• Use os sliders ou digite valores diretamente nos campos</p>
+          <p>• Preços enviados estarão sujeitos a revisão</p>
           <p>
-            • Ripas: {RIPA_LARGURA}cm (largura) × {RIPA_ALTURA}cm (altura)
+            • Tamanhos aproximados das ripas: {RIPA_LARGURA}cm (largura) × {RIPA_ALTURA}cm (altura)
           </p>
         </div>
       </div>
