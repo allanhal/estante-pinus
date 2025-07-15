@@ -30,6 +30,8 @@ const Controls = ({
 
   minSpacePerShelf,
   maxSpacePerShelf,
+
+  price,
 }) => {
   // const [maxShelvesState, setMaxShelvesState] = useState();
   const [maxSlatsPerShelfState, setMaxSlatsPerShelfState] = useState();
@@ -314,7 +316,12 @@ const Controls = ({
         </div>
       </div>
 
-      <div className="pt-4 border-t border-gray-200">
+      <div className="pt-2 border-t border-gray-200">
+        <p className="font-bold text-xl text-green-900">
+          <p>Preço: R$ {price * 2}</p>
+        </p>
+      </div>
+      <div className="pt-2 border-t border-gray-200">
         <div className="text-xs text-gray-500 space-y-1">
           <p className="font-bold text-amber-600">
             • Podem haver variações de 1~2cm nas dimensões

@@ -36,11 +36,14 @@ function App() {
   const [depth, setDepth] = useState(PROFUNDIDADE);
   const [shelves, setShelves] = useState(PRATELEIRAS);
   const [slatsPerShelf, setSlatsPerShelf] = useState(TIRAS_POR_PRATELEIRA);
-  const [spacePerShelf, setSpacePerShelf] = useState(DISTANCIA_ENTRE_PRATELEIRAS);
+  const [spacePerShelf, setSpacePerShelf] = useState(
+    DISTANCIA_ENTRE_PRATELEIRAS
+  );
+  const [price, setPrice] = useState();
 
   return (
-    <div className="grid grid-cols-4 h-screen">
-      <div className="col-span-4 m-5 flex items-center justify-center border border-gray-300 rounded-xl shadow-lg">
+    <div className="grid grid-cols-5 h-screen">
+      <div className="col-span-5 m-5 flex items-center justify-center border border-gray-300 rounded-xl shadow-lg">
         <p className="text-[100px] font-tiktok">Estante Pinus</p>
       </div>
       <div
@@ -54,9 +57,10 @@ function App() {
           shelves={shelves}
           slatsPerShelf={slatsPerShelf}
           spacePerShelf={spacePerShelf}
+          setPrice={setPrice}
         />
       </div>
-      <div className="m-5 ">
+      <div className="col-span-2 m-5">
         <Controls
           width={width}
           height={height}
@@ -80,6 +84,7 @@ function App() {
           minSlatsPerShelf={TIRAS_POR_PRATELEIRA_MINIMO}
           minSpacePerShelf={ESPACO_POR_PRATELEIRA_MINIMO}
           maxSpacePerShelf={ESPACO_POR_PRATELEIRA_MAXIMO}
+          price={price}
         />
       </div>
     </div>

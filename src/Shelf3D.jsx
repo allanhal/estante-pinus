@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as THREE from "three";
 import SceneInit from "./lib/SceneInit";
 import { RIPA_ALTURA, RIPA_LARGURA } from "./App";
@@ -10,6 +10,7 @@ function Shelf3D({
   shelves = 3,
   slatsPerShelf = 6,
   spacePerShelf,
+  setPrice,
 }) {
   let ALTURA = height;
   let LARGURA = width;
@@ -17,7 +18,26 @@ function Shelf3D({
   let PRATELEIRAS = shelves;
   let TIRAS_POR_PRATELEIRA = slatsPerShelf;
 
+  const [arrayOfTiras, setArrayOfTiras] = useState([]);
+
   useEffect(() => {
+    // console.log("arrayOfTiras", arrayOfTiras);
+    // console.log(
+    //   "arrayOfTiras sum",
+    //   arrayOfTiras.reduce((total, num) => total + num, 0)
+    // );
+    // console.log(
+    //   "arrayOfTiras tiras",
+    //   Math.round(arrayOfTiras.reduce((total, num) => total + num, 0) / 300)
+    // );
+    setPrice(
+      Math.round(arrayOfTiras.reduce((total, num) => total + num, 0) / 300) * 10
+    );
+  }, [arrayOfTiras]);
+
+  useEffect(() => {
+    setArrayOfTiras([]);
+    const newArrayOfTiras = [];
     const boxMaterial = new THREE.MeshStandardMaterial({ color: 0x8b4513 }); // SaddleBrown
     function addTiraPrateleira({
       sceneObject,
@@ -57,6 +77,10 @@ function Shelf3D({
     }
 
     function addPes({ sceneObject }) {
+      newArrayOfTiras.push(ALTURA);
+      newArrayOfTiras.push(ALTURA);
+      newArrayOfTiras.push(ALTURA);
+      newArrayOfTiras.push(ALTURA);
       const boxGeometry = new THREE.BoxGeometry(
         RIPA_LARGURA,
         ALTURA,
@@ -110,6 +134,7 @@ function Shelf3D({
       for (let andarIndex = 0; andarIndex < PRATELEIRAS; andarIndex++) {
         // Tiras da prateleira
         for (let i = 0; i < TIRAS_POR_PRATELEIRA; i++) {
+          newArrayOfTiras.push(LARGURA);
           addTiraPrateleira({
             sceneObject,
             boxGeometry,
@@ -126,11 +151,6 @@ function Shelf3D({
           sceneObject,
           andar: andarIndex,
         });
-
-        // Pés
-        addPes({
-          sceneObject,
-        });
       }
     }
 
@@ -139,6 +159,10 @@ function Shelf3D({
     sceneObject.animate();
 
     addPrateleira();
+
+    addPes({
+      sceneObject,
+    });
 
     // sceneObject.camera.position.set(200, 200, -200); // posição diagonal de cima
     // sceneObject.camera.position.set(120, 120, 120); // posição diagonal de cima
@@ -151,6 +175,8 @@ function Shelf3D({
     // sceneObject.camera.position.set(-100, 0, 20); // posição lateral
     // sceneObject.camera.position.set(100, 50, -100); // posição diagonal de cima
     sceneObject.camera.lookAt(0, 0, 0); // olhando para o centro da cena
+
+    setArrayOfTiras(newArrayOfTiras);
   }, [width, height, depth, shelves, slatsPerShelf, spacePerShelf]);
 
   return (
