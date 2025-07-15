@@ -96,7 +96,7 @@ const Controls = ({
                 }
                 className="w-16 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
-              <span className="text-xs text-gray-500">px</span>
+              <span className="text-xs text-gray-500">cm</span>
             </div>
           </div>
           <input
@@ -136,7 +136,7 @@ const Controls = ({
                 }
                 className="w-16 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
-              <span className="text-xs text-gray-500">px</span>
+              <span className="text-xs text-gray-500">cm</span>
             </div>
           </div>
           <input
@@ -176,7 +176,7 @@ const Controls = ({
                 }
                 className="w-16 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
-              <span className="text-xs text-gray-500">px</span>
+              <span className="text-xs text-gray-500">cm</span>
             </div>
           </div>
           <input
