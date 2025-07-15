@@ -86,15 +86,19 @@ function App() {
   }, [queryParams]);
 
   return (
-    <div className="grid grid-cols-3 md:grid-cols-5 h-screen">
-      <div className="col-span-3 md:col-span-5 m-5 flex items-center justify-center">
-        <p className="text-[50px] md:text-[100px] dancing-script text-amber-600">
-          Estante Pinus
+    <div className="grid grid-cols-1 md:grid-cols-2 h-screen gap-4 p-4">
+      <div className="col-span-2 flex flex-col items-center justify-center mb-5">
+        <p className="text-[50px] md:text-[80px] font-serif text-amber-600 drop-shadow-lg" style={{ fontFamily: 'Bungee Outline, cursive' }}>
+        Pinus & Forma 
+        </p>
+        <p className="text-lg md:text-xl text-gray-700 text-center">
+        Personalize sua estante em madeira de pinus com simplicidade e estilo, no seu espaço do seu jeito.
         </p>
       </div>
       <div
         id="scene-wrapper"
-        className="col-span-3 rounded-xl shadow-xl m-5 border border-gray-300 rounded-xl shadow-lg aspect-square"
+        className="col-span-1 rounded-xl shadow-xl border border-gray-300 m-4"
+        style={{ height: 'calc(100vh - 150px)', overflow: 'hidden' }}
       >
         <Shelf3D
           width={width}
@@ -106,7 +110,7 @@ function App() {
           setPrice={setPrice}
         />
       </div>
-      <div className="col-span-3 md:col-span-2 m-5">
+      <div className="col-span-1 m-4">
         <Controls
           width={width}
           height={height}
@@ -122,7 +126,6 @@ function App() {
           setSpacePerShelf={setSpacePerShelf}
           minWidth={LARGURA_MINIMA}
           maxWidth={LARGURA_MAXIMA}
-          // minHeight={ALTURA_MINIMA}
           maxHeight={ALTURA_MAXIMA}
           minDepth={PROFUNDIDADE_MINIMA}
           maxDepth={PROFUNDIDADE_MAXIMA}
