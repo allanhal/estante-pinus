@@ -86,15 +86,15 @@ function App() {
   }, [queryParams]);
 
   return (
-    <div className="grid grid-cols-5 h-screen">
-      <div className="col-span-5 m-5 flex items-center justify-center">
-        <p className="text-[100px] dancing-script text-amber-600">
+    <div className="grid grid-cols-3 md:grid-cols-5 h-screen">
+      <div className="col-span-3 md:col-span-5 m-5 flex items-center justify-center">
+        <p className="text-[50px] md:text-[100px] dancing-script text-amber-600">
           Estante Pinus
         </p>
       </div>
       <div
         id="scene-wrapper"
-        className="col-span-3 rounded-xl shadow-xl m-5 border border-gray-300 rounded-xl shadow-lg"
+        className="col-span-3 rounded-xl shadow-xl m-5 border border-gray-300 rounded-xl shadow-lg aspect-square"
       >
         <Shelf3D
           width={width}
@@ -106,7 +106,7 @@ function App() {
           setPrice={setPrice}
         />
       </div>
-      <div className="col-span-2 m-5">
+      <div className="col-span-3 md:col-span-2 m-5">
         <Controls
           width={width}
           height={height}
