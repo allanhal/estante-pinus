@@ -1,7 +1,7 @@
 import { Settings, Ruler, Layers, Grid, ShoppingCart } from "lucide-react";
 import { RIPA_ALTURA, RIPA_LARGURA } from "./App";
 import { useEffect, useState } from "react";
-  
+
 const convertPixelsToMeters = (pixels) => pixels;
 
 const convertMetersToPixels = (meters) => meters;
@@ -67,16 +67,17 @@ const Controls = ({
   return (
     <div className="bg-white rounded-3xl shadow-xl p-8 space-y-8 inset-shadow-sm border border-gray-200">
       <div className="flex items-center gap-4 mb-6">
-        <Settings className="text-amber-600" size={28} />
-        <h2 className="text-lg font-semibold text-gray-800">
+        <Settings className="text-amber-600" size={24} />
+        <h2 className="text-lg font-bold text-gray-700">
           Customização da Prateleira
         </h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-        <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-md space-y-4">
-          <h3 className="text-md font-medium text-gray-700 border-b pb-2">Dimensões</h3>
+        <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-md space-y-4">
+          <h3 className="text-md font-medium text-gray-700 border-b pb-2">
+            Dimensões
+          </h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -100,7 +101,7 @@ const Controls = ({
                       maxHeight
                     )
                   }
-                  className="w-20 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-20 px-3 py-2 text-md rounded-lg text-gray-700 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent font-bold"
                 />
                 <span className="text-sm text-gray-500">cm</span>
               </div>
@@ -111,7 +112,9 @@ const Controls = ({
               max={convertPixelsToMeters(maxHeight)}
               value={convertPixelsToMeters(height)}
               step={convertPixelsToMeters(spacePerShelf)}
-              onChange={(e) => setHeight(convertMetersToPixels(Number(e.target.value)))}
+              onChange={(e) =>
+                setHeight(convertMetersToPixels(Number(e.target.value)))
+              }
               className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
             />
           </div>
@@ -139,7 +142,7 @@ const Controls = ({
                       maxWidth
                     )
                   }
-                  className="w-20 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-20 px-3 py-2 text-md rounded-lg text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent font-bold"
                 />
                 <span className="text-sm text-gray-500">cm</span>
               </div>
@@ -150,7 +153,9 @@ const Controls = ({
               max={convertPixelsToMeters(maxWidth)}
               value={convertPixelsToMeters(width)}
               step={0.1}
-              onChange={(e) => setWidth(convertMetersToPixels(Number(e.target.value)))}
+              onChange={(e) =>
+                setWidth(convertMetersToPixels(Number(e.target.value)))
+              }
               className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
             />
           </div>
@@ -178,7 +183,7 @@ const Controls = ({
                       maxDepth
                     )
                   }
-                  className="w-20 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-20 px-3 py-2 text-md rounded-lg text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent font-bold"
                 />
                 <span className="text-sm text-gray-500">cm</span>
               </div>
@@ -189,14 +194,18 @@ const Controls = ({
               max={convertPixelsToMeters(maxDepth)}
               value={convertPixelsToMeters(depth)}
               step={0.05}
-              onChange={(e) => setDepth(convertMetersToPixels(Number(e.target.value)))}
+              onChange={(e) =>
+                setDepth(convertMetersToPixels(Number(e.target.value)))
+              }
               className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
             />
           </div>
         </div>
 
-        <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-md space-y-4">
-          <h3 className="text-md font-medium text-gray-700 border-b pb-2">Configurações de Prateleira</h3>
+        <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-md space-y-4">
+          <h3 className="text-md font-medium text-gray-700 border-b pb-2">
+            Configurações de Prateleira
+          </h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -219,7 +228,7 @@ const Controls = ({
                       maxSlatsPerShelfState
                     )
                   }
-                  className="w-20 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-20 px-3 py-2 text-md rounded-lg text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent font-bold"
                 />
               </div>
             </div>
@@ -263,7 +272,7 @@ const Controls = ({
                       maxHeight
                     );
                   }}
-                  className="w-20 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-20 px-3 py-2 text-md rounded-lg text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent font-bold"
                 />
               </div>
             </div>
@@ -276,7 +285,9 @@ const Controls = ({
               onChange={(e) => {
                 setSpacePerShelf(convertMetersToPixels(Number(e.target.value)));
 
-                setHeight(shelves * convertMetersToPixels(Number(e.target.value)));
+                setHeight(
+                  shelves * convertMetersToPixels(Number(e.target.value))
+                );
               }}
               className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
             />
@@ -284,10 +295,13 @@ const Controls = ({
         </div>
       </div>
 
-      <div className="text-center " >
-        <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-lg inline-block max-w-2xl mx-auto flex flex-col md:flex-row justify-between items-center">
+      <div className="text-center ">
+        <div className="flex items-center gap-4 mb-6">
+          <ShoppingCart className="text-amber-600" size={24} />
+          <h4 className="text-lg font-bold text-gray-700">Resumo da Compra</h4>
+        </div>
+        <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-lg inline-block w-full flex flex-col md:flex-row justify-between items-center">
           <div className="text-left mb-6 md:mb-0 md:mr-10">
-            <h4 className="text-lg font-medium text-gray-800 mb-3">Resumo da Compra</h4>
             <div className="grid grid-cols-3 gap-4">
               <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
                 <Ruler className="text-amber-600 rotate-45" size={16} />
@@ -311,14 +325,30 @@ const Controls = ({
               </div>
               <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
                 <Layers className="text-amber-600" size={16} />
-                <span className="font-normal">{convertPixelsToMeters(spacePerShelf)}cm</span>
+                <span className="font-normal">
+                  {convertPixelsToMeters(spacePerShelf)}cm
+                </span>
               </div>
             </div>
           </div>
-          <div className="flex flex-col justify-start items-start bg-gray-50 p-6 rounded-2xl shadow-inner">
-            <div className="flex items-start mb-3">
-              <span className="text-2xl font-bold text-gray-900 px-3 py-1 rounded-lg">
-                {(price * 2).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+          <div className="flex flex-col justify-start items-start bg-gray-50 p-4 rounded-2xl">
+            <div className="flex flex-col items-start mb-3">
+              <div className="flex items-center">
+                <img
+                  src="/src/assets/pinus-icon1.svg"
+                  alt="Estante Icon"
+                  className="mr-2"
+                  style={{ width: "24px", height: "24px" }}
+                />
+                <span className="text-md font-bold text-gray-600">
+                  Valor total:
+                </span>
+              </div>
+              <span className="text-2xl font-bold text-gray-700">
+                {(price * 2).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
               </span>
             </div>
             <a
@@ -326,7 +356,9 @@ const Controls = ({
                 "Olá, gostaria de fazer o pedido de uma estante de pinus com as medidas: " +
                   `Largura: ${width}cm, Altura: ${height}cm, Profundidade: ${depth}cm, ` +
                   `Prateleiras: ${shelves}, Ripas por Prateleira: ${slatsPerShelf}, ` +
-                  `Espaço entre Prateleiras: ${convertPixelsToMeters(spacePerShelf)}cm. ` +
+                  `Espaço entre Prateleiras: ${convertPixelsToMeters(
+                    spacePerShelf
+                  )}cm. ` +
                   `Preço: R$ ${price * 2}. ` +
                   `Link para entrar na página: ${window.location.origin}/?altura=${height}&largura=${width}&profundidade=${depth}&ripas_por_prateleira=${slatsPerShelf}&espaco_entre_prateleiras=${spacePerShelf}`
               )}`}
@@ -347,7 +379,8 @@ const Controls = ({
           <p>• Use os sliders ou digite valores diretamente nos campos</p>
           <p>• Preços enviados estarão sujeitos a revisão</p>
           <p>
-            • Tamanhos aproximados das ripas: {RIPA_LARGURA}cm (largura) × {RIPA_ALTURA}cm (altura)
+            • Tamanhos aproximados das ripas: {RIPA_LARGURA}cm (largura) ×{" "}
+            {RIPA_ALTURA}cm (altura)
           </p>
           <button
             id="button"
