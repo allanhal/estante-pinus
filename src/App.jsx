@@ -6,11 +6,11 @@ import Controls from "./Controls";
 export const RIPA_LARGURA = 4;
 export const RIPA_ALTURA = 2;
 
-const LARGURA = 80;
 const ALTURA = 80;
-const PROFUNDIDADE = 50;
+const LARGURA = 50;
+const PROFUNDIDADE = 30;
 const PRATELEIRAS = 4;
-const TIRAS_POR_PRATELEIRA = 7;
+const TIRAS_POR_PRATELEIRA = 4;
 
 const LARGURA_MINIMA = 30;
 const LARGURA_MAXIMA = 90;

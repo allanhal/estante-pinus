@@ -323,7 +323,8 @@ const Controls = ({
               `Largura: ${width}px, Altura: ${height}px, Profundidade: ${depth}px, ` +
               `Prateleiras: ${shelves}, Ripas por Prateleira: ${slatsPerShelf}, ` +
               `Espaço entre Prateleiras: ${spacePerShelf}px. ` +
-              `Preço: R$ ${price * 2}`
+              `Preço: R$ ${price * 2}. ` +
+              `Link para entrar na página: ${window.location.origin}/?altura=${height}&largura=${width}&profundidade=${depth}&ripas_por_prateleira=${slatsPerShelf}&espaco_entre_prateleiras=${spacePerShelf}`
           )}`}
           target="_blank"
           className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
@@ -339,7 +340,8 @@ const Controls = ({
           <p>• Use os sliders ou digite valores diretamente nos campos</p>
           <p>• Preços enviados estarão sujeitos a revisão</p>
           <p>
-            • Tamanhos aproximados das ripas: {RIPA_LARGURA}cm (largura) × {RIPA_ALTURA}cm (altura)
+            • Tamanhos aproximados das ripas: {RIPA_LARGURA}cm (largura) ×{" "}
+            {RIPA_ALTURA}cm (altura)
           </p>
         </div>
       </div>

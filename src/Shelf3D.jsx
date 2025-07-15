@@ -54,7 +54,7 @@ function Shelf3D({
       boxMesh1.position.set(
         0,
         -RIPA_ALTURA + andar * spacePerShelf,
-        LARGURA / 2 - RIPA_LARGURA / 2
+        LARGURA / 2 - RIPA_LARGURA / 2 - RIPA_LARGURA / 2
       );
       sceneObject.scene.add(boxMesh1);
 
@@ -62,7 +62,7 @@ function Shelf3D({
       boxMesh2.position.set(
         0,
         -RIPA_ALTURA + andar * spacePerShelf,
-        -LARGURA / 2 + RIPA_LARGURA / 2
+        -LARGURA / 2 + RIPA_LARGURA / 2 + RIPA_LARGURA / 2
       );
       sceneObject.scene.add(boxMesh2);
     }
@@ -115,7 +115,7 @@ function Shelf3D({
       const boxGeometry = new THREE.BoxGeometry(
         RIPA_LARGURA,
         RIPA_ALTURA,
-        LARGURA
+        LARGURA - RIPA_LARGURA
       );
 
       const ESPACO_ENTRE_TIRAS =
@@ -125,7 +125,7 @@ function Shelf3D({
       for (let andarIndex = 0; andarIndex < PRATELEIRAS; andarIndex++) {
         // Tiras da prateleira
         for (let i = 0; i < TIRAS_POR_PRATELEIRA; i++) {
-          newArrayOfTiras.push(LARGURA);
+          newArrayOfTiras.push(LARGURA - RIPA_LARGURA);
           addTiraPrateleira({
             sceneObject,
             boxGeometry,
@@ -157,6 +157,7 @@ function Shelf3D({
 
     // sceneObject.camera.position.set(200, 200, -200); // posição diagonal de cima
     // sceneObject.camera.position.set(120, 120, 120); // posição diagonal de cima
+    // sceneObject.camera.position.set(100, 60, 0); // posição diagonal de cima
     sceneObject.camera.position.set(
       20 + height * 2,
       20 + height * 2,
