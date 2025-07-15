@@ -195,7 +195,7 @@ const Controls = ({
           </div>
         </div>
 
-        <div className="bg-gray-50 p-4 rounded-lg shadow-md space-y-4">
+        <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-md space-y-4">
           <h3 className="text-md font-medium text-gray-700 border-b pb-2">Configurações de Prateleira</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
