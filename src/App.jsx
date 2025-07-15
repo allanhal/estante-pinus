@@ -88,16 +88,16 @@ function App() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen gap-4 p-4">
       <div className="col-span-2 flex flex-col items-center justify-center mb-5">
-        <p className="text-[50px] md:text-[80px] font-serif text-amber-600 drop-shadow-lg" style={{ fontFamily: 'Bungee Outline, cursive' }}>
+        <p className="text-[50px] md:text-[80px] font-serif text-amber-600 drop-shadow-lg" style={{ fontFamily: 'Bungee Outline, cursive', fontWeight: 'bold' }}>
         Pinus & Forma 
         </p>
-        <p className="text-lg md:text-xl text-gray-700 text-center">
-        Personalize sua estante em madeira de pinus com simplicidade e estilo, no seu espaço do seu jeito.
+        <p className="text-lg md:text-xl text-amber-600 text-center">
+        Personalize sua estante em madeira de pinus com simplicidade e estilo, do seu jeito.
         </p>
       </div>
       <div
         id="scene-wrapper"
-        className="col-span-1 rounded-xl shadow-xl border border-gray-300 m-4"
+        className="col-span-1 md:col-span-1 rounded-3xl shadow-xl border border-gray-200 m-1"
         style={{ height: 'calc(100vh - 150px)', overflow: 'hidden' }}
       >
         <Shelf3D
@@ -110,7 +110,7 @@ function App() {
           setPrice={setPrice}
         />
       </div>
-      <div className="col-span-1 m-4">
+      <div className="col-span-1 md:col-span-1 m-1">
         <Controls
           width={width}
           height={height}

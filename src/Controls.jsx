@@ -2,9 +2,9 @@ import { Settings, Ruler, Layers, Grid, ShoppingCart } from "lucide-react";
 import { RIPA_ALTURA, RIPA_LARGURA } from "./App";
 import { useEffect, useState } from "react";
   
-const convertPixelsToMeters = (pixels) => (pixels / 100).toFixed(2);
+const convertPixelsToMeters = (pixels) => pixels;
 
-const convertMetersToPixels = (meters) => Math.round(meters * 100);
+const convertMetersToPixels = (meters) => meters;
 
 const Controls = ({
   width,
@@ -65,7 +65,7 @@ const Controls = ({
   };
 
   return (
-    <div className="bg-white rounded-xl mb-6 shadow-lg p-8 space-y-8 inset-shadow-sm border border-gray-300">
+    <div className="bg-white rounded-3xl mb-6 shadow-xl p-8 space-y-8 inset-shadow-sm border border-gray-200">
       <div className="flex items-center gap-4 mb-6">
         <Settings className="text-amber-600" size={28} />
         <h2 className="text-lg font-semibold text-gray-800">
@@ -75,7 +75,7 @@ const Controls = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-        <div className="bg-gray-50 p-4 rounded-lg shadow-md space-y-4">
+        <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-md space-y-4">
           <h3 className="text-md font-medium text-gray-700 border-b pb-2">Dimensões</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -102,7 +102,7 @@ const Controls = ({
                   }
                   className="w-20 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                 />
-                <span className="text-sm text-gray-500">m</span>
+                <span className="text-sm text-gray-500">cm</span>
               </div>
             </div>
             <input
@@ -141,7 +141,7 @@ const Controls = ({
                   }
                   className="w-20 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                 />
-                <span className="text-sm text-gray-500">m</span>
+                <span className="text-sm text-gray-500">cm</span>
               </div>
             </div>
             <input
@@ -180,7 +180,7 @@ const Controls = ({
                   }
                   className="w-20 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                 />
-                <span className="text-sm text-gray-500">m</span>
+                <span className="text-sm text-gray-500">cm</span>
               </div>
             </div>
             <input
@@ -291,15 +291,15 @@ const Controls = ({
             <div className="grid grid-cols-3 gap-4">
               <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
                 <Ruler className="text-amber-600 rotate-45" size={16} />
-                <span className="font-normal">{convertPixelsToMeters(width)}m</span>
+                <span className="font-normal">{width}cm</span>
               </div>
               <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
                 <Ruler className="text-amber-600 rotate-[-45deg]" size={16} />
-                <span className="font-normal">{convertPixelsToMeters(height)}m</span>
+                <span className="font-normal">{height}cm</span>
               </div>
               <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
                 <Ruler className="text-amber-600" size={16} />
-                <span className="font-normal">{convertPixelsToMeters(depth)}m</span>
+                <span className="font-normal">{depth}cm</span>
               </div>
               <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
                 <Layers className="text-amber-600" size={16} />
@@ -311,7 +311,7 @@ const Controls = ({
               </div>
               <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
                 <Layers className="text-amber-600" size={16} />
-                <span className="font-normal">{convertPixelsToMeters(spacePerShelf)}m</span>
+                <span className="font-normal">{convertPixelsToMeters(spacePerShelf)}cm</span>
               </div>
             </div>
           </div>
@@ -324,9 +324,9 @@ const Controls = ({
             <a
               href={`https://api.whatsapp.com/send?phone=5585992820404&text=${encodeURIComponent(
                 "Olá, gostaria de fazer o pedido de uma estante de pinus com as medidas: " +
-                  `Largura: ${convertPixelsToMeters(width)}m, Altura: ${convertPixelsToMeters(height)}m, Profundidade: ${convertPixelsToMeters(depth)}m, ` +
+                  `Largura: ${width}cm, Altura: ${height}cm, Profundidade: ${depth}cm, ` +
                   `Prateleiras: ${shelves}, Ripas por Prateleira: ${slatsPerShelf}, ` +
-                  `Espaço entre Prateleiras: ${convertPixelsToMeters(spacePerShelf)}m. ` +
+                  `Espaço entre Prateleiras: ${convertPixelsToMeters(spacePerShelf)}cm. ` +
                   `Preço: R$ ${price * 2}. ` +
                   `Link para entrar na página: ${window.location.origin}/?altura=${height}&largura=${width}&profundidade=${depth}&ripas_por_prateleira=${slatsPerShelf}&espaco_entre_prateleiras=${spacePerShelf}`
               )}`}
