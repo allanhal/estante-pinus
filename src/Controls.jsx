@@ -327,7 +327,7 @@ const Controls = ({
               `Link para entrar na página: ${window.location.origin}/?altura=${height}&largura=${width}&profundidade=${depth}&ripas_por_prateleira=${slatsPerShelf}&espaco_entre_prateleiras=${spacePerShelf}`
           )}`}
           target="_blank"
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-xl"
         >
           Preço: R$ {price * 2}
         </a>
@@ -343,6 +343,12 @@ const Controls = ({
             • Tamanhos aproximados das ripas: {RIPA_LARGURA}cm (largura) ×{" "}
             {RIPA_ALTURA}cm (altura)
           </p>
+          <button
+            id="button"
+            className="bg-sky-500 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded text-xs"
+          >
+            Exportar para STL
+          </button>
         </div>
       </div>
     </div>
