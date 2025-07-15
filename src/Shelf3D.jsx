@@ -173,7 +173,7 @@ function Shelf3D({
 
   return (
     <div>
-      <canvas id="myThreeJsCanvas" className="p-1" />
+      <canvas id="myThreeJsCanvas" className="p-2" />
     </div>
   );
 }

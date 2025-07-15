@@ -114,8 +114,8 @@ function App() {
         id="scene-wrapper"
         className={
           isMobile
-            ? "block md:hidden col-span-3 rounded-xl shadow-xl m-5 border border-gray-300 rounded-xl shadow-lg aspect-square"
-            : "col-span-1 md:col-span-1 rounded-3xl shadow-xl border border-gray-200 m-1"
+            ? "block md:hidden col-span-3 rounded-xl shadow-xl m-5 border border-gray-300 rounded-xl shadow-lg aspect-square mb-6"
+            : "col-span-1 md:col-span-1 rounded-3xl shadow-xl border border-gray-200 m-1 mb-6"
         }
       >
         <Shelf3D
@@ -132,8 +132,8 @@ function App() {
       <div
         className={
           isMobile
-            ? "col-span-3 md:col-span-2 m-5"
-            : "col-span-1 md:col-span-1 m-1"
+            ? "col-span-3 md:col-span-2 m-5 pb-6"
+            : "col-span-1 md:col-span-1 m-1 pb-6"
         }
       >
         <Controls
