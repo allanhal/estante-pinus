@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import * as THREE from "three";
 import SceneInit from "./lib/SceneInit";
 import { RIPA_ALTURA, RIPA_LARGURA } from "./App";
+import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
 
 function Shelf3D({
   width = 70,
@@ -169,6 +170,16 @@ function Shelf3D({
     sceneObject.camera.lookAt(0, 0, 0); // olhando para o centro da cena
 
     setArrayOfTiras(newArrayOfTiras);
+
+    document.getElementById("button").addEventListener("click", () => {
+      const exporter = new STLExporter();
+      const stlString = exporter.parse(sceneObject.scene);
+      const blob = new Blob([stlString], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "estante.stl";
+      link.click();
+    });
   }, [width, height, depth, shelves, slatsPerShelf, spacePerShelf]);
 
   return (

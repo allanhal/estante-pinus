@@ -349,6 +349,12 @@ const Controls = ({
           <p>
             • Tamanhos aproximados das ripas: {RIPA_LARGURA}cm (largura) × {RIPA_ALTURA}cm (altura)
           </p>
+          <button
+            id="button"
+            className="bg-sky-500 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded text-xs"
+          >
+            Exportar para STL
+          </button>
         </div>
       </div>
     </div>
