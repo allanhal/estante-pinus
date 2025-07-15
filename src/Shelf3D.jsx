@@ -21,15 +21,6 @@ function Shelf3D({
   const [arrayOfTiras, setArrayOfTiras] = useState([]);
 
   useEffect(() => {
-    // console.log("arrayOfTiras", arrayOfTiras);
-    // console.log(
-    //   "arrayOfTiras sum",
-    //   arrayOfTiras.reduce((total, num) => total + num, 0)
-    // );
-    // console.log(
-    //   "arrayOfTiras tiras",
-    //   Math.round(arrayOfTiras.reduce((total, num) => total + num, 0) / 300)
-    // );
     setPrice(
       Math.round(arrayOfTiras.reduce((total, num) => total + num, 0) / 300) * 10
     );

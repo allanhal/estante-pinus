@@ -74,7 +74,7 @@ const Controls = ({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Ruler className="text-amber-600 rotate-90" size={18} />
+              <Ruler className="text-amber-600 rotate-45" size={18} />
               <label className="text-xs font-medium text-gray-700">
                 Altura
               </label>
@@ -114,7 +114,7 @@ const Controls = ({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Ruler className="text-amber-600" size={18} />
+              <Ruler className="text-amber-600 rotate-[-45deg]" size={18} />
               <label className="text-xs font-medium text-gray-700">
                 Largura
               </label>
@@ -318,7 +318,7 @@ const Controls = ({
 
       <div className="pt-2 border-t border-gray-200">
         <p className="font-bold text-xl text-green-900">
-          <p>Preço: R$ {price * 2}</p>
+          Preço: R$ {price * 2}
         </p>
       </div>
       <div className="pt-2 border-t border-gray-200">
