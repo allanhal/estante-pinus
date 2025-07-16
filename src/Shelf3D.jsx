@@ -23,7 +23,9 @@ function Shelf3D({
 
   useEffect(() => {
     setPrice(
-      (Math.round(arrayOfTiras.reduce((total, num) => total + num, 0) / 300) * 10) + 10
+      Math.round(arrayOfTiras.reduce((total, num) => total + num, 0) / 300) *
+        10 +
+        10
     );
   }, [arrayOfTiras]);
 
@@ -156,11 +158,16 @@ function Shelf3D({
       sceneObject,
     });
 
-    // sceneObject.camera.position.set(200, 200, -200); // posição diagonal de cima
+    // sceneObject.camera.position.set(500, 500, 500); // posição diagonal de cima
+    // sceneObject.camera.position.set(400, 400, 400); // posição diagonal de cima
+    // sceneObject.camera.position.set(200, 200, 200); // posição diagonal de cima
     // sceneObject.camera.position.set(120, 120, 120); // posição diagonal de cima
+    // sceneObject.camera.position.set(40, 40, 40); // posição diagonal de cima
+    // sceneObject.camera.position.set(10, 10, 10); // posição diagonal de cima
     // sceneObject.camera.position.set(100, 60, 0); // posição diagonal de cima
+    // sceneObject.camera.position.set(20 + height * 2, 20 + height * 2, height);
     sceneObject.camera.position.set(
-      20 + height * 2,
+      20 + height * 4,
       20 + height * 2,
       20 + height * 2
     );

@@ -1,4 +1,14 @@
-import { Settings, Ruler, Layers, Grid, ShoppingCart } from "lucide-react";
+import {
+  Settings,
+  Ruler,
+  Layers,
+  Grid,
+  ShoppingCart,
+  DollarSign,
+  Bike,
+  Car,
+  Truck,
+} from "lucide-react";
 import {
   FRETE_FIXO_CAMINHAO,
   FRETE_FIXO_CARRO,
@@ -434,17 +444,18 @@ const Controls = ({
           <div className="flex flex-col justify-start items-start bg-gray-50 p-4 rounded-2xl">
             <div className="flex flex-col items-start mb-3">
               <div className="flex items-center">
-                <img
+                {/* <img
                   src="/pinus-icon1.svg"
                   alt="Estante Icon"
                   className="mr-2"
                   style={{ width: "24px", height: "24px" }}
-                />
+                /> */}
+                <DollarSign className="text-amber-600" size={24} />
                 <span className="text-md font-bold text-gray-600">
                   Valor total:
                 </span>
               </div>
-              <span className="text-2xl font-bold text-gray-700">
+              <span className="pl-1 text-2xl font-bold text-gray-700">
                 {(price * 2).toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
@@ -453,13 +464,16 @@ const Controls = ({
             </div>
             <div className="flex flex-col items-start mb-3">
               <div className="flex items-center">
-                <img
+                {/* <img
                   src="/pinus-icon1.svg"
                   alt="Estante Icon"
                   className="mr-2"
                   style={{ width: "24px", height: "24px" }}
-                />
-                <span className="text-md font-bold text-gray-600">
+                /> */}
+                {shelves >= 10 && <Truck className="text-amber-600" size={24} />}
+                {(shelves > 3 && shelves < 10) && <Car className="text-amber-600" size={24} />}
+                {shelves <= 3 && <Bike className="text-amber-600" size={24} />}
+                <span className="pl-1 text-sm font-bold text-gray-600">
                   Frete + Montagem (opcional):
                 </span>
               </div>
