@@ -23,7 +23,7 @@ function Shelf3D({
 
   useEffect(() => {
     setPrice(
-      Math.round(arrayOfTiras.reduce((total, num) => total + num, 0) / 300) * 10
+      (Math.round(arrayOfTiras.reduce((total, num) => total + num, 0) / 300) * 10) + 10
     );
   }, [arrayOfTiras]);
 

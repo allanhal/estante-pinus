@@ -66,10 +66,46 @@ const Controls = ({
   };
 
   const buttonConfigs = [
-    { width: 50, height: 50, depth: 30, shelves: 2, slatsPerShelf: 4, spacePerShelf: 15 },
-    { width: 60, height: 60, depth: 35, shelves: 3, slatsPerShelf: 4, spacePerShelf: 20 },
-    { width: 70, height: 70, depth: 40, shelves: 4, slatsPerShelf: 4, spacePerShelf: 25 },
-    { width: 80, height: 80, depth: 45, shelves: 5, slatsPerShelf: 4, spacePerShelf: 30 },
+    {
+      height: 30,
+      width: 30,
+      depth: 20,
+      shelves: 2,
+      slatsPerShelf: 4,
+      spacePerShelf: 10,
+    },
+    {
+      height: 40,
+      width: 40,
+      depth: 30,
+      shelves: 2,
+      slatsPerShelf: 4,
+      spacePerShelf: 20,
+    },
+    {
+      height: 60,
+      width: 40,
+      depth: 30,
+      shelves: 3,
+      slatsPerShelf: 4,
+      spacePerShelf: 20,
+    },
+    {
+      height: 80,
+      width: 60,
+      depth: 40,
+      shelves: 4,
+      slatsPerShelf: 5,
+      spacePerShelf: 20,
+    },
+    {
+      height: 100,
+      width: 60,
+      depth: 40,
+      shelves: 5,
+      slatsPerShelf: 5,
+      spacePerShelf: 20,
+    },
   ];
 
   return (
@@ -85,13 +121,21 @@ const Controls = ({
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="border border-gray-600 py-2 px-3 text-gray-600 font-bold text-sm rounded-lg transition duration-300 flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0"
         >
-          <img src="/pinus-icon2.png" alt="Prateleira Icon" className="w-6 h-6" />
+          <img
+            src="/pinus-icon2.png"
+            alt="Prateleira Icon"
+            className="w-6 h-6"
+          />
           {isCollapsed ? "Sugestões de Prateleiras" : "Esconder Sugestões"}
         </button>
       </div>
 
       {!isCollapsed && (
-        <div className={`flex flex-col md:flex-row justify-around mt-2 transition-all duration-500 ease-in-out bg-gray-50 p-4 rounded-lg gap-4 ${isCollapsed ? 'max-h-0 overflow-hidden' : 'max-h-screen'}`}>
+        <div
+          className={`flex flex-col md:flex-row justify-around mt-2 transition-all duration-500 ease-in-out bg-gray-50 p-4 rounded-lg gap-4 ${
+            isCollapsed ? "max-h-0 overflow-hidden" : "max-h-screen"
+          }`}
+        >
           {buttonConfigs.map((config, index) => (
             <button
               key={index}
@@ -105,8 +149,12 @@ const Controls = ({
               }}
               className="border border-amber-600 text-gray-600 font-bold text-sm py-1 px-3 rounded-md flex items-center gap-2 transition duration-300 transform hover:scale-105"
             >
-              <img src="/orange-pinus.png" alt="Prateleira Icon" className="w-10 h-10" />
-              {`${config.width} x ${config.height} x ${config.depth}`}
+              <img
+                src="/orange-pinus.png"
+                alt="Prateleira Icon"
+                className="w-10 h-10"
+              />
+              {`${config.height} x ${config.width} x ${config.depth}`}
             </button>
           ))}
         </div>
