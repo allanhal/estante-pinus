@@ -1,5 +1,5 @@
 import { Settings, Ruler, Layers, Grid, ShoppingCart } from "lucide-react";
-import { RIPA_ALTURA, RIPA_LARGURA } from "./App";
+import { FRETE_FIXO, RIPA_ALTURA, RIPA_LARGURA } from "./App";
 import { useEffect, useState } from "react";
 
 const convertPixelsToMeters = (pixels) => pixels;
@@ -109,7 +109,7 @@ const Controls = ({
   ];
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl p-8 space-y-8 inset-shadow-sm border border-gray-200">
+    <div className="bg-white rounded-3xl shadow-xl p-4 space-y-4 inset-shadow-sm border border-gray-200">
       <div className="flex flex-col md:flex-row items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <Settings className="text-amber-600" size={24} />
@@ -439,6 +439,25 @@ const Controls = ({
                 })}
               </span>
             </div>
+            <div className="flex flex-col items-start mb-3">
+              <div className="flex items-center">
+                <img
+                  src="/pinus-icon1.svg"
+                  alt="Estante Icon"
+                  className="mr-2"
+                  style={{ width: "24px", height: "24px" }}
+                />
+                <span className="text-md font-bold text-gray-600">
+                  Frete + Montagem (opcional):
+                </span>
+              </div>
+              <span className="text-2xl font-bold text-gray-700">
+                {(25 + shelves * 10).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </span>
+            </div>
             <a
               href={`https://api.whatsapp.com/send?phone=5585992820404&text=${encodeURIComponent(
                 "Olá, gostaria de fazer o pedido de uma estante de pinus com as medidas: " +
@@ -448,6 +467,7 @@ const Controls = ({
                     spacePerShelf
                   )}cm. ` +
                   `Preço: R$ ${price * 2}. ` +
+                  `Frete + Montagem: R$ ${FRETE_FIXO + shelves * 10}. ` +
                   `Link para entrar na página: ${window.location.origin}/?altura=${height}&largura=${width}&profundidade=${depth}&ripas_por_prateleira=${slatsPerShelf}&espaco_entre_prateleiras=${spacePerShelf}`
               )}`}
               target="_blank"
@@ -462,8 +482,9 @@ const Controls = ({
       <div className="pt-4 border-t border-gray-200">
         <div className="text-sm text-gray-500 space-y-2">
           <p className="font-bold text-amber-600">
-            • Podem haver variações de 1~2cm nas dimensões
+            • Frete para todas regiões de Fortaleza-CE
           </p>
+          <p>• Podem haver variações de 1~2cm nas dimensões</p>
           <p>• Use os sliders ou digite valores diretamente nos campos</p>
           <p>• Preços enviados estarão sujeitos a revisão</p>
           <p>
