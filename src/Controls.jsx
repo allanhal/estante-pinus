@@ -1,10 +1,22 @@
 import { Settings, Ruler, Layers, Grid, ShoppingCart } from "lucide-react";
-import { FRETE_FIXO, RIPA_ALTURA, RIPA_LARGURA } from "./App";
+import {
+  FRETE_FIXO_CAMINHAO,
+  FRETE_FIXO_CARRO,
+  FRETE_FIXO_MOTO,
+  RIPA_ALTURA,
+  RIPA_LARGURA,
+} from "./App";
 import { useEffect, useState } from "react";
 
 const convertPixelsToMeters = (pixels) => pixels;
 
 const convertMetersToPixels = (meters) => meters;
+
+const freteMontagem = (shelves) => {
+  if (shelves >= 10) return FRETE_FIXO_CAMINHAO + shelves * 10;
+  if (shelves > 3) return FRETE_FIXO_CARRO + shelves * 10;
+  return FRETE_FIXO_MOTO + shelves * 10;
+};
 
 const Controls = ({
   width,
@@ -452,7 +464,7 @@ const Controls = ({
                 </span>
               </div>
               <span className="text-2xl font-bold text-gray-700">
-                {(25 + shelves * 10).toLocaleString("pt-BR", {
+                {freteMontagem(shelves).toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 })}
@@ -467,7 +479,7 @@ const Controls = ({
                     spacePerShelf
                   )}cm. ` +
                   `Preço: R$ ${price * 2}. ` +
-                  `Frete + Montagem: R$ ${FRETE_FIXO + shelves * 10}. ` +
+                  `Frete + Montagem: R$ ${freteMontagem(shelves)}. ` +
                   `Link para entrar na página: ${window.location.origin}/?altura=${height}&largura=${width}&profundidade=${depth}&ripas_por_prateleira=${slatsPerShelf}&espaco_entre_prateleiras=${spacePerShelf}`
               )}`}
               target="_blank"
@@ -481,6 +493,12 @@ const Controls = ({
       </div>
       <div className="pt-4 border-t border-gray-200">
         <div className="text-sm text-gray-500 space-y-2">
+          <p className="font-bold text-amber-600">
+            • Tempo de produção: até 2 dias úteis
+          </p>
+          <p className="font-bold text-amber-600">
+            • Entrega: até 2 dias úteis
+          </p>
           <p className="font-bold text-amber-600">
             • Frete para todas regiões de Fortaleza-CE
           </p>

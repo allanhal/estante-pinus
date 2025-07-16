@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import Shelf3D from "./Shelf3D";
 import Controls from "./Controls";
 
-export const FRETE_FIXO = 4;
+export const FRETE_FIXO_CAMINHAO = 80;
+export const FRETE_FIXO_CARRO = 50;
+export const FRETE_FIXO_MOTO = 25;
 
 export const RIPA_LARGURA = 4;
 export const RIPA_ALTURA = 2;
