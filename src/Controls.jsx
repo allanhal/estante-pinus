@@ -374,7 +374,7 @@ const Controls = ({
             <div className="flex flex-col items-start mb-3">
               <div className="flex items-center">
                 <img
-                  src="/src/assets/pinus-icon1.svg"
+                  src="/pinus-icon1.svg"
                   alt="Estante Icon"
                   className="mr-2"
                   style={{ width: "24px", height: "24px" }}
