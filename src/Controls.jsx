@@ -85,7 +85,7 @@ const Controls = ({
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="border border-gray-600 py-2 px-3 text-gray-600 font-bold text-sm rounded-lg transition duration-300 flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0"
         >
-          <img src="/src/assets/pinus-icon2.png" alt="Prateleira Icon" className="w-6 h-6" />
+          <img src="/spinus-icon2.png" alt="Prateleira Icon" className="w-6 h-6" />
           {isCollapsed ? "Sugestões de Prateleiras" : "Esconder Sugestões"}
         </button>
       </div>
@@ -105,7 +105,7 @@ const Controls = ({
               }}
               className="border border-amber-600 text-gray-600 font-bold text-sm py-1 px-3 rounded-md flex items-center gap-2 transition duration-300 transform hover:scale-105"
             >
-              <img src="/src/assets/orange-pinus.png" alt="Prateleira Icon" className="w-10 h-10" />
+              <img src="/orange-pinus.png" alt="Prateleira Icon" className="w-10 h-10" />
               {`${config.width} x ${config.height} x ${config.depth}`}
             </button>
           ))}
