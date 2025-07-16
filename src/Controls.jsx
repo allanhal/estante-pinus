@@ -85,7 +85,7 @@ const Controls = ({
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="border border-gray-600 py-2 px-3 text-gray-600 font-bold text-sm rounded-lg transition duration-300 flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0"
         >
-          <img src="/spinus-icon2.png" alt="Prateleira Icon" className="w-6 h-6" />
+          <img src="/pinus-icon2.png" alt="Prateleira Icon" className="w-6 h-6" />
           {isCollapsed ? "Sugestões de Prateleiras" : "Esconder Sugestões"}
         </button>
       </div>
