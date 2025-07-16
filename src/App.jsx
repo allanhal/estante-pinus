@@ -103,7 +103,7 @@ function App() {
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen gap-4 p-4">
       <div className="col-span-2 flex flex-col items-center justify-center mb-5">
         <p
-          className="text-[50px] md:text-[80px] font-serif text-amber-600 drop-shadow-lg"
+          className="text-[30px] sm:text-[60px] md:text-[80px] font-serif text-amber-600 drop-shadow-lg"
           style={{ fontFamily: "Bungee Outline, cursive", fontWeight: "bold" }}
         >
           Pinus & Forma
