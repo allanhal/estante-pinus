@@ -122,7 +122,7 @@ const Controls = ({
               <div className="flex items-center gap-3">
                 <Ruler className="text-amber-600 rotate-45" size={20} />
                 <label className="text-sm font-medium text-gray-700">
-                  Altura (m)
+                  Altura
                 </label>
               </div>
               <div className="flex items-center gap-3">
@@ -163,7 +163,7 @@ const Controls = ({
               <div className="flex items-center gap-3">
                 <Ruler className="text-amber-600 rotate-[-45deg]" size={20} />
                 <label className="text-sm font-medium text-gray-700">
-                  Largura (m)
+                  Largura
                 </label>
               </div>
               <div className="flex items-center gap-3">
@@ -204,7 +204,7 @@ const Controls = ({
               <div className="flex items-center gap-3">
                 <Ruler className="text-amber-600" size={20} />
                 <label className="text-sm font-medium text-gray-700">
-                  Profundidade (m)
+                  Profundidade
                 </label>
               </div>
               <div className="flex items-center gap-3">
@@ -286,7 +286,7 @@ const Controls = ({
               <div className="flex items-center gap-3">
                 <Layers className="text-amber-600" size={20} />
                 <label className="text-sm font-medium text-gray-700">
-                  Espaço entre Prateleiras (m)
+                  Espaço entre Prateleiras
                 </label>
               </div>
               <div className="flex items-center gap-3">
@@ -313,6 +313,7 @@ const Controls = ({
                   }}
                   className="w-20 px-3 py-2 text-md rounded-lg text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent font-bold"
                 />
+                <span className="text-sm text-gray-500">cm</span>
               </div>
             </div>
             <input
@@ -344,15 +345,15 @@ const Controls = ({
             <div className="grid grid-cols-3 gap-4">
               <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
                 <Ruler className="text-amber-600 rotate-45" size={16} />
-                <span className="font-normal">{width}cm</span>
+                <span className="font-normal">{width} cm</span>
               </div>
               <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
                 <Ruler className="text-amber-600 rotate-[-45deg]" size={16} />
-                <span className="font-normal">{height}cm</span>
+                <span className="font-normal">{height} cm</span>
               </div>
               <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
                 <Ruler className="text-amber-600" size={16} />
-                <span className="font-normal">{depth}cm</span>
+                <span className="font-normal">{depth} cm</span>
               </div>
               <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
                 <Layers className="text-amber-600" size={16} />
@@ -365,7 +366,7 @@ const Controls = ({
               <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
                 <Layers className="text-amber-600" size={16} />
                 <span className="font-normal">
-                  {convertPixelsToMeters(spacePerShelf)}cm
+                  {convertPixelsToMeters(spacePerShelf)} cm
                 </span>
               </div>
             </div>
