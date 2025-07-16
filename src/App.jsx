@@ -10,8 +10,8 @@ export const FRETE_FIXO_MOTO = 25;
 export const RIPA_LARGURA = 4;
 export const RIPA_ALTURA = 2;
 
-const ALTURA = 80;
-const LARGURA = 50;
+const ALTURA = 60;
+const LARGURA = 40;
 const PROFUNDIDADE = 30;
 const PRATELEIRAS = 4;
 const TIRAS_POR_PRATELEIRA = 4;
