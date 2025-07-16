@@ -39,6 +39,7 @@ const Controls = ({
 }) => {
   // const [maxShelvesState, setMaxShelvesState] = useState();
   const [maxSlatsPerShelfState, setMaxSlatsPerShelfState] = useState();
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   useEffect(() => {
     const newMaxShelves = Math.floor(height / spacePerShelf);
@@ -64,14 +65,52 @@ const Controls = ({
     }
   };
 
+  const buttonConfigs = [
+    { width: 50, height: 50, depth: 30, shelves: 2, slatsPerShelf: 4, spacePerShelf: 15 },
+    { width: 60, height: 60, depth: 35, shelves: 3, slatsPerShelf: 4, spacePerShelf: 20 },
+    { width: 70, height: 70, depth: 40, shelves: 4, slatsPerShelf: 4, spacePerShelf: 25 },
+    { width: 80, height: 80, depth: 45, shelves: 5, slatsPerShelf: 4, spacePerShelf: 30 },
+  ];
+
   return (
     <div className="bg-white rounded-3xl shadow-xl p-8 space-y-8 inset-shadow-sm border border-gray-200">
-      <div className="flex items-center gap-4 mb-6">
-        <Settings className="text-amber-600" size={24} />
-        <h2 className="text-lg font-bold text-gray-700">
-          Customização da Prateleira
-        </h2>
+      <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <Settings className="text-amber-600" size={24} />
+          <h2 className="text-lg font-bold text-gray-700">
+            Customização da Prateleira
+          </h2>
+        </div>
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="border border-gray-600 py-2 px-3 text-gray-600 font-bold text-sm rounded-lg transition duration-300 flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0"
+        >
+          <img src="/src/assets/pinus-icon2.png" alt="Prateleira Icon" className="w-6 h-6" />
+          {isCollapsed ? "Sugestões de Prateleiras" : "Esconder Sugestões"}
+        </button>
       </div>
+
+      {!isCollapsed && (
+        <div className={`flex flex-col md:flex-row justify-around mt-2 transition-all duration-500 ease-in-out bg-gray-50 p-4 rounded-lg gap-4 ${isCollapsed ? 'max-h-0 overflow-hidden' : 'max-h-screen'}`}>
+          {buttonConfigs.map((config, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                setWidth(config.width);
+                setHeight(config.height);
+                setDepth(config.depth);
+                setShelves(config.shelves);
+                setSlatsPerShelf(config.slatsPerShelf);
+                setSpacePerShelf(config.spacePerShelf);
+              }}
+              className="border border-amber-600 text-gray-600 font-bold text-sm py-1 px-3 rounded-md flex items-center gap-2 transition duration-300 transform hover:scale-105"
+            >
+              <img src="/src/assets/orange-pinus.png" alt="Prateleira Icon" className="w-10 h-10" />
+              {`${config.width} x ${config.height} x ${config.depth}`}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-md space-y-4">
@@ -133,7 +172,7 @@ const Controls = ({
                   min={convertPixelsToMeters(minWidth)}
                   max={convertPixelsToMeters(maxWidth)}
                   value={convertPixelsToMeters(width)}
-                  step={0.1}
+                  step={10}
                   onChange={(e) =>
                     handleInputChange(
                       convertMetersToPixels(e.target.value),
@@ -152,7 +191,7 @@ const Controls = ({
               min={convertPixelsToMeters(minWidth)}
               max={convertPixelsToMeters(maxWidth)}
               value={convertPixelsToMeters(width)}
-              step={0.1}
+              step={10}
               onChange={(e) =>
                 setWidth(convertMetersToPixels(Number(e.target.value)))
               }
@@ -174,7 +213,7 @@ const Controls = ({
                   min={convertPixelsToMeters(minDepth)}
                   max={convertPixelsToMeters(maxDepth)}
                   value={convertPixelsToMeters(depth)}
-                  step={0.05}
+                  step={5}
                   onChange={(e) =>
                     handleInputChange(
                       convertMetersToPixels(e.target.value),
@@ -193,7 +232,7 @@ const Controls = ({
               min={convertPixelsToMeters(minDepth)}
               max={convertPixelsToMeters(maxDepth)}
               value={convertPixelsToMeters(depth)}
-              step={0.05}
+              step={5}
               onChange={(e) =>
                 setDepth(convertMetersToPixels(Number(e.target.value)))
               }
@@ -256,7 +295,7 @@ const Controls = ({
                   min={convertPixelsToMeters(minSpacePerShelf)}
                   max={convertPixelsToMeters(maxSpacePerShelf)}
                   value={convertPixelsToMeters(spacePerShelf)}
-                  step={0.1}
+                  step={10}
                   onChange={(e) => {
                     handleInputChange(
                       convertMetersToPixels(e.target.value),
@@ -281,7 +320,7 @@ const Controls = ({
               min={convertPixelsToMeters(minSpacePerShelf)}
               max={convertPixelsToMeters(maxSpacePerShelf)}
               value={convertPixelsToMeters(spacePerShelf)}
-              step={0.1}
+              step={10}
               onChange={(e) => {
                 setSpacePerShelf(convertMetersToPixels(Number(e.target.value)));
 
