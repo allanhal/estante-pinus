@@ -167,9 +167,9 @@ function Shelf3D({
     // sceneObject.camera.position.set(100, 60, 0); // posição diagonal de cima
     // sceneObject.camera.position.set(20 + height * 2, 20 + height * 2, height);
     sceneObject.camera.position.set(
-      20 + height * 4,
-      20 + height * 2,
-      20 + height * 2
+      20 + height * 5,
+      20 + height * 3,
+      20 + height * 3
     );
     // sceneObject.camera.position.set(0, 0, 100); // posição lateral
     // sceneObject.camera.position.set(-100, 0, 20); // posição lateral
