@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import STLModel from "./STLModel";
 
-export default function STLImporter() {
+export default function STLModelViewer() {
   return (
     <Canvas camera={{ position: [0, 0, 50], fov: 40 }}>
       <ambientLight intensity={0.5} />
