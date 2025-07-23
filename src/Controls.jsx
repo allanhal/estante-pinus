@@ -61,7 +61,7 @@ const Controls = ({
 }) => {
   // const [maxShelvesState, setMaxShelvesState] = useState();
   const [maxSlatsPerShelfState, setMaxSlatsPerShelfState] = useState();
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
     const newMaxShelves = Math.floor(height / spacePerShelf);
@@ -470,8 +470,12 @@ const Controls = ({
                   className="mr-2"
                   style={{ width: "24px", height: "24px" }}
                 /> */}
-                {shelves >= 10 && <Truck className="text-amber-600" size={24} />}
-                {(shelves > 3 && shelves < 10) && <Car className="text-amber-600" size={24} />}
+                {shelves >= 10 && (
+                  <Truck className="text-amber-600" size={24} />
+                )}
+                {shelves > 3 && shelves < 10 && (
+                  <Car className="text-amber-600" size={24} />
+                )}
                 {shelves <= 3 && <Bike className="text-amber-600" size={24} />}
                 <span className="pl-1 text-sm font-bold text-gray-600">
                   Frete + Montagem (opcional):
