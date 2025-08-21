@@ -19,5 +19,8 @@
     "@vitejs/plugin-react": "^1.0.7",
     "vite": "^7.0.4",
     "vite-plugin-fonts": "^0.7.0"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
