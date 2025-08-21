@@ -512,11 +512,11 @@ const Controls = ({
       <div className="pt-4 border-t border-gray-200">
         <div className="text-sm text-gray-500 space-y-2">
           <p className="font-bold text-amber-600">
-            • Tempo de produção: até 2 dias úteis
+            • Tempo de produção e entrega: até 2 dias úteis
           </p>
-          <p className="font-bold text-amber-600">
+          {/* <p className="font-bold text-amber-600">
             • Entrega: até 2 dias úteis
-          </p>
+          </p> */}
           <p className="font-bold text-amber-600">
             • Frete para todas regiões de Fortaleza-CE
           </p>
