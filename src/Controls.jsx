@@ -121,7 +121,7 @@ const Controls = ({
       spacePerShelf: 20,
     },
     {
-      height: 100,
+      height: 120,
       width: 60,
       depth: 40,
       shelves: 5,
