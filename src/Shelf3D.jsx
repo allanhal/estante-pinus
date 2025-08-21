@@ -158,6 +158,10 @@ function Shelf3D({
       sceneObject,
     });
 
+    let x = Math.min(20 + height * 5, 600)
+    let yz = Math.min(20 + height * 3, 550)
+
+    // sceneObject.camera.position.set(600, 550, 550); // posição diagonal de cima
     // sceneObject.camera.position.set(500, 500, 500); // posição diagonal de cima
     // sceneObject.camera.position.set(400, 400, 400); // posição diagonal de cima
     // sceneObject.camera.position.set(200, 200, 200); // posição diagonal de cima
@@ -167,9 +171,9 @@ function Shelf3D({
     // sceneObject.camera.position.set(100, 60, 0); // posição diagonal de cima
     // sceneObject.camera.position.set(20 + height * 2, 20 + height * 2, height);
     sceneObject.camera.position.set(
-      20 + height * 5,
-      20 + height * 3,
-      20 + height * 3
+      x,
+      yz,
+      yz
     );
     // sceneObject.camera.position.set(0, 0, 100); // posição lateral
     // sceneObject.camera.position.set(-100, 0, 20); // posição lateral
