@@ -148,6 +148,7 @@ function Shelf3D({
       }
     }
 
+    // const sceneObject = new SceneInit("myThreeJsCanvas"+Math.random());
     const sceneObject = new SceneInit("myThreeJsCanvas");
     sceneObject.initialize();
     sceneObject.animate();
@@ -158,8 +159,10 @@ function Shelf3D({
       sceneObject,
     });
 
-    let x = Math.min(20 + height * 5, 600)
-    let yz = Math.min(20 + height * 3, 550)
+    let x = Math.min(20 + height * 5, 600);
+    let yz = Math.min(20 + height * 3, 550);
+    // let yz = 150;
+    // let z = 200;
 
     // sceneObject.camera.position.set(600, 550, 550); // posição diagonal de cima
     // sceneObject.camera.position.set(500, 500, 500); // posição diagonal de cima
@@ -170,11 +173,8 @@ function Shelf3D({
     // sceneObject.camera.position.set(10, 10, 10); // posição diagonal de cima
     // sceneObject.camera.position.set(100, 60, 0); // posição diagonal de cima
     // sceneObject.camera.position.set(20 + height * 2, 20 + height * 2, height);
-    sceneObject.camera.position.set(
-      x,
-      yz,
-      yz
-    );
+    // sceneObject.camera.position.set(x, yz, z);
+    sceneObject.camera.position.set(x, yz, yz);
     // sceneObject.camera.position.set(0, 0, 100); // posição lateral
     // sceneObject.camera.position.set(-100, 0, 20); // posição lateral
     // sceneObject.camera.position.set(100, 50, -100); // posição diagonal de cima
