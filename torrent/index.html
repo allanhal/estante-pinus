@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello World!</title>
+
+</head>
+
+<body>
+  <div style="
+      display: flex;
+      flex-direction: column;
+      gap: 20px; 
+      /* padding: 20px; */">
+    <!-- <h1>💖 Hello World!</h1> -->
+    <h2>Torrents!</h2>
+
+    <!-- <p>Welcome to your Electron application.</p> -->
+    <div>
+
+      <span>Search:</span>
+      <input type="text" id="fileInput" />
+    </div>
+    <h3>List of Torrents:</h3>
+    <div style="display: flex; gap: 10px; flex-direction: column;">
+      <div>
+        <span>torrent 1</span>
+        <button>Download</button>
+      </div>
+      <div>
+        <span>torrent 2</span>
+        <button>Download</button>
+      </div>
+    </div>
+    <div style="
+  display: flex; 
+  gap: 10px; 
+  align-items: center; 
+  /* border: 1px solid red; */
+  height: 20px;
+  ">
+      <span>Title of Torrent</span>
+      <style>
+        .progress-container {
+          width: 300px;
+          height: 20px;
+          background: #e0e0e0;
+          border-radius: 15px;
+          overflow: hidden;
+          border: 1px solid #ccc;
+          position: relative;
+        }
+
+        .progress-bar {
+          height: 100%;
+          width: 0%;
+          /* start empty */
+          background: linear-gradient(90deg, #4caf50, #81c784);
+          transition: width 0.3s ease;
+        }
+
+        .progress-text {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-weight: bold;
+          color: #fff;
+          /* white so it stands out on green */
+        }
+
+        button {
+          height: 20px;
+          margin-right: 10px;
+          /* padding: 6px 12px; */
+          border: none;
+          border-radius: 6px;
+          background: #4caf50;
+          color: white;
+          cursor: pointer;
+          font-weight: bold;
+        }
+
+        button.decrease {
+          background: #f44336;
+        }
+
+        button:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      </style>
+      <div class="progress-container">
+        <div class="progress-bar" id="progress"></div>
+        <div class="progress-text" id="progress-text">0%</div>
+      </div>
+
+      <button class="decrease" onclick="decreaseProgress()">Decrease</button>
+      <button onclick="increaseProgress()">Increase</button>
+      <!-- <button id="toggle-dark-mode">Toggle Dark Mode</button> -->
+      <!-- <button id="reset-to-system">Reset to System Theme</button> -->
+    </div>
+
+    <button id="myBtn">Run Node Task</button>
+    <pre id="output"></pre>
+
+    <script>
+      const btn = document.getElementById("myBtn");
+      const output = document.getElementById("output");
+
+      btn.addEventListener("click", async () => {
+        const result = await window.electronAPI.doNodeTask("hello from renderer");
+        output.textContent = result;
+      });
+    </script>
+
+  </div>
+  <script type="module" src="/src/renderer.js"></script>
+  <script>
+    let progress = 0;
+    const bar = document.getElementById("progress");
+    const text = document.getElementById("progress-text");
+
+    function updateProgress() {
+      bar.style.width = progress + "%";
+      text.textContent = progress + "%";
+    }
+
+    function increaseProgress() {
+      if (progress < 100) {
+        progress += 10;
+        updateProgress();
+      }
+    }
+
+    function decreaseProgress() {
+      if (progress > 0) {
+        progress -= 10;
+        updateProgress();
+      }
+    }
+  </script>
+</body>
+
+</html>
