@@ -261,7 +261,7 @@ const Controls = ({
               min={convertPixelsToMeters(minWidth)}
               max={convertPixelsToMeters(maxWidth)}
               value={convertPixelsToMeters(width)}
-              step={10}
+              step={5}
               onChange={(e) =>
                 setWidth(convertMetersToPixels(Number(e.target.value)))
               }
