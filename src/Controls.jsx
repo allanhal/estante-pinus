@@ -452,7 +452,7 @@ const Controls = ({
                 /> */}
                 <DollarSign className="text-amber-600" size={24} />
                 <span className="text-md font-bold text-gray-600">
-                  Valor total:
+                  Valor estante:
                 </span>
               </div>
               <span className="pl-1 text-2xl font-bold text-gray-700">
