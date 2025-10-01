@@ -10,6 +10,7 @@ import {
   Truck,
 } from "lucide-react";
 import {
+  CUSTO_FIXO_MONTAGEM_ESTANTE,
   FRETE_FIXO_CAMINHAO,
   FRETE_FIXO_CARRO,
   FRETE_FIXO_MOTO,
@@ -22,10 +23,13 @@ const convertPixelsToMeters = (pixels) => pixels;
 
 const convertMetersToPixels = (meters) => meters;
 
-const freteMontagem = (shelves) => {
-  if (shelves >= 10) return FRETE_FIXO_CAMINHAO + shelves * 10;
-  if (shelves > 3) return FRETE_FIXO_CARRO + shelves * 10;
-  return FRETE_FIXO_MOTO + shelves * 10;
+const montagem = (shelves) => {
+  return shelves * CUSTO_FIXO_MONTAGEM_ESTANTE;
+};
+const frete = (shelves, width) => {
+  if (shelves >= 10) return FRETE_FIXO_CAMINHAO;
+  if (shelves > 3 || width >= 60) return FRETE_FIXO_CARRO;
+  return FRETE_FIXO_MOTO;
 };
 
 const Controls = ({
@@ -444,12 +448,6 @@ const Controls = ({
           <div className="flex flex-col justify-start items-start bg-gray-50 p-4 rounded-2xl">
             <div className="flex flex-col items-start mb-3">
               <div className="flex items-center">
-                {/* <img
-                  src="/pinus-icon1.svg"
-                  alt="Estante Icon"
-                  className="mr-2"
-                  style={{ width: "24px", height: "24px" }}
-                /> */}
                 <DollarSign className="text-amber-600" size={24} />
                 <span className="text-md font-bold text-gray-600">
                   Valor estante:
@@ -464,25 +462,45 @@ const Controls = ({
             </div>
             <div className="flex flex-col items-start mb-3">
               <div className="flex items-center">
-                {/* <img
-                  src="/pinus-icon1.svg"
-                  alt="Estante Icon"
-                  className="mr-2"
-                  style={{ width: "24px", height: "24px" }}
-                /> */}
-                {shelves >= 10 && (
+                <DollarSign className="text-amber-600" size={24} />
+                <span className="pl-1 text-sm font-bold text-gray-600">
+                  Valor montagem (opcional):
+                </span>
+              </div>
+              <span className="pl-1 text-2xl font-bold text-gray-700">
+                {montagem(shelves).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </span>
+            </div>
+            <div className="flex flex-col items-start mb-3">
+              <div className="flex items-center">
+                {/* {switch (shelves) {
+                  case shelves >= 10:
+                    <Truck className="text-amber-600" size={24} />;
+                    break;
+                  case shelves > 3:
+                    <Car className="text-amber-600" size={24} />;
+                    break;
+                  default:
+                    <Bike className="text-amber-600" size={24} />;  
+                }} */}
+                {frete(shelves, width) === FRETE_FIXO_CAMINHAO && (
                   <Truck className="text-amber-600" size={24} />
                 )}
-                {shelves > 3 && shelves < 10 && (
+                {frete(shelves, width) === FRETE_FIXO_CARRO && (
                   <Car className="text-amber-600" size={24} />
                 )}
-                {shelves <= 3 && <Bike className="text-amber-600" size={24} />}
+                {frete(shelves, width) === FRETE_FIXO_MOTO && (
+                  <Bike className="text-amber-600" size={24} />
+                )}
                 <span className="pl-1 text-sm font-bold text-gray-600">
-                  Frete + Montagem (opcional):
+                  Valor Frete (opcional):
                 </span>
               </div>
               <span className="text-2xl font-bold text-gray-700">
-                {freteMontagem(shelves).toLocaleString("pt-BR", {
+                {frete(shelves, width).toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 })}
@@ -497,7 +515,8 @@ const Controls = ({
                     spacePerShelf
                   )}cm. ` +
                   `Preço: R$ ${price * 2}. ` +
-                  `Frete + Montagem: R$ ${freteMontagem(shelves)}. ` +
+                  `Montagem: R$ ${montagem(shelves)}. ` +
+                  `Frete: R$ ${frete(shelves, width)}. ` +
                   `Link para entrar na página: ${window.location.origin}/?altura=${height}&largura=${width}&profundidade=${depth}&ripas_por_prateleira=${slatsPerShelf}&espaco_entre_prateleiras=${spacePerShelf}`
               )}`}
               target="_blank"
@@ -512,7 +531,7 @@ const Controls = ({
       <div className="pt-4 border-t border-gray-200">
         <div className="text-sm text-gray-500 space-y-2">
           <p className="font-bold text-amber-600">
-            • Tempo de produção e entrega: até 2 dias úteis
+            • Tempo de produção e entrega: até 24 horas
           </p>
           {/* <p className="font-bold text-amber-600">
             • Entrega: até 2 dias úteis
