@@ -449,7 +449,7 @@ const Controls = ({
             <div className="flex flex-col items-start mb-3">
               <div className="flex items-center">
                 <DollarSign className="text-amber-600" size={24} />
-                <span className="text-md font-bold text-gray-600">
+                <span className="text-md font-bold text-gray-600 text-left">
                   Valor estante:
                 </span>
               </div>
@@ -463,7 +463,7 @@ const Controls = ({
             <div className="flex flex-col items-start mb-3">
               <div className="flex items-center">
                 <DollarSign className="text-amber-600" size={24} />
-                <span className="pl-1 text-sm font-bold text-gray-600">
+                <span className="pl-1 text-sm font-bold text-gray-600 text-left">
                   Valor montagem (opcional):
                 </span>
               </div>
@@ -476,16 +476,6 @@ const Controls = ({
             </div>
             <div className="flex flex-col items-start mb-3">
               <div className="flex items-center">
-                {/* {switch (shelves) {
-                  case shelves >= 10:
-                    <Truck className="text-amber-600" size={24} />;
-                    break;
-                  case shelves > 3:
-                    <Car className="text-amber-600" size={24} />;
-                    break;
-                  default:
-                    <Bike className="text-amber-600" size={24} />;  
-                }} */}
                 {frete(shelves, width) === FRETE_FIXO_CAMINHAO && (
                   <Truck className="text-amber-600" size={24} />
                 )}
@@ -495,7 +485,7 @@ const Controls = ({
                 {frete(shelves, width) === FRETE_FIXO_MOTO && (
                   <Bike className="text-amber-600" size={24} />
                 )}
-                <span className="pl-1 text-sm font-bold text-gray-600">
+                <span className="pl-1 text-sm font-bold text-gray-600 text-left">
                   Valor Frete (opcional):
                 </span>
               </div>
