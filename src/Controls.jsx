@@ -66,6 +66,8 @@ const Controls = ({
   // const [maxShelvesState, setMaxShelvesState] = useState();
   const [maxSlatsPerShelfState, setMaxSlatsPerShelfState] = useState();
   const [isCollapsed, setIsCollapsed] = useState(window.innerWidth <= 768);
+  const [includeMontagem, setIncludeMontagem] = useState(false);
+  const [includeFrete, setIncludeFrete] = useState(false);
 
   useEffect(() => {
     const newMaxShelves = Math.floor(height / spacePerShelf);
@@ -449,9 +451,15 @@ const Controls = ({
             <div className="flex flex-col items-start mb-3">
               <div className="flex items-center">
                 <DollarSign className="text-amber-600" size={24} />
-                <span className="text-md font-bold text-gray-600 text-left">
-                  Valor estante:
-                </span>
+                <label className="text-md font-bold text-gray-600 text-left flex items-center gap-2">
+                  Valor estante
+                  <input
+                    type="checkbox"
+                    checked={true}
+                    className="w-4 h-4 accent-amber-600"
+                    disabled
+                  />
+                </label>
               </div>
               <span className="pl-1 text-2xl font-bold text-gray-700">
                 {(price * 2).toLocaleString("pt-BR", {
@@ -463,9 +471,15 @@ const Controls = ({
             <div className="flex flex-col items-start mb-3">
               <div className="flex items-center">
                 <DollarSign className="text-amber-600" size={24} />
-                <span className="pl-1 text-sm font-bold text-gray-600 text-left">
-                  Valor montagem (opcional):
-                </span>
+                <label className="pl-1 text-sm font-bold text-gray-600 text-left flex items-center gap-2">
+                  Valor montagem (opcional)
+                  <input
+                    type="checkbox"
+                    checked={includeMontagem}
+                    onChange={(e) => setIncludeMontagem(e.target.checked)}
+                    className="w-4 h-4 accent-amber-600"
+                  />
+                </label>
               </div>
               <span className="pl-1 text-2xl font-bold text-gray-700">
                 {montagem(shelves).toLocaleString("pt-BR", {
@@ -485,12 +499,36 @@ const Controls = ({
                 {frete(shelves, width) === FRETE_FIXO_MOTO && (
                   <Bike className="text-amber-600" size={24} />
                 )}
-                <span className="pl-1 text-sm font-bold text-gray-600 text-left">
-                  Valor Frete (opcional):
-                </span>
+                <label className="pl-1 text-sm font-bold text-gray-600 text-left flex items-center gap-2">
+                  Valor Frete (opcional)
+                  <input
+                    type="checkbox"
+                    checked={includeFrete}
+                    onChange={(e) => setIncludeFrete(e.target.checked)}
+                    className="w-4 h-4 accent-amber-600"
+                  />
+                </label>
               </div>
               <span className="text-2xl font-bold text-gray-700">
                 {frete(shelves, width).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </span>
+            </div>
+            <div className="flex flex-col items-start mt-2 pt-2 border-t border-gray-200">
+              <div className="flex items-center">
+                <DollarSign className="text-amber-600" size={24} />
+                <span className="pl-1 text-md font-bold text-gray-700">
+                  Valor Total:
+                </span>
+              </div>
+              <span className="pl-1 text-3xl font-extrabold text-gray-800">
+                {(
+                  price * 2 +
+                  (includeMontagem ? montagem(shelves) : 0) +
+                  (includeFrete ? frete(shelves, width) : 0)
+                ).toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 })}
@@ -506,8 +544,10 @@ const Controls = ({
                   )}cm. ` +
                   `Preço: R$ ${price * 2}. ` +
                   `Montagem: R$ ${montagem(shelves)}. ` +
+                  `Com Montagem: ${includeMontagem ? "Sim" : "Não"} ` +
                   `Frete: R$ ${frete(shelves, width)}. ` +
-                  `Link para entrar na página: ${window.location.origin}/?altura=${height}&largura=${width}&profundidade=${depth}&ripas_por_prateleira=${slatsPerShelf}&espaco_entre_prateleiras=${spacePerShelf}`
+                  `Com Frete: ${includeFrete ? "Sim" : "Não"} ` +
+                  `-- Link para entrar na página: ${window.location.origin}/?altura=${height}&largura=${width}&profundidade=${depth}&ripas_por_prateleira=${slatsPerShelf}&espaco_entre_prateleiras=${spacePerShelf}`
               )}`}
               target="_blank"
               className="bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 text-white font-medium py-2 px-6 rounded-full shadow-md text-base transition duration-300 ease-in-out transform hover:scale-105 mt-3 flex items-center gap-2"
