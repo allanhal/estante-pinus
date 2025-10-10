@@ -22,6 +22,7 @@ function Shelf3D({
   const [arrayOfTiras, setArrayOfTiras] = useState([]);
 
   useEffect(() => {
+    console.log({ arrayOfTiras });
     setPrice(
       Math.round(arrayOfTiras.reduce((total, num) => total + num, 0) / 300) *
         10 +
@@ -155,12 +156,12 @@ function Shelf3D({
 
     addPrateleira();
 
-    addPes({
-      sceneObject,
-    });
+    // addPes({
+    //   sceneObject,
+    // });
 
-    let x = Math.min(20 + height * 5, 600);
-    let yz = Math.min(20 + height * 3, 550);
+    let x = Math.min(20 + height * 5, 250);
+    let yz = Math.min(20 + height * 3, 100);
     // let yz = 150;
     // let z = 200;
 
@@ -181,16 +182,6 @@ function Shelf3D({
     sceneObject.camera.lookAt(0, 0, 0); // olhando para o centro da cena
 
     setArrayOfTiras(newArrayOfTiras);
-
-    document.getElementById("button").addEventListener("click", () => {
-      const exporter = new STLExporter();
-      const stlString = exporter.parse(sceneObject.scene);
-      const blob = new Blob([stlString], { type: "text/plain" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "estante.stl";
-      link.click();
-    });
   }, [width, height, depth, shelves, slatsPerShelf, spacePerShelf]);
 
   return (

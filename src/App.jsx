@@ -110,8 +110,8 @@ function App() {
           Pinus & Forma
         </p>
         <p className="text-lg md:text-xl text-amber-600 text-center">
-          Personalize sua estante em madeira de pinus com simplicidade e estilo,
-          do seu jeito.
+          Personalize sua prateleira em madeira de pinus com simplicidade e
+          estilo, do seu jeito.
         </p>
       </div>
 
@@ -127,7 +127,7 @@ function App() {
           width={width}
           height={height}
           depth={depth}
-          shelves={shelves}
+          shelves={1}
           slatsPerShelf={slatsPerShelf}
           spacePerShelf={spacePerShelf}
           setPrice={setPrice}
@@ -145,7 +145,7 @@ function App() {
           width={width}
           height={height}
           depth={depth}
-          shelves={shelves}
+          shelves={1}
           slatsPerShelf={slatsPerShelf}
           spacePerShelf={spacePerShelf}
           setWidth={setWidth}

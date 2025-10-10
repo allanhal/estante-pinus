@@ -3,6 +3,7 @@
 
 - [ ] Corrigir perspectiva da camera
 - [ ] Botão de resetar os números
+- [ ] Colocar opção de pedir várias prateleiras
 
 
 - [X] Versão pra celular
