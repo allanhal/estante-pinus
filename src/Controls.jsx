@@ -68,6 +68,7 @@ const Controls = ({
   const [includeMontagem, setIncludeMontagem] = useState(false);
   const [includeFrete, setIncludeFrete] = useState(false);
   const [isSummarizing, setIsSummarizing] = useState(false);
+  const [shelfQuantity, setShelfQuantity] = useState(1);
 
   useEffect(() => {
     const newMaxShelves = Math.floor(height / spacePerShelf);
@@ -98,10 +99,17 @@ const Controls = ({
     { label: "G", h: 120, w: 80, d: 40, s: 6, sp: 20 },
   ];
 
+  const unitValue = price * 2;
+  const montagemValue = montagem(shelves) * shelfQuantity;
+  const freteValue = frete(shelves, width);
+
   const totalValue =
-    price * 2 +
-    (includeMontagem ? montagem(shelves) : 0) +
-    (includeFrete ? frete(shelves, width) : 0);
+    unitValue * shelfQuantity +
+    (includeMontagem ? montagemValue : 0) +
+    (includeFrete ? freteValue : 0);
+
+  const formatBRL = (value) =>
+    value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
   const billOfMaterials = calculateBillOfMaterials({ width, height, depth, shelves, slatsPerShelf });
   const totalLinearMeters = billOfMaterials.reduce(
@@ -358,6 +366,46 @@ const Controls = ({
           </div>
 
           <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-amber-100">Quantidade</span>
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-widest font-black italic">
+                  {formatBRL(unitValue)} / unid.
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShelfQuantity((q) => Math.max(q - 1, 1))}
+                  disabled={shelfQuantity <= 1}
+                  className="w-8 h-8 rounded-xl bg-white/10 text-white font-black leading-none hover:bg-white/20 active:scale-95 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  aria-label="Diminuir quantidade"
+                >
+                  −
+                </button>
+                <input
+                  type="number"
+                  min={1}
+                  step={1}
+                  value={shelfQuantity}
+                  onChange={(e) => {
+                    const parsed = parseInt(e.target.value, 10);
+                    if (!isNaN(parsed)) setShelfQuantity(Math.max(parsed, 1));
+                  }}
+                  className="w-14 px-2 py-1 text-center text-sm font-bold rounded-xl bg-white/10 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  aria-label="Quantidade de estantes"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShelfQuantity((q) => q + 1)}
+                  className="w-8 h-8 rounded-xl bg-white/10 text-white font-black leading-none hover:bg-white/20 active:scale-95 transition-all"
+                  aria-label="Aumentar quantidade"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
             <div className="flex justify-between items-center group/item hover:translate-x-1 transition-transform cursor-pointer">
               <div className="flex items-center gap-3">
                 <input
@@ -368,12 +416,7 @@ const Controls = ({
                 />
                 <span className="text-sm font-medium text-amber-100">Serviço de Montagem</span>
               </div>
-              <span className="text-sm font-bold">
-                {montagem(shelves).toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}
-              </span>
+              <span className="text-sm font-bold">{formatBRL(montagemValue)}</span>
             </div>
 
             <div className="flex justify-between items-center group/item hover:translate-x-1 transition-transform cursor-pointer">
@@ -387,36 +430,37 @@ const Controls = ({
                 <div className="flex flex-col">
                   <span className="text-sm font-medium text-amber-100">Entrega Especial</span>
                   <span className="text-[10px] text-amber-300/50 uppercase tracking-widest font-black italic">
-                    {frete(shelves, width) === FRETE_FIXO_CAMINHAO ? "Caminhão" : frete(shelves, width) === FRETE_FIXO_CARRO ? "Carro" : "Moto"}
+                    {freteValue === FRETE_FIXO_CAMINHAO ? "Caminhão" : freteValue === FRETE_FIXO_CARRO ? "Carro" : "Moto"}
                   </span>
                 </div>
               </div>
-              <span className="text-sm font-bold">
-                {frete(shelves, width).toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}
-              </span>
+              <span className="text-sm font-bold">{formatBRL(freteValue)}</span>
             </div>
 
             <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
               <div className="flex justify-between items-end">
-                <p className="text-[10px] font-black uppercase tracking-[3px] text-amber-400">Valor Total</p>
+                <div className="flex flex-col gap-1">
+                  <p className="text-[10px] font-black uppercase tracking-[3px] text-amber-400">Valor Total</p>
+                  {shelfQuantity > 1 && (
+                    <p className="text-[10px] text-amber-300/50 font-black italic">
+                      {shelfQuantity} × {formatBRL(unitValue)}
+                    </p>
+                  )}
+                </div>
                 <p className="text-4xl font-black text-white leading-none">
-                  {totalValue.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
+                  {formatBRL(totalValue)}
                 </p>
               </div>
               <a
                 href={`https://api.whatsapp.com/send?phone=5585992820404&text=${encodeURIComponent(
-                  "Olá, gostaria de fazer o pedido de uma estante de pinus personalizada:\n\n" +
+                  `Olá, gostaria de fazer o pedido de ${shelfQuantity > 1 ? `${shelfQuantity} estantes de pinus personalizadas` : "uma estante de pinus personalizada"}:\n\n` +
                     `📐 Dimensões: ${width} x ${height} x ${depth} cm (Largura x Altura x Profundidade)\n` +
                     `📦 Prateleiras: ${shelves} unid.\n` +
                     `🪵 Ripas por prateleira: ${slatsPerShelf}\n` +
                     `📏 Espaço entre prateleiras: ${spacePerShelf}cm\n\n` +
-                    `💰 Total: ${totalValue.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}\n` +
+                    `🔢 Quantidade: ${shelfQuantity}\n` +
+                    `🏷 Valor unitário: ${formatBRL(unitValue)}\n` +
+                    `💰 Total: ${formatBRL(totalValue)}\n` +
                     `🛠 Montagem: ${includeMontagem ? "Sim" : "Não"}\n` +
                     `🚚 Frete: ${includeFrete ? "Sim" : "Não"}`
                 )}`}

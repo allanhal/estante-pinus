@@ -5,6 +5,7 @@
 - [ ] Botão de resetar os números
 
 
+- [X] Colocar opção de pedir várias prateleiras
 - [X] Versão pra celular
 - [X] Corrigir tamanho das prateleiras
 - [X] Corrigir zoom prateleira grande
