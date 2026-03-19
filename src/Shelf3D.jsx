@@ -59,11 +59,23 @@ function Shelf3D({
     const newArrayOfTiras = [];
     
     // Premium Wood Material
-    const boxMaterial = new THREE.MeshStandardMaterial({ 
-      color: 0x92400e, 
-      roughness: 0.6, 
-      metalness: 0.1 
+    const boxMaterial = new THREE.MeshStandardMaterial({
+      color: 0x92400e,
+      roughness: 0.6,
+      metalness: 0.1
     });
+    const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x1a0a03 });
+
+    function addMeshWithEdges(geometry, position) {
+      const mesh = new THREE.Mesh(geometry, boxMaterial);
+      mesh.position.set(...position);
+      sceneObject.scene.add(mesh);
+
+      const edges = new THREE.EdgesGeometry(geometry);
+      const line = new THREE.LineSegments(edges, edgeMaterial);
+      line.position.set(...position);
+      sceneObject.scene.add(line);
+    }
 
     function addTiraPrateleira({
       boxGeometry,
@@ -71,9 +83,7 @@ function Shelf3D({
       offsetY = 0,
       offsetZ = 0,
     }) {
-      const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
-      boxMesh.position.set(offsetX, offsetY, offsetZ);
-      sceneObject.scene.add(boxMesh);
+      addMeshWithEdges(boxGeometry, [offsetX, offsetY, offsetZ]);
     }
 
     function addBasePrateleira({ andar = 1 }) {
@@ -83,21 +93,8 @@ function Shelf3D({
         RIPA_LARGURA
       );
       
-      const boxMesh1 = new THREE.Mesh(boxGeometry, boxMaterial);
-      boxMesh1.position.set(
-        0,
-        -RIPA_ALTURA + andar * spacePerShelf,
-        width / 2 - RIPA_LARGURA / 2 - RIPA_LARGURA / 2
-      );
-      sceneObject.scene.add(boxMesh1);
-
-      const boxMesh2 = new THREE.Mesh(boxGeometry, boxMaterial);
-      boxMesh2.position.set(
-        0,
-        -RIPA_ALTURA + andar * spacePerShelf,
-        -width / 2 + RIPA_LARGURA / 2 + RIPA_LARGURA / 2
-      );
-      sceneObject.scene.add(boxMesh2);
+      addMeshWithEdges(boxGeometry, [0, -RIPA_ALTURA + andar * spacePerShelf, width / 2 - RIPA_LARGURA / 2 - RIPA_LARGURA / 2]);
+      addMeshWithEdges(boxGeometry, [0, -RIPA_ALTURA + andar * spacePerShelf, -width / 2 + RIPA_LARGURA / 2 + RIPA_LARGURA / 2]);
     }
 
     function addPes() {
@@ -115,11 +112,7 @@ function Shelf3D({
         [depth / 2 - RIPA_LARGURA / 2, height / 2 - spacePerShelf, width / 2 - RIPA_ALTURA / 2],
       ];
 
-      positions.forEach(pos => {
-        const mesh = new THREE.Mesh(boxGeometry, boxMaterial);
-        mesh.position.set(...pos);
-        sceneObject.scene.add(mesh);
-      });
+      positions.forEach(pos => addMeshWithEdges(boxGeometry, pos));
     }
 
     function addPrateleiras() {
