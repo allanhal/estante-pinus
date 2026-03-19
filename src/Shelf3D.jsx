@@ -147,19 +147,138 @@ function Shelf3D({
     addPrateleiras();
     addPes();
 
-    // Compute bounding box of all shelf meshes to find true center
+    // Compute bounding box from shelf meshes BEFORE adding dimension lines
     const box = new THREE.Box3();
     sceneObject.scene.children.forEach(child => {
       if (child.isMesh) box.expandByObject(child);
     });
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
-    const dist = Math.max(size.x, size.y, size.z) * 2.5;
 
-    sceneObject.camera.position.set(center.x + dist, center.y + dist * 0.7, center.z + dist);
+    // Account for dimension lines extending beyond the shelf
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const dimOffset = 8 * (maxDim / 60); // same as offset used for dimension lines
+    const totalHeight = size.y + dimOffset * 2 + 10; // extra for ticks + labels below
+    const totalWidth = (size.x + size.z) * 0.7 + dimOffset * 2 + 10;
+
+    // Calculate distance to fit the object tightly in the viewport
+    const fovRad = sceneObject.camera.fov * (Math.PI / 180);
+    const aspect = sceneObject.camera.aspect;
+
+    // Distance needed to fit height vs width
+    const distForHeight = totalHeight / (2 * Math.tan(fovRad / 2));
+    const distForWidth = totalWidth / (2 * Math.tan(fovRad / 2) * aspect);
+    const fitDist = Math.max(distForHeight, distForWidth) * 1.15;
+
+    // Position camera diagonally
+    const camDir = new THREE.Vector3(1, 0.4, 1).normalize();
+    sceneObject.camera.position.set(
+      center.x + camDir.x * fitDist,
+      center.y + camDir.y * fitDist,
+      center.z + camDir.z * fitDist
+    );
     sceneObject.camera.lookAt(center.x, center.y, center.z);
     sceneObject.controls.target.set(center.x, center.y, center.z);
     sceneObject.controls.update();
+
+    // --- Dimension lines and labels ---
+    const dimColor = 0x444444;
+    const dimMaterial = new THREE.MeshBasicMaterial({ color: dimColor });
+    const scaleFactor = maxDim / 60; // scale relative to default shelf size
+    const offset = 8 * scaleFactor;
+    const lineRadius = 0.3 * scaleFactor;
+
+    function createTextSprite(text) {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = 256;
+      canvas.height = 64;
+      ctx.fillStyle = "#1e293b";
+      ctx.roundRect(0, 0, 256, 64, 10);
+      ctx.fill();
+      ctx.font = "bold 36px Outfit, sans-serif";
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, 128, 32);
+      const texture = new THREE.CanvasTexture(canvas);
+      const material = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+      const sprite = new THREE.Sprite(material);
+      const spriteScale = 16 * scaleFactor;
+      sprite.scale.set(spriteScale, spriteScale * 0.25, 1);
+      return sprite;
+    }
+
+    function addRod(start, end) {
+      const s = new THREE.Vector3(...start);
+      const e = new THREE.Vector3(...end);
+      const dir = new THREE.Vector3().subVectors(e, s);
+      const len = dir.length();
+      const mid = new THREE.Vector3().addVectors(s, e).multiplyScalar(0.5);
+      const cyl = new THREE.CylinderGeometry(lineRadius, lineRadius, len, 6);
+      const mesh = new THREE.Mesh(cyl, dimMaterial);
+      mesh.position.copy(mid);
+      // Align cylinder to direction
+      const axis = new THREE.Vector3(0, 1, 0);
+      const quat = new THREE.Quaternion().setFromUnitVectors(axis, dir.normalize());
+      mesh.quaternion.copy(quat);
+      sceneObject.scene.add(mesh);
+    }
+
+    function addDimensionLine(start, end, label) {
+      // Main line as cylinder
+      addRod(start, end);
+
+      // End caps (small perpendicular ticks)
+      const dir = new THREE.Vector3(...end).sub(new THREE.Vector3(...start)).normalize();
+      const tickSize = 3 * scaleFactor;
+      const up = new THREE.Vector3(0, 1, 0);
+      let perp = new THREE.Vector3().crossVectors(dir, up).normalize();
+      if (perp.length() < 0.1) {
+        perp = new THREE.Vector3().crossVectors(dir, new THREE.Vector3(1, 0, 0)).normalize();
+      }
+
+      for (const pt of [new THREE.Vector3(...start), new THREE.Vector3(...end)]) {
+        const t1 = pt.clone().add(perp.clone().multiplyScalar(tickSize));
+        const t2 = pt.clone().add(perp.clone().multiplyScalar(-tickSize));
+        addRod([t1.x, t1.y, t1.z], [t2.x, t2.y, t2.z]);
+      }
+
+      // Text label at midpoint
+      const mid = new THREE.Vector3(...start).add(new THREE.Vector3(...end)).multiplyScalar(0.5);
+      const sprite = createTextSprite(label);
+      sprite.position.copy(mid);
+      sceneObject.scene.add(sprite);
+    }
+
+    // Shelf bounds
+    const legBottom = -spacePerShelf;
+    const legTop = height - spacePerShelf;
+    const frontX = depth / 2;
+    const rightZ = width / 2;
+    const leftZ = -width / 2;
+    const backX = -depth / 2;
+
+    // Height line (right side, front)
+    addDimensionLine(
+      [frontX + offset, legBottom, rightZ + offset],
+      [frontX + offset, legTop, rightZ + offset],
+      `${height} cm`
+    );
+
+    // Width line (front bottom)
+    addDimensionLine(
+      [frontX + offset, legBottom - offset, leftZ],
+      [frontX + offset, legBottom - offset, rightZ],
+      `${width} cm`
+    );
+
+    // Depth line (right side bottom)
+    addDimensionLine(
+      [backX, legBottom - offset, rightZ + offset],
+      [frontX, legBottom - offset, rightZ + offset],
+      `${depth} cm`
+    );
 
     setArrayOfTiras(newArrayOfTiras);
 
