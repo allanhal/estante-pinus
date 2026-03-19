@@ -47,6 +47,7 @@ export default class SceneInit {
     );
     this.camera.position.z = 48;
 
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(width, height);
     this.renderer.setClearColor(0x000000, 0); // Transparent background for glass look
 
