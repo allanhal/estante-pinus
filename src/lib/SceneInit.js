@@ -10,7 +10,7 @@ export default class SceneInit {
     this.renderer = undefined;
 
     // NOTE: Camera params;
-    this.fov = 20;
+    this.fov = 45;
     this.nearPlane = 1;
     this.farPlane = 1000;
     this.canvasId = canvasId;
@@ -26,30 +26,29 @@ export default class SceneInit {
   }
 
   initialize() {
+    const canvas = document.getElementById(this.canvasId);
+    this.canvas = canvas;
+    this.renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+    });
+
+    const container = canvas.parentElement;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(
       this.fov,
-      window.innerWidth / window.innerHeight,
+      width / height,
       1,
       1000
     );
     this.camera.position.z = 48;
 
-    // NOTE: Specify a canvas which is already created in the HTML.
-    const canvas = document.getElementById(this.canvasId);
-    this.renderer = new THREE.WebGLRenderer({
-      canvas,
-      // NOTE: Anti-aliasing smooths out the edges.
-      antialias: true,
-    });
-
-    const container = document.getElementById("scene-wrapper");
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-
     this.renderer.setSize(width, height);
-
-    this.renderer.setClearColor(0xffffff); // white background
+    this.renderer.setClearColor(0x000000, 0); // Transparent background for glass look
 
     // this.renderer.setSize(window.innerWidth, window.innerHeight);
     // this.renderer.shadowMap.enabled = true;
@@ -72,23 +71,10 @@ export default class SceneInit {
     this.scene.add(this.directionalLight);
 
     // if window resizes
-    // window.addEventListener('resize', () => this.onWindowResize(), false);
-
-    // NOTE: Load space background.
-    // this.loader = new THREE.TextureLoader();
-    // this.scene.background = this.loader.load('./pics/space.jpeg');
-
-    // NOTE: Declare uniforms to pass into glsl shaders.
-    // this.uniforms = {
-    //   u_time: { type: 'f', value: 1.0 },
-    //   colorB: { type: 'vec3', value: new THREE.Color(0xfff000) },
-    //   colorA: { type: 'vec3', value: new THREE.Color(0xffffff) },
-    // };
+    window.addEventListener('resize', () => this.onWindowResize(), false);
   }
 
   animate() {
-    // NOTE: Window is implied.
-    // requestAnimationFrame(this.animate.bind(this));
     window.requestAnimationFrame(this.animate.bind(this));
     this.render();
     this.stats.update();
@@ -96,14 +82,15 @@ export default class SceneInit {
   }
 
   render() {
-    // NOTE: Update uniform data on each render.
-    // this.uniforms.u_time.value += this.clock.getDelta();
     this.renderer.render(this.scene, this.camera);
   }
 
   onWindowResize() {
-    this.camera.aspect = window.innerWidth / window.innerHeight;
+    const container = this.canvas.parentElement;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(width, height);
   }
 }

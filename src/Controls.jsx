@@ -3,11 +3,12 @@ import {
   Ruler,
   Layers,
   Grid,
-  ShoppingCart,
   DollarSign,
   Bike,
   Car,
   Truck,
+  ArrowRight,
+  Info,
 } from "lucide-react";
 import {
   CUSTO_FIXO_MONTAGEM_ESTANTE,
@@ -20,12 +21,9 @@ import {
 import { useEffect, useState } from "react";
 
 const convertPixelsToMeters = (pixels) => pixels;
-
 const convertMetersToPixels = (meters) => meters;
 
-const montagem = (shelves) => {
-  return shelves * CUSTO_FIXO_MONTAGEM_ESTANTE;
-};
+const montagem = (shelves) => shelves * CUSTO_FIXO_MONTAGEM_ESTANTE;
 const frete = (shelves, width) => {
   if (shelves >= 10) return FRETE_FIXO_CAMINHAO;
   if (shelves > 3 || width >= 60) return FRETE_FIXO_CARRO;
@@ -49,541 +47,334 @@ const Controls = ({
 
   minWidth,
   maxWidth,
-
   maxHeight,
-
   minDepth,
   maxDepth,
 
   minSlatsPerShelf = 3,
-  maxSlatsPerShelf = Math.floor(depth / RIPA_LARGURA),
-
   minSpacePerShelf,
   maxSpacePerShelf,
 
   price,
 }) => {
-  // const [maxShelvesState, setMaxShelvesState] = useState();
-  const [maxSlatsPerShelfState, setMaxSlatsPerShelfState] = useState();
-  const [isCollapsed, setIsCollapsed] = useState(window.innerWidth <= 768);
+  const [maxSlatsPerShelfState, setMaxSlatsPerShelfState] = useState(
+    Math.floor(depth / RIPA_LARGURA)
+  );
   const [includeMontagem, setIncludeMontagem] = useState(false);
   const [includeFrete, setIncludeFrete] = useState(false);
+  const [isSummarizing, setIsSummarizing] = useState(false);
 
   useEffect(() => {
     const newMaxShelves = Math.floor(height / spacePerShelf);
-    // setMaxShelvesState(newMaxShelves);
-
-    // if (shelves > newMaxShelves) {
     setShelves(newMaxShelves);
-    // }
-  }, [height, spacePerShelf]);
+  }, [height, spacePerShelf, setShelves]);
 
   useEffect(() => {
-    setMaxSlatsPerShelfState(Math.floor(depth / RIPA_LARGURA));
+    const newMaxSlats = Math.floor(depth / RIPA_LARGURA);
+    setMaxSlatsPerShelfState(newMaxSlats);
 
-    if (slatsPerShelf >= Math.floor(depth / RIPA_LARGURA)) {
-      setSlatsPerShelf(Math.floor(depth / RIPA_LARGURA) - 1);
+    if (slatsPerShelf >= newMaxSlats) {
+      setSlatsPerShelf(newMaxSlats - 1);
     }
-  }, [depth, RIPA_LARGURA]);
+  }, [depth, slatsPerShelf, setSlatsPerShelf]);
 
   const handleInputChange = (value, onChange, min, max) => {
     const numValue = parseInt(value);
-    if (!isNaN(numValue) && numValue >= min && numValue <= max) {
-      onChange(numValue);
+    if (!isNaN(numValue)) {
+      if (numValue < min) onChange(min);
+      else if (numValue > max) onChange(max);
+      else onChange(numValue);
     }
   };
 
   const buttonConfigs = [
-    {
-      height: 30,
-      width: 30,
-      depth: 20,
-      shelves: 2,
-      slatsPerShelf: 4,
-      spacePerShelf: 10,
-    },
-    {
-      height: 40,
-      width: 40,
-      depth: 30,
-      shelves: 2,
-      slatsPerShelf: 4,
-      spacePerShelf: 20,
-    },
-    {
-      height: 60,
-      width: 40,
-      depth: 30,
-      shelves: 3,
-      slatsPerShelf: 4,
-      spacePerShelf: 20,
-    },
-    {
-      height: 80,
-      width: 60,
-      depth: 40,
-      shelves: 4,
-      slatsPerShelf: 5,
-      spacePerShelf: 20,
-    },
-    {
-      height: 120,
-      width: 60,
-      depth: 40,
-      shelves: 5,
-      slatsPerShelf: 5,
-      spacePerShelf: 20,
-    },
+    { label: "P", h: 40, w: 40, d: 20, s: 2, sp: 20 },
+    { label: "M", h: 80, w: 60, d: 30, s: 4, sp: 20 },
+    { label: "G", h: 120, w: 80, d: 40, s: 6, sp: 20 },
   ];
 
-  return (
-    <div className="bg-white rounded-3xl shadow-xl p-4 space-y-4 inset-shadow-sm border border-gray-200">
-      <div className="flex flex-col md:flex-row items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <Settings className="text-amber-600" size={24} />
-          <h2 className="text-lg font-bold text-gray-700">
-            Customização da Prateleira
-          </h2>
-        </div>
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="border border-gray-600 py-2 px-3 text-gray-600 font-bold text-sm rounded-lg transition duration-300 flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0"
-        >
-          <img
-            src="/pinus-icon2.png"
-            alt="Prateleira Icon"
-            className="w-6 h-6"
-          />
-          {isCollapsed ? "Sugestões de Prateleiras" : "Esconder Sugestões"}
-        </button>
-      </div>
+  const totalValue =
+    price * 2 +
+    (includeMontagem ? montagem(shelves) : 0) +
+    (includeFrete ? frete(shelves, width) : 0);
 
-      {!isCollapsed && (
-        <div
-          className={`flex flex-col md:flex-row justify-around mt-2 transition-all duration-500 ease-in-out bg-gray-50 p-4 rounded-lg gap-4 ${
-            isCollapsed ? "max-h-0 overflow-hidden" : "max-h-screen"
-          }`}
-        >
+  return (
+    <div className="space-y-10 pb-20 lg:pb-0">
+      {/* Suggestions Section */}
+      <section>
+        <div className="flex items-center gap-3 mb-6">
+          <Settings className="text-amber-800" size={20} />
+          <h2 className="text-xl font-bold text-amber-900 tracking-tight">Sugestões</h2>
+        </div>
+        <div className="flex gap-2 w-full">
           {buttonConfigs.map((config, index) => (
             <button
               key={index}
               onClick={() => {
-                setWidth(config.width);
-                setHeight(config.height);
-                setDepth(config.depth);
-                setShelves(config.shelves);
-                setSlatsPerShelf(config.slatsPerShelf);
-                setSpacePerShelf(config.spacePerShelf);
+                setWidth(config.w);
+                setHeight(config.h);
+                setDepth(config.d);
+                setShelves(config.s);
+                setSpacePerShelf(config.sp);
               }}
-              className="border border-amber-600 text-gray-600 font-bold text-sm py-1 px-3 rounded-md flex items-center gap-2 transition duration-300 transform hover:scale-105"
+              className="flex-1 flex flex-col items-center justify-center py-2 px-1 glass-card rounded-xl border border-white hover:border-amber-200 hover:shadow-md transition-all active:scale-95 group text-center min-w-0"
             >
-              <img
-                src="/orange-pinus.png"
-                alt="Prateleira Icon"
-                className="w-10 h-10"
-              />
-              {`${config.height} x ${config.width} x ${config.depth}`}
+              <span className="text-[10px] font-black text-amber-900 uppercase tracking-tight group-hover:text-amber-700 transition-colors truncate w-full px-1">
+                {config.label}
+              </span>
+              <span className="text-[9px] font-medium text-amber-900/40 leading-none mt-0.5 whitespace-nowrap">
+                {config.h}×{config.w}×{config.d}
+              </span>
             </button>
           ))}
         </div>
-      )}
+      </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-md space-y-4">
-          <h3 className="text-md font-medium text-gray-700 border-b pb-2">
-            Dimensões
-          </h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Ruler className="text-amber-600 rotate-45" size={20} />
-                <label className="text-sm font-medium text-gray-700">
-                  Altura
-                </label>
-              </div>
-              <div className="flex items-center gap-3">
-                <input
-                  type="number"
-                  min={convertPixelsToMeters(spacePerShelf)}
-                  max={convertPixelsToMeters(maxHeight)}
-                  value={convertPixelsToMeters(height)}
-                  step={convertPixelsToMeters(spacePerShelf)}
-                  onChange={(e) =>
-                    handleInputChange(
-                      convertMetersToPixels(e.target.value),
-                      setHeight,
-                      spacePerShelf,
-                      maxHeight
-                    )
-                  }
-                  className="w-20 px-3 py-2 text-md rounded-lg text-gray-700 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent font-bold"
-                />
-                <span className="text-sm text-gray-500">cm</span>
-              </div>
-            </div>
-            <input
-              type="range"
-              min={convertPixelsToMeters(spacePerShelf)}
-              max={convertPixelsToMeters(maxHeight)}
-              value={convertPixelsToMeters(height)}
-              step={convertPixelsToMeters(spacePerShelf)}
-              onChange={(e) =>
-                setHeight(convertMetersToPixels(Number(e.target.value)))
-              }
-              className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-            />
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Ruler className="text-amber-600 rotate-[-45deg]" size={20} />
-                <label className="text-sm font-medium text-gray-700">
-                  Largura
-                </label>
-              </div>
-              <div className="flex items-center gap-3">
-                <input
-                  type="number"
-                  min={convertPixelsToMeters(minWidth)}
-                  max={convertPixelsToMeters(maxWidth)}
-                  value={convertPixelsToMeters(width)}
-                  step={5}
-                  onChange={(e) =>
-                    handleInputChange(
-                      convertMetersToPixels(e.target.value),
-                      setWidth,
-                      minWidth,
-                      maxWidth
-                    )
-                  }
-                  className="w-20 px-3 py-2 text-md rounded-lg text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent font-bold"
-                />
-                <span className="text-sm text-gray-500">cm</span>
-              </div>
-            </div>
-            <input
-              type="range"
-              min={convertPixelsToMeters(minWidth)}
-              max={convertPixelsToMeters(maxWidth)}
-              value={convertPixelsToMeters(width)}
-              step={5}
-              onChange={(e) =>
-                setWidth(convertMetersToPixels(Number(e.target.value)))
-              }
-              className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-            />
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Ruler className="text-amber-600" size={20} />
-                <label className="text-sm font-medium text-gray-700">
-                  Profundidade
-                </label>
-              </div>
-              <div className="flex items-center gap-3">
-                <input
-                  type="number"
-                  min={convertPixelsToMeters(minDepth)}
-                  max={convertPixelsToMeters(maxDepth)}
-                  value={convertPixelsToMeters(depth)}
-                  step={5}
-                  onChange={(e) =>
-                    handleInputChange(
-                      convertMetersToPixels(e.target.value),
-                      setDepth,
-                      minDepth,
-                      maxDepth
-                    )
-                  }
-                  className="w-20 px-3 py-2 text-md rounded-lg text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent font-bold"
-                />
-                <span className="text-sm text-gray-500">cm</span>
-              </div>
-            </div>
-            <input
-              type="range"
-              min={convertPixelsToMeters(minDepth)}
-              max={convertPixelsToMeters(maxDepth)}
-              value={convertPixelsToMeters(depth)}
-              step={5}
-              onChange={(e) =>
-                setDepth(convertMetersToPixels(Number(e.target.value)))
-              }
-              className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-            />
-          </div>
+      {/* Main Dimensions Section */}
+      <section className="space-y-8">
+        <div className="flex items-center gap-3 mb-6">
+          <Ruler className="text-amber-800" size={20} />
+          <h2 className="text-xl font-bold text-amber-900 tracking-tight">Dimensões da Estante</h2>
         </div>
 
-        <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-md space-y-4">
-          <h3 className="text-md font-medium text-gray-700 border-b pb-2">
-            Configurações de Prateleira
-          </h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Grid className="text-amber-600" size={20} />
-                <label className="text-sm font-medium text-gray-700">
-                  Ripas por Prateleira
-                </label>
-              </div>
+        {/* Height Control */}
+        <div className="space-y-4">
+          <div className="flex justify-between items-end">
+            <span className="text-sm font-bold text-amber-900/50 uppercase tracking-widest italic leading-none pb-1">Altura</span>
+            <div className="flex items-baseline gap-1">
+              <input
+                type="number"
+                value={height}
+                onChange={(e) => handleInputChange(e.target.value, setHeight, spacePerShelf, maxHeight)}
+                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 p-0 leading-none"
+              />
+              <span className="text-sm font-medium text-amber-900/40">cm</span>
+            </div>
+          </div>
+          <input
+            type="range"
+            min={spacePerShelf}
+            max={maxHeight}
+            value={height}
+            step={5}
+            onChange={(e) => setHeight(Number(e.target.value))}
+            className="w-full"
+          />
+        </div>
+
+        {/* Width Control */}
+        <div className="space-y-4">
+          <div className="flex justify-between items-end">
+            <span className="text-sm font-bold text-amber-900/50 uppercase tracking-widest italic leading-none pb-1">Largura</span>
+            <div className="flex items-baseline gap-1">
+              <input
+                type="number"
+                value={width}
+                onChange={(e) => handleInputChange(e.target.value, setWidth, minWidth, maxWidth)}
+                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 p-0 leading-none"
+              />
+              <span className="text-sm font-medium text-amber-900/40">cm</span>
+            </div>
+          </div>
+          <input
+            type="range"
+            min={minWidth}
+            max={maxWidth}
+            value={width}
+            step={5}
+            onChange={(e) => setWidth(Number(e.target.value))}
+            className="w-full"
+          />
+        </div>
+
+        {/* Depth Control */}
+        <div className="space-y-4">
+          <div className="flex justify-between items-end">
+            <span className="text-sm font-bold text-amber-900/50 uppercase tracking-widest italic leading-none pb-1">Profundidade</span>
+            <div className="flex items-baseline gap-1">
+              <input
+                type="number"
+                value={depth}
+                onChange={(e) => handleInputChange(e.target.value, setDepth, minDepth, maxDepth)}
+                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 p-0 leading-none"
+              />
+              <span className="text-sm font-medium text-amber-900/40">cm</span>
+            </div>
+          </div>
+          <input
+            type="range"
+            min={minDepth}
+            max={maxDepth}
+            value={depth}
+            step={5}
+            onChange={(e) => setDepth(Number(e.target.value))}
+            className="w-full"
+          />
+        </div>
+
+        {/* Slats Control */}
+        <div className="space-y-4">
+          <div className="flex justify-between items-end">
+            <span className="text-sm font-bold text-amber-900/50 uppercase tracking-widest italic leading-none pb-1">Ripas por prateleira</span>
+            <div className="flex items-baseline gap-1">
+              <input
+                type="number"
+                value={slatsPerShelf}
+                onChange={(e) => handleInputChange(e.target.value, setSlatsPerShelf, minSlatsPerShelf, maxSlatsPerShelfState)}
+                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 p-0 leading-none"
+              />
+            </div>
+          </div>
+          <input
+            type="range"
+            min={minSlatsPerShelf}
+            max={maxSlatsPerShelfState}
+            value={slatsPerShelf}
+            step={1}
+            onChange={(e) => setSlatsPerShelf(Number(e.target.value))}
+            className="w-full"
+          />
+        </div>
+
+        {/* Space Per Shelf Control */}
+        <div className="space-y-4">
+          <div className="flex justify-between items-end">
+            <span className="text-sm font-bold text-amber-900/50 uppercase tracking-widest italic leading-none pb-1">Espaçamento</span>
+            <div className="flex items-baseline gap-1">
+              <input
+                type="number"
+                value={spacePerShelf}
+                onChange={(e) => handleInputChange(e.target.value, setSpacePerShelf, minSpacePerShelf, maxSpacePerShelf)}
+                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 p-0 leading-none"
+              />
+              <span className="text-sm font-medium text-amber-900/40">cm</span>
+            </div>
+          </div>
+          <input
+            type="range"
+            min={minSpacePerShelf}
+            max={maxSpacePerShelf}
+            value={spacePerShelf}
+            step={5}
+            onChange={(e) => setSpacePerShelf(Number(e.target.value))}
+            className="w-full"
+          />
+        </div>
+      </section>
+
+      {/* Purchase Card */}
+      <section className="mt-12 bg-amber-900 rounded-[32px] p-8 text-white shadow-2xl relative overflow-hidden group">
+        <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl pointer-events-none group-hover:scale-150 transition-transform duration-1000" />
+        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-1000" />
+
+        <div className="relative z-10">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-black tracking-tight italic">Resumo do Pedido</h3>
+            </div>
+            <button
+               onClick={() => setIsSummarizing(!isSummarizing)}
+               className="text-amber-300/60 hover:text-amber-200 transition-colors"
+            >
+              <Info size={18} />
+            </button>
+          </div>
+
+          <div className="space-y-6">
+            <div className="flex justify-between items-center group/item hover:translate-x-1 transition-transform cursor-pointer">
               <div className="flex items-center gap-3">
                 <input
-                  type="number"
-                  min={minSlatsPerShelf}
-                  max={maxSlatsPerShelfState}
-                  value={slatsPerShelf}
-                  onChange={(e) =>
-                    handleInputChange(
-                      e.target.value,
-                      setSlatsPerShelf,
-                      minSlatsPerShelf,
-                      maxSlatsPerShelfState
-                    )
-                  }
-                  className="w-20 px-3 py-2 text-md rounded-lg text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent font-bold"
+                  type="checkbox"
+                  checked={includeMontagem}
+                  onChange={(e) => setIncludeMontagem(e.target.checked)}
+                  className="w-5 h-5 rounded-lg border-white/20 bg-white/10 accent-amber-500 focus:ring-0 h-4 w-4"
                 />
+                <span className="text-sm font-medium text-amber-100">Serviço de Montagem</span>
               </div>
-            </div>
-            <input
-              type="range"
-              min={minSlatsPerShelf}
-              max={maxSlatsPerShelf}
-              value={slatsPerShelf}
-              onChange={(e) => setSlatsPerShelf(Number(e.target.value))}
-              className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-            />
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Layers className="text-amber-600" size={20} />
-                <label className="text-sm font-medium text-gray-700">
-                  Espaço entre Prateleiras
-                </label>
-              </div>
-              <div className="flex items-center gap-3">
-                <input
-                  type="number"
-                  min={convertPixelsToMeters(minSpacePerShelf)}
-                  max={convertPixelsToMeters(maxSpacePerShelf)}
-                  value={convertPixelsToMeters(spacePerShelf)}
-                  step={10}
-                  onChange={(e) => {
-                    handleInputChange(
-                      convertMetersToPixels(e.target.value),
-                      setSpacePerShelf,
-                      minSpacePerShelf,
-                      maxSpacePerShelf
-                    );
-
-                    handleInputChange(
-                      shelves * convertMetersToPixels(e.target.value),
-                      setHeight,
-                      spacePerShelf,
-                      maxHeight
-                    );
-                  }}
-                  className="w-20 px-3 py-2 text-md rounded-lg text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent font-bold"
-                />
-                <span className="text-sm text-gray-500">cm</span>
-              </div>
-            </div>
-            <input
-              type="range"
-              min={convertPixelsToMeters(minSpacePerShelf)}
-              max={convertPixelsToMeters(maxSpacePerShelf)}
-              value={convertPixelsToMeters(spacePerShelf)}
-              step={10}
-              onChange={(e) => {
-                setSpacePerShelf(convertMetersToPixels(Number(e.target.value)));
-
-                setHeight(
-                  shelves * convertMetersToPixels(Number(e.target.value))
-                );
-              }}
-              className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="text-center ">
-        <div className="flex items-center gap-4 mb-6">
-          <ShoppingCart className="text-amber-600" size={24} />
-          <h4 className="text-lg font-bold text-gray-700">Resumo da Compra</h4>
-        </div>
-        <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-lg inline-block w-full flex flex-col md:flex-row justify-between items-center">
-          <div className="text-left mb-6 md:mb-0 md:mr-10">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
-                <Ruler className="text-amber-600 rotate-45" size={16} />
-                <span className="font-normal">{width} cm</span>
-              </div>
-              <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
-                <Ruler className="text-amber-600 rotate-[-45deg]" size={16} />
-                <span className="font-normal">{height} cm</span>
-              </div>
-              <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
-                <Ruler className="text-amber-600" size={16} />
-                <span className="font-normal">{depth} cm</span>
-              </div>
-              <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
-                <Layers className="text-amber-600" size={16} />
-                <span className="font-normal">{shelves}</span>
-              </div>
-              <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
-                <Grid className="text-amber-600" size={16} />
-                <span className="font-normal">{slatsPerShelf}</span>
-              </div>
-              <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg shadow-md">
-                <Layers className="text-amber-600" size={16} />
-                <span className="font-normal">
-                  {convertPixelsToMeters(spacePerShelf)} cm
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col justify-start items-start bg-gray-50 p-4 rounded-2xl">
-            <div className="flex flex-col items-start mb-3">
-              <div className="flex items-center">
-                <DollarSign className="text-amber-600" size={24} />
-                <label className="text-md font-bold text-gray-600 text-left flex items-center gap-2">
-                  Valor estante
-                  <input
-                    type="checkbox"
-                    checked={true}
-                    className="w-4 h-4 accent-amber-600"
-                    disabled
-                  />
-                </label>
-              </div>
-              <span className="pl-1 text-2xl font-bold text-gray-700">
-                {(price * 2).toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}
-              </span>
-            </div>
-            <div className="flex flex-col items-start mb-3">
-              <div className="flex items-center">
-                <DollarSign className="text-amber-600" size={24} />
-                <label className="pl-1 text-sm font-bold text-gray-600 text-left flex items-center gap-2">
-                  Valor montagem (opcional)
-                  <input
-                    type="checkbox"
-                    checked={includeMontagem}
-                    onChange={(e) => setIncludeMontagem(e.target.checked)}
-                    className="w-4 h-4 accent-amber-600"
-                  />
-                </label>
-              </div>
-              <span className="pl-1 text-2xl font-bold text-gray-700">
+              <span className="text-sm font-bold">
                 {montagem(shelves).toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 })}
               </span>
             </div>
-            <div className="flex flex-col items-start mb-3">
-              <div className="flex items-center">
-                {frete(shelves, width) === FRETE_FIXO_CAMINHAO && (
-                  <Truck className="text-amber-600" size={24} />
-                )}
-                {frete(shelves, width) === FRETE_FIXO_CARRO && (
-                  <Car className="text-amber-600" size={24} />
-                )}
-                {frete(shelves, width) === FRETE_FIXO_MOTO && (
-                  <Bike className="text-amber-600" size={24} />
-                )}
-                <label className="pl-1 text-sm font-bold text-gray-600 text-left flex items-center gap-2">
-                  Valor Frete (opcional)
-                  <input
-                    type="checkbox"
-                    checked={includeFrete}
-                    onChange={(e) => setIncludeFrete(e.target.checked)}
-                    className="w-4 h-4 accent-amber-600"
-                  />
-                </label>
+
+            <div className="flex justify-between items-center group/item hover:translate-x-1 transition-transform cursor-pointer">
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={includeFrete}
+                  onChange={(e) => setIncludeFrete(e.target.checked)}
+                  className="w-5 h-5 rounded-lg border-white/20 bg-white/10 accent-amber-500 focus:ring-0 h-4 w-4"
+                />
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium text-amber-100">Entrega Especial</span>
+                  <span className="text-[10px] text-amber-300/50 uppercase tracking-widest font-black italic">
+                    {frete(shelves, width) === FRETE_FIXO_CAMINHAO ? "Caminhão" : frete(shelves, width) === FRETE_FIXO_CARRO ? "Carro" : "Moto"}
+                  </span>
+                </div>
               </div>
-              <span className="text-2xl font-bold text-gray-700">
+              <span className="text-sm font-bold">
                 {frete(shelves, width).toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 })}
               </span>
             </div>
-            <div className="flex flex-col items-start mt-2 pt-2 border-t border-gray-200">
-              <div className="flex items-center">
-                <DollarSign className="text-amber-600" size={24} />
-                <span className="pl-1 text-md font-bold text-gray-700">
-                  Valor Total:
-                </span>
+
+            <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
+              <div className="flex justify-between items-end">
+                <p className="text-[10px] font-black uppercase tracking-[3px] text-amber-400">Valor Total</p>
+                <p className="text-4xl font-black text-white leading-none">
+                  {totalValue.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </p>
               </div>
-              <span className="pl-1 text-3xl font-extrabold text-gray-800">
-                {(
-                  price * 2 +
-                  (includeMontagem ? montagem(shelves) : 0) +
-                  (includeFrete ? frete(shelves, width) : 0)
-                ).toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}
-              </span>
+              <a
+                href={`https://api.whatsapp.com/send?phone=5585992820404&text=${encodeURIComponent(
+                  "Olá, gostaria de fazer o pedido de uma estante de pinus personalizada:\n\n" +
+                    `📐 Dimensões: ${width} x ${height} x ${depth} cm (Largura x Altura x Profundidade)\n` +
+                    `📦 Prateleiras: ${shelves} unid.\n` +
+                    `🪵 Ripas por prateleira: ${slatsPerShelf}\n` +
+                    `📏 Espaço entre prateleiras: ${spacePerShelf}cm\n\n` +
+                    `💰 Total: ${totalValue.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}\n` +
+                    `🛠 Montagem: ${includeMontagem ? "Sim" : "Não"}\n` +
+                    `🚚 Frete: ${includeFrete ? "Sim" : "Não"}`
+                )}`}
+                target="_blank"
+                className="flex items-center justify-center gap-2 w-full bg-amber-400 text-amber-950 font-black py-4 px-8 rounded-2xl hover:bg-amber-300 active:scale-95 transition-all shadow-xl shadow-amber-950/20"
+              >
+                Pedir agora <ArrowRight size={20} />
+              </a>
             </div>
-            <a
-              href={`https://api.whatsapp.com/send?phone=5585992820404&text=${encodeURIComponent(
-                "Olá, gostaria de fazer o pedido de uma estante de pinus com as medidas: " +
-                  `Largura: ${width}cm, Altura: ${height}cm, Profundidade: ${depth}cm, ` +
-                  `Prateleiras: ${shelves}, Ripas por Prateleira: ${slatsPerShelf}, ` +
-                  `Espaço entre Prateleiras: ${convertPixelsToMeters(
-                    spacePerShelf
-                  )}cm. ` +
-                  `Preço: R$ ${price * 2}. ` +
-                  `Montagem: R$ ${montagem(shelves)}. ` +
-                  `Com Montagem: ${includeMontagem ? "Sim" : "Não"} ` +
-                  `Frete: R$ ${frete(shelves, width)}. ` +
-                  `Com Frete: ${includeFrete ? "Sim" : "Não"} ` +
-                  `-- Link para entrar na página: ${window.location.origin}/?altura=${height}&largura=${width}&profundidade=${depth}&ripas_por_prateleira=${slatsPerShelf}&espaco_entre_prateleiras=${spacePerShelf}`
-              )}`}
-              target="_blank"
-              className="bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 text-white font-medium py-2 px-6 rounded-full shadow-md text-base transition duration-300 ease-in-out transform hover:scale-105 mt-3 flex items-center gap-2"
-            >
-              <ShoppingCart className="text-white" size={20} />
-              Comprar Agora
-            </a>
           </div>
         </div>
+      </section>
+
+      {/* Production Info */}
+      <div className="pt-8 border-t border-amber-900/5 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {[
+          { text: "Produção Expressa (24h)", icon: <Truck size={14} className="text-amber-800" /> },
+          { text: "Entrega em Fortaleza-CE", icon: <Info size={14} className="text-amber-800" /> },
+          { text: "Design Personalizável", icon: <Layers size={14} className="text-amber-800" /> },
+          { text: "Artesanal em Pinus", icon: <Grid size={14} className="text-amber-800" /> },
+        ].map((item, i) => (
+          <div key={i} className="flex items-center gap-3 text-xs font-bold text-amber-800/40 uppercase tracking-widest italic">
+            <span className="w-6 h-6 rounded-lg bg-amber-50 flex items-center justify-center">{item.icon}</span>
+            {item.text}
+          </div>
+        ))}
       </div>
-      <div className="pt-4 border-t border-gray-200">
-        <div className="text-sm text-gray-500 space-y-2">
-          <p className="font-bold text-amber-600">
-            • Tempo de produção e entrega: até 24 horas
-          </p>
-          {/* <p className="font-bold text-amber-600">
-            • Entrega: até 2 dias úteis
-          </p> */}
-          <p className="font-bold text-amber-600">
-            • Frete para todas regiões de Fortaleza-CE
-          </p>
-          <p>• Podem haver variações de 1~2cm nas dimensões</p>
-          <p>• Use os sliders ou digite valores diretamente nos campos</p>
-          <p>• Preços enviados estarão sujeitos a revisão</p>
-          <p>
-            • Tamanhos aproximados das ripas: {RIPA_LARGURA}cm (largura) ×{" "}
-            {RIPA_ALTURA}cm (altura)
-          </p>
-          <button
-            id="button"
-            className="bg-sky-500 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded text-xs"
-          >
-            Exportar para STL
-          </button>
-        </div>
-      </div>
+
+      {/* Footer / STL Button Hidden in Premium UX */}
+      <button
+        id="button"
+        className="opacity-10 hover:opacity-100 transition-opacity text-[10px] fixed bottom-2 right-2 uppercase font-black tracking-widest text-amber-900"
+      >
+        Exportar STL
+      </button>
     </div>
   );
 };

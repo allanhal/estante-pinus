@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import * as THREE from "three";
 import SceneInit from "./lib/SceneInit";
 import { RIPA_ALTURA, RIPA_LARGURA } from "./App";
@@ -13,51 +13,81 @@ function Shelf3D({
   spacePerShelf,
   setPrice,
 }) {
-  let ALTURA = height;
-  let LARGURA = width;
-  let PROFUNDIDADE = depth;
-  let PRATELEIRAS = shelves;
-  let TIRAS_POR_PRATELEIRA = slatsPerShelf;
-
+  const sceneRef = useRef(null);
   const [arrayOfTiras, setArrayOfTiras] = useState([]);
 
   useEffect(() => {
-    setPrice(
-      Math.round(arrayOfTiras.reduce((total, num) => total + num, 0) / 300) *
-        10 +
-        10
-    );
-  }, [arrayOfTiras]);
+    // Total meters calculation for pricing
+    const totalMeters = arrayOfTiras.reduce((total, num) => total + num, 0);
+    setPrice(Math.round(totalMeters / 300) * 10 + 10);
+  }, [arrayOfTiras, setPrice]);
 
   useEffect(() => {
-    setArrayOfTiras([]);
+    if (!sceneRef.current) {
+      sceneRef.current = new SceneInit("myThreeJsCanvas");
+      sceneRef.current.initialize();
+      sceneRef.current.animate();
+      
+      // Improve lighting for premium look
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      sceneRef.current.scene.add(ambientLight);
+
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(500, 500, 500);
+      directionalLight.castShadow = true;
+      sceneRef.current.scene.add(directionalLight);
+
+      const softLight = new THREE.PointLight(0xfff3c7, 0.4);
+      softLight.position.set(-200, 300, 0);
+      sceneRef.current.scene.add(softLight);
+    }
+
+    const sceneObject = sceneRef.current;
+    
+    // Clear existing meshes
+    while(sceneObject.scene.children.length > 0){ 
+        sceneObject.scene.remove(sceneObject.scene.children[0]); 
+    }
+
+    // Restore lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    sceneObject.scene.add(ambientLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(1, 1, 1);
+    sceneObject.scene.add(directionalLight);
+
     const newArrayOfTiras = [];
-    const boxMaterial = new THREE.MeshStandardMaterial({ color: 0x8b4513 }); // SaddleBrown
+    
+    // Premium Wood Material
+    const boxMaterial = new THREE.MeshStandardMaterial({ 
+      color: 0x92400e, 
+      roughness: 0.6, 
+      metalness: 0.1 
+    });
+
     function addTiraPrateleira({
-      sceneObject,
       boxGeometry,
       offsetX = 0,
       offsetY = 0,
       offsetZ = 0,
     }) {
       const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
-
       boxMesh.position.set(offsetX, offsetY, offsetZ);
-
       sceneObject.scene.add(boxMesh);
     }
 
-    function addBasePrateleira({ sceneObject, andar = 1, offsetX = 0 }) {
+    function addBasePrateleira({ andar = 1 }) {
       const boxGeometry = new THREE.BoxGeometry(
-        PROFUNDIDADE,
+        depth,
         RIPA_ALTURA,
         RIPA_LARGURA
       );
+      
       const boxMesh1 = new THREE.Mesh(boxGeometry, boxMaterial);
       boxMesh1.position.set(
         0,
         -RIPA_ALTURA + andar * spacePerShelf,
-        LARGURA / 2 - RIPA_LARGURA / 2 - RIPA_LARGURA / 2
+        width / 2 - RIPA_LARGURA / 2 - RIPA_LARGURA / 2
       );
       sceneObject.scene.add(boxMesh1);
 
@@ -65,137 +95,93 @@ function Shelf3D({
       boxMesh2.position.set(
         0,
         -RIPA_ALTURA + andar * spacePerShelf,
-        -LARGURA / 2 + RIPA_LARGURA / 2 + RIPA_LARGURA / 2
+        -width / 2 + RIPA_LARGURA / 2 + RIPA_LARGURA / 2
       );
       sceneObject.scene.add(boxMesh2);
     }
 
-    function addPes({ sceneObject }) {
-      newArrayOfTiras.push(ALTURA);
-      newArrayOfTiras.push(ALTURA);
-      newArrayOfTiras.push(ALTURA);
-      newArrayOfTiras.push(ALTURA);
+    function addPes() {
+      newArrayOfTiras.push(height, height, height, height);
       const boxGeometry = new THREE.BoxGeometry(
         RIPA_LARGURA,
-        ALTURA,
+        height,
         RIPA_ALTURA
       );
 
-      const boxMesh1 = new THREE.Mesh(boxGeometry, boxMaterial);
-      boxMesh1.position.set(
-        -PROFUNDIDADE / 2 + RIPA_LARGURA / 2,
-        ALTURA / 2 - spacePerShelf,
-        LARGURA / 2 - RIPA_ALTURA / 2
-      );
-      sceneObject.scene.add(boxMesh1);
+      const positions = [
+        [-depth / 2 + RIPA_LARGURA / 2, height / 2 - spacePerShelf, width / 2 - RIPA_ALTURA / 2],
+        [-depth / 2 + RIPA_LARGURA / 2, height / 2 - spacePerShelf, -width / 2 + RIPA_ALTURA / 2],
+        [depth / 2 - RIPA_LARGURA / 2, height / 2 - spacePerShelf, -width / 2 + RIPA_ALTURA / 2],
+        [depth / 2 - RIPA_LARGURA / 2, height / 2 - spacePerShelf, width / 2 - RIPA_ALTURA / 2],
+      ];
 
-      const boxMesh2 = new THREE.Mesh(boxGeometry, boxMaterial);
-      boxMesh2.position.set(
-        -PROFUNDIDADE / 2 + RIPA_LARGURA / 2,
-        ALTURA / 2 - spacePerShelf,
-        -LARGURA / 2 + RIPA_ALTURA / 2
-      );
-      sceneObject.scene.add(boxMesh2);
-
-      const boxMesh3 = new THREE.Mesh(boxGeometry, boxMaterial);
-      boxMesh3.position.set(
-        +PROFUNDIDADE / 2 - RIPA_LARGURA / 2,
-        ALTURA / 2 - spacePerShelf,
-        -LARGURA / 2 + RIPA_ALTURA / 2
-      );
-      sceneObject.scene.add(boxMesh3);
-
-      const boxMesh4 = new THREE.Mesh(boxGeometry, boxMaterial);
-      boxMesh4.position.set(
-        +PROFUNDIDADE / 2 - RIPA_LARGURA / 2,
-        ALTURA / 2 - spacePerShelf,
-        +LARGURA / 2 - RIPA_ALTURA / 2
-      );
-      sceneObject.scene.add(boxMesh4);
+      positions.forEach(pos => {
+        const mesh = new THREE.Mesh(boxGeometry, boxMaterial);
+        mesh.position.set(...pos);
+        sceneObject.scene.add(mesh);
+      });
     }
 
-    function addPrateleira() {
+    function addPrateleiras() {
       const boxGeometry = new THREE.BoxGeometry(
         RIPA_LARGURA,
         RIPA_ALTURA,
-        LARGURA - RIPA_LARGURA
+        width - RIPA_LARGURA
       );
 
-      const ESPACO_ENTRE_TIRAS =
-        (PROFUNDIDADE - TIRAS_POR_PRATELEIRA * RIPA_LARGURA) /
-        (TIRAS_POR_PRATELEIRA - 1);
+      const gap = (depth - slatsPerShelf * RIPA_LARGURA) / (slatsPerShelf - 1);
 
-      for (let andarIndex = 0; andarIndex < PRATELEIRAS; andarIndex++) {
-        // Tiras da prateleira
-        for (let i = 0; i < TIRAS_POR_PRATELEIRA; i++) {
-          newArrayOfTiras.push(LARGURA - RIPA_LARGURA);
+      for (let i = 0; i < shelves; i++) {
+        for (let j = 0; j < slatsPerShelf; j++) {
+          newArrayOfTiras.push(width - RIPA_LARGURA);
           addTiraPrateleira({
-            sceneObject,
             boxGeometry,
-            offsetX:
-              -PROFUNDIDADE / 2 +
-              RIPA_LARGURA / 2 +
-              i * (ESPACO_ENTRE_TIRAS + RIPA_LARGURA),
-            offsetY: andarIndex * spacePerShelf,
+            offsetX: -depth / 2 + RIPA_LARGURA / 2 + j * (gap + RIPA_LARGURA),
+            offsetY: i * spacePerShelf,
           });
         }
-
-        // Base das tiras da prateleira
-        addBasePrateleira({
-          sceneObject,
-          andar: andarIndex,
-        });
+        addBasePrateleira({ andar: i });
       }
     }
 
-    // const sceneObject = new SceneInit("myThreeJsCanvas"+Math.random());
-    const sceneObject = new SceneInit("myThreeJsCanvas");
-    sceneObject.initialize();
-    sceneObject.animate();
+    addPrateleiras();
+    addPes();
 
-    addPrateleira();
-
-    addPes({
-      sceneObject,
+    // Compute bounding box of all shelf meshes to find true center
+    const box = new THREE.Box3();
+    sceneObject.scene.children.forEach(child => {
+      if (child.isMesh) box.expandByObject(child);
     });
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    const dist = Math.max(size.x, size.y, size.z) * 2.5;
 
-    let x = Math.min(20 + height * 5, 600);
-    let yz = Math.min(20 + height * 3, 550);
-    // let yz = 150;
-    // let z = 200;
-
-    // sceneObject.camera.position.set(600, 550, 550); // posição diagonal de cima
-    // sceneObject.camera.position.set(500, 500, 500); // posição diagonal de cima
-    // sceneObject.camera.position.set(400, 400, 400); // posição diagonal de cima
-    // sceneObject.camera.position.set(200, 200, 200); // posição diagonal de cima
-    // sceneObject.camera.position.set(120, 120, 120); // posição diagonal de cima
-    // sceneObject.camera.position.set(40, 40, 40); // posição diagonal de cima
-    // sceneObject.camera.position.set(10, 10, 10); // posição diagonal de cima
-    // sceneObject.camera.position.set(100, 60, 0); // posição diagonal de cima
-    // sceneObject.camera.position.set(20 + height * 2, 20 + height * 2, height);
-    // sceneObject.camera.position.set(x, yz, z);
-    sceneObject.camera.position.set(x, yz, yz);
-    // sceneObject.camera.position.set(0, 0, 100); // posição lateral
-    // sceneObject.camera.position.set(-100, 0, 20); // posição lateral
-    // sceneObject.camera.position.set(100, 50, -100); // posição diagonal de cima
-    sceneObject.camera.lookAt(0, 0, 0); // olhando para o centro da cena
+    sceneObject.camera.position.set(center.x + dist, center.y + dist * 0.7, center.z + dist);
+    sceneObject.camera.lookAt(center.x, center.y, center.z);
+    sceneObject.controls.target.set(center.x, center.y, center.z);
+    sceneObject.controls.update();
 
     setArrayOfTiras(newArrayOfTiras);
 
-    document.getElementById("button").addEventListener("click", () => {
+    // Export Handler
+    const exportBtn = document.getElementById("button");
+    const handleExport = () => {
       const exporter = new STLExporter();
       const stlString = exporter.parse(sceneObject.scene);
       const blob = new Blob([stlString], { type: "text/plain" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "estante.stl";
+      link.download = "estante-pinus.stl";
       link.click();
-    });
+    };
+    
+    exportBtn?.addEventListener("click", handleExport);
+    return () => exportBtn?.removeEventListener("click", handleExport);
   }, [width, height, depth, shelves, slatsPerShelf, spacePerShelf]);
 
   return (
-    <div>
-      <canvas id="myThreeJsCanvas" className="p-2" />
+    <div className="w-full h-full relative">
+      <canvas id="myThreeJsCanvas" className="w-full h-full block" />
     </div>
   );
 }
