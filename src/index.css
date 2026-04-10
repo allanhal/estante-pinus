@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --primary: #92400e;
   --secondary: #fef3c7;
@@ -12,6 +14,18 @@
   --glass-border: rgba(255, 255, 255, 0.2);
 }
 
+.dark {
+  --primary: #d97706;
+  --secondary: #292524;
+  --background: #1c1917;
+  --card-bg: rgba(41, 37, 36, 0.8);
+  --text: #fafaf9;
+  --text-muted: #a8a29e;
+  --accent: #f59e0b;
+  --glass: rgba(41, 37, 36, 0.7);
+  --glass-border: rgba(68, 64, 60, 0.4);
+}
+
 body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -19,6 +33,7 @@ body {
   background: var(--background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4 {
@@ -32,6 +47,10 @@ h1, h2, h3, h4 {
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   box-shadow: 0 8px 32px 0 rgba(146, 64, 14, 0.1);
+}
+
+.dark .glass-card {
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 .wood-gradient {
@@ -55,6 +74,12 @@ input[type="range"] {
   background-repeat: no-repeat;
 }
 
+.dark input[type="range"] {
+  background: #44403c;
+  background-image: linear-gradient(#f59e0b, #f59e0b);
+  background-repeat: no-repeat;
+}
+
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   height: 18px;
@@ -64,6 +89,10 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: transform 0.1s ease-in-out;
+}
+
+.dark input[type="range"]::-webkit-slider-thumb {
+  background: #f59e0b;
 }
 
 input[type="range"]::-webkit-slider-thumb:hover {

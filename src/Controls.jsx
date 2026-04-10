@@ -103,8 +103,8 @@ const Controls = ({
       {/* Suggestions Section */}
       <section>
         <div className="flex items-center gap-3 mb-6">
-          <Settings className="text-amber-800" size={20} />
-          <h2 className="text-xl font-bold text-amber-900 tracking-tight">Sugestões</h2>
+          <Settings className="text-amber-800 dark:text-amber-500" size={20} />
+          <h2 className="text-xl font-bold text-amber-900 dark:text-amber-400 tracking-tight">Sugestões</h2>
         </div>
         <div className="flex gap-2 w-full">
           {buttonConfigs.map((config, index) => (
@@ -117,12 +117,12 @@ const Controls = ({
                 setShelves(config.s);
                 setSpacePerShelf(config.sp);
               }}
-              className="flex-1 flex flex-col items-center justify-center py-2 px-1 glass-card rounded-xl border border-white hover:border-amber-200 hover:shadow-md transition-all active:scale-95 group text-center min-w-0"
+              className="flex-1 flex flex-col items-center justify-center py-2 px-1 glass-card rounded-xl border border-white dark:border-stone-700 hover:border-amber-200 dark:hover:border-amber-600 hover:shadow-md transition-all active:scale-95 group text-center min-w-0"
             >
-              <span className="text-[10px] font-black text-amber-900 uppercase tracking-tight group-hover:text-amber-700 transition-colors truncate w-full px-1">
+              <span className="text-[10px] font-black text-amber-900 dark:text-amber-400 uppercase tracking-tight group-hover:text-amber-700 dark:group-hover:text-amber-300 transition-colors truncate w-full px-1">
                 {config.label}
               </span>
-              <span className="text-[9px] font-medium text-amber-900/40 leading-none mt-0.5 whitespace-nowrap">
+              <span className="text-[9px] font-medium text-amber-900/40 dark:text-amber-500/40 leading-none mt-0.5 whitespace-nowrap">
                 {config.h}×{config.w}×{config.d}
               </span>
             </button>
@@ -133,22 +133,22 @@ const Controls = ({
       {/* Main Dimensions Section */}
       <section className="space-y-8">
         <div className="flex items-center gap-3 mb-6">
-          <Ruler className="text-amber-800" size={20} />
-          <h2 className="text-xl font-bold text-amber-900 tracking-tight">Dimensões da Estante</h2>
+          <Ruler className="text-amber-800 dark:text-amber-500" size={20} />
+          <h2 className="text-xl font-bold text-amber-900 dark:text-amber-400 tracking-tight">Dimensões da Estante</h2>
         </div>
 
         {/* Height Control */}
         <div className="space-y-4">
           <div className="flex justify-between items-end">
-            <span className="text-sm font-bold text-amber-900/50 uppercase tracking-widest italic leading-none pb-1">Altura</span>
+            <span className="text-sm font-bold text-amber-900/50 dark:text-amber-500/50 uppercase tracking-widest italic leading-none pb-1">Altura</span>
             <div className="flex items-baseline gap-1">
               <input
                 type="number"
                 value={height}
                 onChange={(e) => handleInputChange(e.target.value, setHeight, spacePerShelf, maxHeight)}
-                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 p-0 leading-none"
+                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 dark:text-amber-400 p-0 leading-none"
               />
-              <span className="text-sm font-medium text-amber-900/40">cm</span>
+              <span className="text-sm font-medium text-amber-900/40 dark:text-amber-500/40">cm</span>
             </div>
           </div>
           <input
@@ -165,15 +165,15 @@ const Controls = ({
         {/* Width Control */}
         <div className="space-y-4">
           <div className="flex justify-between items-end">
-            <span className="text-sm font-bold text-amber-900/50 uppercase tracking-widest italic leading-none pb-1">Largura</span>
+            <span className="text-sm font-bold text-amber-900/50 dark:text-amber-500/50 uppercase tracking-widest italic leading-none pb-1">Largura</span>
             <div className="flex items-baseline gap-1">
               <input
                 type="number"
                 value={width}
                 onChange={(e) => handleInputChange(e.target.value, setWidth, minWidth, maxWidth)}
-                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 p-0 leading-none"
+                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 dark:text-amber-400 p-0 leading-none"
               />
-              <span className="text-sm font-medium text-amber-900/40">cm</span>
+              <span className="text-sm font-medium text-amber-900/40 dark:text-amber-500/40">cm</span>
             </div>
           </div>
           <input
@@ -190,15 +190,15 @@ const Controls = ({
         {/* Depth Control */}
         <div className="space-y-4">
           <div className="flex justify-between items-end">
-            <span className="text-sm font-bold text-amber-900/50 uppercase tracking-widest italic leading-none pb-1">Profundidade</span>
+            <span className="text-sm font-bold text-amber-900/50 dark:text-amber-500/50 uppercase tracking-widest italic leading-none pb-1">Profundidade</span>
             <div className="flex items-baseline gap-1">
               <input
                 type="number"
                 value={depth}
                 onChange={(e) => handleInputChange(e.target.value, setDepth, minDepth, maxDepth)}
-                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 p-0 leading-none"
+                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 dark:text-amber-400 p-0 leading-none"
               />
-              <span className="text-sm font-medium text-amber-900/40">cm</span>
+              <span className="text-sm font-medium text-amber-900/40 dark:text-amber-500/40">cm</span>
             </div>
           </div>
           <input
@@ -215,13 +215,13 @@ const Controls = ({
         {/* Slats Control */}
         <div className="space-y-4">
           <div className="flex justify-between items-end">
-            <span className="text-sm font-bold text-amber-900/50 uppercase tracking-widest italic leading-none pb-1">Ripas por prateleira</span>
+            <span className="text-sm font-bold text-amber-900/50 dark:text-amber-500/50 uppercase tracking-widest italic leading-none pb-1">Ripas por prateleira</span>
             <div className="flex items-baseline gap-1">
               <input
                 type="number"
                 value={slatsPerShelf}
                 onChange={(e) => handleInputChange(e.target.value, setSlatsPerShelf, minSlatsPerShelf, maxSlatsPerShelfState)}
-                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 p-0 leading-none"
+                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 dark:text-amber-400 p-0 leading-none"
               />
             </div>
           </div>
@@ -239,15 +239,15 @@ const Controls = ({
         {/* Space Per Shelf Control */}
         <div className="space-y-4">
           <div className="flex justify-between items-end">
-            <span className="text-sm font-bold text-amber-900/50 uppercase tracking-widest italic leading-none pb-1">Espaçamento</span>
+            <span className="text-sm font-bold text-amber-900/50 dark:text-amber-500/50 uppercase tracking-widest italic leading-none pb-1">Espaçamento</span>
             <div className="flex items-baseline gap-1">
               <input
                 type="number"
                 value={spacePerShelf}
                 onChange={(e) => handleInputChange(e.target.value, setSpacePerShelf, minSpacePerShelf, maxSpacePerShelf)}
-                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 p-0 leading-none"
+                className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 dark:text-amber-400 p-0 leading-none"
               />
-              <span className="text-sm font-medium text-amber-900/40">cm</span>
+              <span className="text-sm font-medium text-amber-900/40 dark:text-amber-500/40">cm</span>
             </div>
           </div>
           <input
@@ -263,7 +263,7 @@ const Controls = ({
       </section>
 
       {/* Purchase Card */}
-      <section className="mt-12 bg-amber-900 rounded-[32px] p-8 text-white shadow-2xl relative overflow-hidden group">
+      <section className="mt-12 bg-amber-900 dark:bg-stone-800 rounded-[32px] p-8 text-white shadow-2xl relative overflow-hidden group">
         <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl pointer-events-none group-hover:scale-150 transition-transform duration-1000" />
         <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-1000" />
 
@@ -354,15 +354,15 @@ const Controls = ({
       </section>
 
       {/* Production Info */}
-      <div className="pt-8 border-t border-amber-900/5 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="pt-8 border-t border-amber-900/5 dark:border-stone-700/30 grid grid-cols-1 md:grid-cols-2 gap-4">
         {[
-          { text: "Produção Expressa (24h)", icon: <Truck size={14} className="text-amber-800" /> },
-          { text: "Entrega em Fortaleza-CE", icon: <Info size={14} className="text-amber-800" /> },
-          { text: "Design Personalizável", icon: <Layers size={14} className="text-amber-800" /> },
-          { text: "Artesanal em Pinus", icon: <Grid size={14} className="text-amber-800" /> },
+          { text: "Produção Expressa (24h)", icon: <Truck size={14} className="text-amber-800 dark:text-amber-500" /> },
+          { text: "Entrega em Fortaleza-CE", icon: <Info size={14} className="text-amber-800 dark:text-amber-500" /> },
+          { text: "Design Personalizável", icon: <Layers size={14} className="text-amber-800 dark:text-amber-500" /> },
+          { text: "Artesanal em Pinus", icon: <Grid size={14} className="text-amber-800 dark:text-amber-500" /> },
         ].map((item, i) => (
-          <div key={i} className="flex items-center gap-3 text-xs font-bold text-amber-800/40 uppercase tracking-widest italic">
-            <span className="w-6 h-6 rounded-lg bg-amber-50 flex items-center justify-center">{item.icon}</span>
+          <div key={i} className="flex items-center gap-3 text-xs font-bold text-amber-800/40 dark:text-amber-500/40 uppercase tracking-widest italic">
+            <span className="w-6 h-6 rounded-lg bg-amber-50 dark:bg-stone-800 flex items-center justify-center">{item.icon}</span>
             {item.text}
           </div>
         ))}
@@ -371,7 +371,7 @@ const Controls = ({
       {/* Footer / STL Button Hidden in Premium UX */}
       <button
         id="button"
-        className="opacity-10 hover:opacity-100 transition-opacity text-[10px] fixed bottom-2 right-2 uppercase font-black tracking-widest text-amber-900"
+        className="opacity-10 hover:opacity-100 transition-opacity text-[10px] fixed bottom-2 right-2 uppercase font-black tracking-widest text-amber-900 dark:text-amber-400"
       >
         Exportar STL
       </button>

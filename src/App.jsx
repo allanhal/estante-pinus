@@ -1,5 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Moon, Sun } from "lucide-react";
 import Shelf3D from "./Shelf3D";
 import Controls from "./Controls";
 
@@ -42,6 +43,16 @@ function App() {
   const [spacePerShelf, setSpacePerShelf] = useState(DISTANCIA_ENTRE_PRATELEIRAS);
   const [price, setPrice] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem("darkMode");
+    if (saved !== null) return saved === "true";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
 
   const [searchParams] = useSearchParams();
 
@@ -66,21 +77,35 @@ function App() {
   }, []);
 
   return (
-    <div className="h-screen lg:h-auto lg:min-h-screen bg-[#fdfbf7] flex flex-col overflow-hidden lg:overflow-visible">
+    <div className="h-screen lg:h-auto lg:min-h-screen bg-[var(--background)] flex flex-col overflow-hidden lg:overflow-visible transition-colors duration-300">
       {/* Header / Hero */}
-      <header className="hidden lg:block pt-10 pb-6 px-6 text-center lg:text-left lg:px-20">
-        <h1 className="text-4xl md:text-6xl font-black text-amber-900 leading-tight" style={{ fontFamily: "'Outfit', sans-serif" }}>
+      <header className="hidden lg:flex pt-10 pb-6 px-6 lg:px-20 items-center justify-between">
+        <h1 className="text-4xl md:text-6xl font-black text-amber-900 dark:text-amber-400 leading-tight" style={{ fontFamily: "'Outfit', sans-serif" }}>
           Estante Pinus Fortaleza
         </h1>
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="p-3 rounded-2xl glass-card hover:scale-105 active:scale-95 transition-all text-amber-900 dark:text-amber-400"
+          aria-label={darkMode ? "Ativar modo claro" : "Ativar modo escuro"}
+        >
+          {darkMode ? <Sun size={22} /> : <Moon size={22} />}
+        </button>
       </header>
 
-      <div className="lg:hidden bg-gradient-to-r from-amber-800 via-amber-700 to-amber-800 px-4 py-2.5 text-center shrink-0 shadow-md">
+      <div className="lg:hidden bg-gradient-to-r from-amber-800 via-amber-700 to-amber-800 dark:from-amber-950 dark:via-amber-900 dark:to-amber-950 px-4 py-2.5 text-center shrink-0 shadow-md flex items-center justify-between">
         <span className="text-amber-50 tracking-wide font-bold" style={{ fontFamily: "'Outfit', sans-serif" }}>Estante Pinus Fortaleza</span>
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="p-1.5 rounded-lg text-amber-200 hover:text-amber-50 transition-colors"
+          aria-label={darkMode ? "Ativar modo claro" : "Ativar modo escuro"}
+        >
+          {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
       </div>
 
       <main className="flex-1 flex flex-col lg:grid lg:grid-cols-12 gap-0 lg:gap-8 lg:px-12 pb-0 lg:pb-12 overflow-hidden lg:overflow-visible">
         {/* Left: 3D Scene */}
-        <div className="h-[40vh] shrink-0 lg:col-span-7 lg:sticky lg:top-8 lg:h-[80vh] bg-white lg:rounded-3xl shadow-2xl lg:shadow-amber-900/10 overflow-hidden group lg:self-start">
+        <div className="h-[40vh] shrink-0 lg:col-span-7 lg:sticky lg:top-8 lg:h-[80vh] bg-white dark:bg-stone-900 lg:rounded-3xl shadow-2xl lg:shadow-amber-900/10 dark:lg:shadow-black/30 overflow-hidden group lg:self-start transition-colors duration-300">
           <Shelf3D
             width={width}
             height={height}
@@ -91,7 +116,7 @@ function App() {
             setPrice={setPrice}
           />
           <div className="absolute bottom-6 left-6 z-20 hidden lg:block">
-            <div className="glass-card px-4 py-2 rounded-full text-xs font-bold text-amber-900 uppercase tracking-widest">
+            <div className="glass-card px-4 py-2 rounded-full text-xs font-bold text-amber-900 dark:text-amber-400 uppercase tracking-widest">
               Interação 3D Ativa
             </div>
           </div>
@@ -99,7 +124,7 @@ function App() {
 
         {/* Right: Controls */}
         <div className="flex-1 overflow-y-auto lg:overflow-visible lg:col-span-5 px-4 md:px-6 lg:px-0 lg:mt-0 pt-4 lg:pt-0 relative">
-          <div className="bg-white lg:bg-white/40 lg:backdrop-blur-xl rounded-t-[40px] lg:rounded-3xl p-6 lg:p-8 shadow-2xl lg:shadow-none border-t lg:border border-amber-900/5 min-h-[50vh]">
+          <div className="bg-white dark:bg-stone-900 lg:bg-white/40 lg:dark:bg-stone-900/40 lg:backdrop-blur-xl rounded-t-[40px] lg:rounded-3xl p-6 lg:p-8 shadow-2xl lg:shadow-none border-t lg:border border-amber-900/5 dark:border-stone-700/30 min-h-[50vh] transition-colors duration-300">
             <Controls
               width={width}
               height={height}
