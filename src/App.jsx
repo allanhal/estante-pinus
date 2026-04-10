@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import Shelf3D from "./Shelf3D";
 import Controls from "./Controls";
@@ -34,6 +34,14 @@ const DISTANCIA_ENTRE_PRATELEIRAS = 20; // Distância entre as prateleiras
 const ESPACO_POR_PRATELEIRA_MINIMO = 10;
 const ESPACO_POR_PRATELEIRA_MAXIMO = 50;
 
+export const calculateShelfBasePrice = ({ width, height, shelves, slatsPerShelf }) => {
+  const totalSlatLength = shelves * slatsPerShelf * (width - RIPA_LARGURA);
+  const totalLegLength = height * 4;
+  const totalLength = totalSlatLength + totalLegLength;
+
+  return Math.round(totalLength / 300) * 10 + 10;
+};
+
 function App() {
   const [width, setWidth] = useState(LARGURA);
   const [height, setHeight] = useState(ALTURA);
@@ -41,8 +49,6 @@ function App() {
   const [shelves, setShelves] = useState(PRATELEIRAS);
   const [slatsPerShelf, setSlatsPerShelf] = useState(TIRAS_POR_PRATELEIRA);
   const [spacePerShelf, setSpacePerShelf] = useState(DISTANCIA_ENTRE_PRATELEIRAS);
-  const [price, setPrice] = useState(0);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem("darkMode");
     if (saved !== null) return saved === "true";
@@ -70,11 +76,10 @@ function App() {
     if (espaco_entre_prateleiras) setSpacePerShelf(parseInt(espaco_entre_prateleiras, 10));
   }, [searchParams]);
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const price = useMemo(
+    () => calculateShelfBasePrice({ width, height, shelves, slatsPerShelf }),
+    [width, height, shelves, slatsPerShelf]
+  );
 
   return (
     <div className="h-screen lg:h-auto lg:min-h-screen bg-[var(--background)] flex flex-col overflow-hidden lg:overflow-visible transition-colors duration-300">
@@ -113,7 +118,6 @@ function App() {
             shelves={shelves}
             slatsPerShelf={slatsPerShelf}
             spacePerShelf={spacePerShelf}
-            setPrice={setPrice}
           />
           <div className="absolute bottom-6 left-6 z-20 hidden lg:block">
             <div className="glass-card px-4 py-2 rounded-full text-xs font-bold text-amber-900 dark:text-amber-400 uppercase tracking-widest">
