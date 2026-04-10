@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import Stats from "three/examples/jsm/libs/stats.module";
 
 export default class SceneInit {
   constructor(canvasId) {
@@ -17,8 +16,8 @@ export default class SceneInit {
 
     // NOTE: Additional components.
     this.clock = undefined;
-    this.stats = undefined;
     this.controls = undefined;
+    this.handleResize = this.onWindowResize.bind(this);
 
     // NOTE: Lighting is basically required.
     this.ambientLight = undefined;
@@ -47,18 +46,13 @@ export default class SceneInit {
     );
     this.camera.position.z = 48;
 
-    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(width, height);
     this.renderer.setClearColor(0x000000, 0); // Transparent background for glass look
 
-    // this.renderer.setSize(window.innerWidth, window.innerHeight);
-    // this.renderer.shadowMap.enabled = true;
-    // document.body.appendChild(this.renderer.domElement);
-
     this.clock = new THREE.Clock();
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.stats = Stats();
-    // document.body.appendChild(this.stats.dom);
+    this.controls.addEventListener("change", this.render.bind(this));
 
     // ambient light which is for the whole scene
     this.ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -72,14 +66,7 @@ export default class SceneInit {
     this.scene.add(this.directionalLight);
 
     // if window resizes
-    window.addEventListener('resize', () => this.onWindowResize(), false);
-  }
-
-  animate() {
-    window.requestAnimationFrame(this.animate.bind(this));
-    this.render();
-    this.stats.update();
-    this.controls.update();
+    window.addEventListener("resize", this.handleResize, false);
   }
 
   render() {
@@ -93,5 +80,13 @@ export default class SceneInit {
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.render();
+  }
+
+  destroy() {
+    window.removeEventListener("resize", this.handleResize, false);
+    this.controls?.dispose();
+    this.renderer?.dispose();
   }
 }
