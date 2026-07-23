@@ -12,6 +12,8 @@ export const CUSTO_FIXO_MONTAGEM_ESTANTE = 10;
 export const RIPA_LARGURA = 4;
 export const RIPA_ALTURA = 2;
 
+export const SPAN_MAXIMO = 150;
+
 const ALTURA = 60;
 const LARGURA = 40;
 const PROFUNDIDADE = 30;
@@ -34,12 +36,28 @@ const DISTANCIA_ENTRE_PRATELEIRAS = 20; // Distância entre as prateleiras
 const ESPACO_POR_PRATELEIRA_MINIMO = 10;
 const ESPACO_POR_PRATELEIRA_MAXIMO = 50;
 
+export const getNumApoiosCentrais = (width) =>
+  Math.max(Math.ceil(width / SPAN_MAXIMO) - 1, 0);
+
+const MATERIAL_RATE = 10 / 300; // mesma taxa usada no preço base: R$10 a cada 300cm de material
+
 export const calculateShelfBasePrice = ({ width, height, shelves, slatsPerShelf }) => {
   const totalSlatLength = shelves * slatsPerShelf * (width - RIPA_LARGURA);
   const totalLegLength = height * 4;
   const totalLength = totalSlatLength + totalLegLength;
 
   return Math.round(totalLength / 300) * 10 + 10;
+};
+
+export const calculateApoiosCentraisPrice = ({ width, height, depth, shelves }) => {
+  const numApoiosCentrais = getNumApoiosCentrais(width);
+
+  if (numApoiosCentrais === 0) return 0;
+
+  const legsLength = height * numApoiosCentrais * 2;
+  const runnersLength = depth * numApoiosCentrais * shelves;
+
+  return Math.round((legsLength + runnersLength) * MATERIAL_RATE);
 };
 
 function App() {
@@ -49,6 +67,7 @@ function App() {
   const [shelves, setShelves] = useState(PRATELEIRAS);
   const [slatsPerShelf, setSlatsPerShelf] = useState(TIRAS_POR_PRATELEIRA);
   const [spacePerShelf, setSpacePerShelf] = useState(DISTANCIA_ENTRE_PRATELEIRAS);
+  const [pernasLateral, setPernasLateral] = useState(true);
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem("darkMode");
     if (saved !== null) return saved === "true";
@@ -60,7 +79,7 @@ function App() {
     localStorage.setItem("darkMode", darkMode);
   }, [darkMode]);
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     const altura = searchParams.get("altura");
@@ -74,11 +93,27 @@ function App() {
     if (profundidade) setDepth(parseInt(profundidade, 10));
     if (ripas_por_prateleira) setSlatsPerShelf(parseInt(ripas_por_prateleira, 10));
     if (espaco_entre_prateleiras) setSpacePerShelf(parseInt(espaco_entre_prateleiras, 10));
-  }, [searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setSearchParams(
+      {
+        altura: height,
+        largura: width,
+        profundidade: depth,
+        ripas_por_prateleira: slatsPerShelf,
+        espaco_entre_prateleiras: spacePerShelf,
+      },
+      { replace: true }
+    );
+  }, [height, width, depth, slatsPerShelf, spacePerShelf, setSearchParams]);
 
   const price = useMemo(
-    () => calculateShelfBasePrice({ width, height, shelves, slatsPerShelf }),
-    [width, height, shelves, slatsPerShelf]
+    () =>
+      calculateShelfBasePrice({ width, height, shelves, slatsPerShelf }) +
+      calculateApoiosCentraisPrice({ width, height, depth, shelves }),
+    [width, height, depth, shelves, slatsPerShelf]
   );
 
   return (
@@ -118,6 +153,7 @@ function App() {
             shelves={shelves}
             slatsPerShelf={slatsPerShelf}
             spacePerShelf={spacePerShelf}
+            pernasLateral={pernasLateral}
           />
           <div className="absolute bottom-6 left-6 z-20 hidden lg:block">
             <div className="glass-card px-4 py-2 rounded-full text-xs font-bold text-amber-900 dark:text-amber-400 uppercase tracking-widest">
@@ -136,12 +172,14 @@ function App() {
               shelves={shelves}
               slatsPerShelf={slatsPerShelf}
               spacePerShelf={spacePerShelf}
+              pernasLateral={pernasLateral}
               setWidth={setWidth}
               setHeight={setHeight}
               setDepth={setDepth}
               setShelves={setShelves}
               setSlatsPerShelf={setSlatsPerShelf}
               setSpacePerShelf={setSpacePerShelf}
+              setPernasLateral={setPernasLateral}
               minWidth={LARGURA_MINIMA}
               maxWidth={LARGURA_MAXIMA}
               maxHeight={ALTURA_MAXIMA}

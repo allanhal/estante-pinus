@@ -37,6 +37,7 @@ const Controls = ({
   shelves,
   slatsPerShelf,
   spacePerShelf,
+  pernasLateral,
 
   setWidth,
   setHeight,
@@ -44,6 +45,7 @@ const Controls = ({
   setShelves,
   setSlatsPerShelf,
   setSpacePerShelf,
+  setPernasLateral,
 
   minWidth,
   maxWidth,
@@ -259,6 +261,39 @@ const Controls = ({
             onChange={(e) => setSpacePerShelf(Number(e.target.value))}
             className="w-full"
           />
+        </div>
+
+        {/* Leg Orientation */}
+        <div className="space-y-2 pt-2">
+          <span className="text-sm font-bold text-amber-900/50 dark:text-amber-500/50 uppercase tracking-widest italic leading-none block">
+            Orientação das pernas laterais
+          </span>
+          <div className="flex flex-col gap-2">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="radio"
+                name="pernasOrientacao"
+                checked={pernasLateral}
+                onChange={() => setPernasLateral(true)}
+                className="w-5 h-5 accent-amber-600 focus:ring-0"
+              />
+              <span className="text-sm font-medium text-amber-900/70 dark:text-amber-400/70">
+                Lateral
+              </span>
+            </label>
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="radio"
+                name="pernasOrientacao"
+                checked={!pernasLateral}
+                onChange={() => setPernasLateral(false)}
+                className="w-5 h-5 accent-amber-600 focus:ring-0"
+              />
+              <span className="text-sm font-medium text-amber-900/70 dark:text-amber-400/70">
+                Frente e fundo
+              </span>
+            </label>
+          </div>
         </div>
       </section>
 

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
 import SceneInit from "./lib/SceneInit";
-import { RIPA_ALTURA, RIPA_LARGURA } from "./App";
+import { RIPA_ALTURA, RIPA_LARGURA, getNumApoiosCentrais } from "./App";
 
 const BOX_MATERIAL = new THREE.MeshStandardMaterial({
   color: 0x92400e,
@@ -44,6 +44,7 @@ function Shelf3D({
   shelves = 3,
   slatsPerShelf = 6,
   spacePerShelf,
+  pernasLateral = true,
 }) {
   const sceneRef = useRef(null);
   const modelGroupRef = useRef(null);
@@ -113,58 +114,64 @@ function Shelf3D({
       modelGroup.add(line);
     };
 
+    const numApoiosCentrais = getNumApoiosCentrais(width);
+    const apoiosZ = Array.from({ length: numApoiosCentrais }, (_, index) => {
+      const i = index + 1;
+      return -width / 2 + (width * i) / (numApoiosCentrais + 1);
+    });
+
+    // Espessura da perna: lateral = face larga voltada para o lado (atual);
+    // frente/fundo = perna rotacionada 90°, face larga voltada para frente/fundo.
+    const legDepthThickness = pernasLateral ? RIPA_LARGURA : RIPA_ALTURA;
+    const legWidthThickness = pernasLateral ? RIPA_ALTURA : RIPA_LARGURA;
+
+    // Lateral: perna encostada (flush) na quina nos dois eixos. Frente e fundo:
+    // sai para fora em profundidade (mesmo passo dos apoios centrais) e entra
+    // para dentro em largura, na mesma medida.
+    const legFrontX = pernasLateral
+      ? depth / 2 - legDepthThickness / 2
+      : depth / 2 + RIPA_ALTURA / 2;
+    const legBackX = pernasLateral
+      ? -depth / 2 + legDepthThickness / 2
+      : -depth / 2 - RIPA_ALTURA / 2;
+    const legRightZ = pernasLateral
+      ? width / 2 - legWidthThickness / 2
+      : width / 2 - legWidthThickness / 2 - RIPA_ALTURA;
+    const legLeftZ = pernasLateral
+      ? -width / 2 + legWidthThickness / 2
+      : -width / 2 + legWidthThickness / 2 + RIPA_ALTURA;
+
     const addBasePrateleira = (andar = 1) => {
       const geometry = new THREE.BoxGeometry(depth, RIPA_ALTURA, RIPA_LARGURA);
+      const z = width / 2 - RIPA_LARGURA;
 
-      addMeshWithEdges(geometry, [
-        0,
-        -RIPA_ALTURA + andar * spacePerShelf,
-        width / 2 - RIPA_LARGURA,
-      ]);
+      addMeshWithEdges(geometry, [0, -RIPA_ALTURA + andar * spacePerShelf, z]);
+      addMeshWithEdges(geometry, [0, -RIPA_ALTURA + andar * spacePerShelf, -z]);
 
-      addMeshWithEdges(geometry, [
-        0,
-        -RIPA_ALTURA + andar * spacePerShelf,
-        -width / 2 + RIPA_LARGURA,
-      ]);
+      apoiosZ.forEach((apoioZ) => {
+        addMeshWithEdges(geometry, [0, -RIPA_ALTURA + andar * spacePerShelf, apoioZ]);
+      });
     };
 
     const addPes = () => {
-      const geometry = new THREE.BoxGeometry(RIPA_LARGURA, height, RIPA_ALTURA);
+      const geometry = new THREE.BoxGeometry(legDepthThickness, height, legWidthThickness);
       const positions = [
-        [-depth / 2 + RIPA_LARGURA / 2, height / 2 - spacePerShelf, width / 2 - RIPA_ALTURA / 2],
-        [-depth / 2 + RIPA_LARGURA / 2, height / 2 - spacePerShelf, -width / 2 + RIPA_ALTURA / 2],
-        [depth / 2 - RIPA_LARGURA / 2, height / 2 - spacePerShelf, -width / 2 + RIPA_ALTURA / 2],
-        [depth / 2 - RIPA_LARGURA / 2, height / 2 - spacePerShelf, width / 2 - RIPA_ALTURA / 2],
+        [legBackX, height / 2 - spacePerShelf, legRightZ],
+        [legBackX, height / 2 - spacePerShelf, legLeftZ],
+        [legFrontX, height / 2 - spacePerShelf, legLeftZ],
+        [legFrontX, height / 2 - spacePerShelf, legRightZ],
       ];
 
       positions.forEach((position) => addMeshWithEdges(geometry, position));
     };
 
     const addApoiosCentrais = () => {
-      const SPAN_MAXIMO = 150;
+      const geometry = new THREE.BoxGeometry(RIPA_ALTURA, height, RIPA_LARGURA);
 
-      if (width <= SPAN_MAXIMO) {
-        return;
-      }
-
-      const geometry = new THREE.BoxGeometry(RIPA_LARGURA, height, RIPA_ALTURA);
-      const numApoios = Math.ceil(width / SPAN_MAXIMO) - 1;
-
-      for (let i = 1; i <= numApoios; i += 1) {
-        const z = -width / 2 + (width * i) / (numApoios + 1);
-
-        addMeshWithEdges(geometry, [
-          -depth / 2 + RIPA_LARGURA / 2,
-          height / 2 - spacePerShelf,
-          z,
-        ]);
-        addMeshWithEdges(geometry, [
-          depth / 2 - RIPA_LARGURA / 2,
-          height / 2 - spacePerShelf,
-          z,
-        ]);
-      }
+      apoiosZ.forEach((z) => {
+        addMeshWithEdges(geometry, [-depth / 2 - RIPA_ALTURA / 2, height / 2 - spacePerShelf, z]);
+        addMeshWithEdges(geometry, [depth / 2 + RIPA_ALTURA / 2, height / 2 - spacePerShelf, z]);
+      });
     };
 
     const addPrateleiras = () => {
@@ -345,7 +352,7 @@ function Shelf3D({
     return () => {
       exportBtn?.removeEventListener("click", handleExport);
     };
-  }, [width, height, depth, shelves, slatsPerShelf, spacePerShelf]);
+  }, [width, height, depth, shelves, slatsPerShelf, spacePerShelf, pernasLateral]);
 
   return (
     <div className="w-full h-full relative">
