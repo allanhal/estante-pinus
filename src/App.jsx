@@ -60,6 +60,28 @@ export const calculateApoiosCentraisPrice = ({ width, height, depth, shelves }) 
   return Math.round((legsLength + runnersLength) * MATERIAL_RATE);
 };
 
+export const calculateBillOfMaterials = ({ width, height, depth, shelves, slatsPerShelf }) => {
+  const numApoiosCentrais = getNumApoiosCentrais(width);
+
+  const items = [
+    { nome: "Pernas", comprimento: height, quantidade: 4 + numApoiosCentrais * 2 },
+  ];
+
+  items.push({
+    nome: "Ripas das prateleiras",
+    comprimento: width - RIPA_LARGURA,
+    quantidade: shelves * slatsPerShelf,
+  });
+
+  items.push({
+    nome: "Travessas da base",
+    comprimento: depth,
+    quantidade: shelves * (2 + numApoiosCentrais),
+  });
+
+  return items;
+};
+
 function App() {
   const [width, setWidth] = useState(LARGURA);
   const [height, setHeight] = useState(ALTURA);
@@ -68,6 +90,7 @@ function App() {
   const [slatsPerShelf, setSlatsPerShelf] = useState(TIRAS_POR_PRATELEIRA);
   const [spacePerShelf, setSpacePerShelf] = useState(DISTANCIA_ENTRE_PRATELEIRAS);
   const [pernasLateral, setPernasLateral] = useState(true);
+  const [showBom, setShowBom] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem("darkMode");
     if (saved !== null) return saved === "true";
@@ -87,27 +110,30 @@ function App() {
     const profundidade = searchParams.get("profundidade");
     const ripas_por_prateleira = searchParams.get("ripas_por_prateleira");
     const espaco_entre_prateleiras = searchParams.get("espaco_entre_prateleiras");
+    const bom = searchParams.get("bom");
 
     if (altura) setHeight(parseInt(altura, 10));
     if (largura) setWidth(parseInt(largura, 10));
     if (profundidade) setDepth(parseInt(profundidade, 10));
     if (ripas_por_prateleira) setSlatsPerShelf(parseInt(ripas_por_prateleira, 10));
     if (espaco_entre_prateleiras) setSpacePerShelf(parseInt(espaco_entre_prateleiras, 10));
+    if (bom) setShowBom(bom === "true");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    setSearchParams(
-      {
-        altura: height,
-        largura: width,
-        profundidade: depth,
-        ripas_por_prateleira: slatsPerShelf,
-        espaco_entre_prateleiras: spacePerShelf,
-      },
-      { replace: true }
-    );
-  }, [height, width, depth, slatsPerShelf, spacePerShelf, setSearchParams]);
+    const params = {
+      altura: height,
+      largura: width,
+      profundidade: depth,
+      ripas_por_prateleira: slatsPerShelf,
+      espaco_entre_prateleiras: spacePerShelf,
+    };
+
+    if (showBom) params.bom = "true";
+
+    setSearchParams(params, { replace: true });
+  }, [height, width, depth, slatsPerShelf, spacePerShelf, showBom, setSearchParams]);
 
   const price = useMemo(
     () =>
@@ -173,6 +199,7 @@ function App() {
               slatsPerShelf={slatsPerShelf}
               spacePerShelf={spacePerShelf}
               pernasLateral={pernasLateral}
+              showBom={showBom}
               setWidth={setWidth}
               setHeight={setHeight}
               setDepth={setDepth}

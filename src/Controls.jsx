@@ -9,6 +9,7 @@ import {
   Truck,
   ArrowRight,
   Info,
+  Scissors,
 } from "lucide-react";
 import {
   CUSTO_FIXO_MONTAGEM_ESTANTE,
@@ -17,6 +18,7 @@ import {
   FRETE_FIXO_MOTO,
   RIPA_ALTURA,
   RIPA_LARGURA,
+  calculateBillOfMaterials,
 } from "./App";
 import { useEffect, useState } from "react";
 
@@ -38,6 +40,7 @@ const Controls = ({
   slatsPerShelf,
   spacePerShelf,
   pernasLateral,
+  showBom,
 
   setWidth,
   setHeight,
@@ -99,6 +102,12 @@ const Controls = ({
     price * 2 +
     (includeMontagem ? montagem(shelves) : 0) +
     (includeFrete ? frete(shelves, width) : 0);
+
+  const billOfMaterials = calculateBillOfMaterials({ width, height, depth, shelves, slatsPerShelf });
+  const totalLinearMeters = billOfMaterials.reduce(
+    (sum, item) => sum + (item.comprimento * item.quantidade) / 100,
+    0
+  );
 
   return (
     <div className="space-y-10 pb-20 lg:pb-0">
@@ -296,6 +305,39 @@ const Controls = ({
           </div>
         </div>
       </section>
+
+      {/* Bill of Materials */}
+      {showBom && (
+        <section>
+          <div className="flex items-center gap-3 mb-6">
+            <Scissors className="text-amber-800 dark:text-amber-500" size={20} />
+            <h2 className="text-xl font-bold text-amber-900 dark:text-amber-400 tracking-tight">Lista de Corte</h2>
+          </div>
+          <div className="overflow-x-auto rounded-2xl border border-amber-900/10 dark:border-stone-700/30">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-amber-900/50 dark:text-amber-500/50 uppercase text-xs tracking-widest">
+                  <th className="py-2 px-3 font-bold">Peça</th>
+                  <th className="py-2 px-3 font-bold text-right">Comp. (cm)</th>
+                  <th className="py-2 px-3 font-bold text-right">Qtd</th>
+                </tr>
+              </thead>
+              <tbody>
+                {billOfMaterials.map((item, index) => (
+                  <tr key={index} className="border-t border-amber-900/5 dark:border-stone-700/30">
+                    <td className="py-2 px-3 text-amber-900 dark:text-amber-400 font-medium">{item.nome}</td>
+                    <td className="py-2 px-3 text-right text-amber-900/70 dark:text-amber-400/70">{item.comprimento}</td>
+                    <td className="py-2 px-3 text-right text-amber-900/70 dark:text-amber-400/70">{item.quantidade}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="text-xs font-medium text-amber-900/40 dark:text-amber-500/40 mt-2">
+            Total: {totalLinearMeters.toFixed(1)}m lineares em ripa 4×2cm
+          </p>
+        </section>
+      )}
 
       {/* Purchase Card */}
       <section className="mt-12 bg-amber-900 dark:bg-stone-800 rounded-[32px] p-8 text-white shadow-2xl relative overflow-hidden group">
