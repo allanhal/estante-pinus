@@ -141,6 +141,32 @@ function Shelf3D({
       positions.forEach((position) => addMeshWithEdges(geometry, position));
     };
 
+    const addApoiosCentrais = () => {
+      const SPAN_MAXIMO = 150;
+
+      if (width <= SPAN_MAXIMO) {
+        return;
+      }
+
+      const geometry = new THREE.BoxGeometry(RIPA_LARGURA, height, RIPA_ALTURA);
+      const numApoios = Math.ceil(width / SPAN_MAXIMO) - 1;
+
+      for (let i = 1; i <= numApoios; i += 1) {
+        const z = -width / 2 + (width * i) / (numApoios + 1);
+
+        addMeshWithEdges(geometry, [
+          -depth / 2 + RIPA_LARGURA / 2,
+          height / 2 - spacePerShelf,
+          z,
+        ]);
+        addMeshWithEdges(geometry, [
+          depth / 2 - RIPA_LARGURA / 2,
+          height / 2 - spacePerShelf,
+          z,
+        ]);
+      }
+    };
+
     const addPrateleiras = () => {
       const geometry = new THREE.BoxGeometry(
         RIPA_LARGURA,
@@ -237,6 +263,7 @@ function Shelf3D({
 
     addPrateleiras();
     addPes();
+    addApoiosCentrais();
 
     const box = new THREE.Box3().setFromObject(modelGroup);
     const center = box.getCenter(new THREE.Vector3());
