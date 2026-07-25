@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./App";
 import Luminaria from "./Luminaria";
 import MaoFrancesa from "./MaoFrancesa";
+import PrateleiraMaoFrancesa from "./PrateleiraMaoFrancesa";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -16,6 +17,7 @@ root.render(
         <Route path="/" element={<App />} />
         <Route path="/luminaria" element={<Luminaria />} />
         <Route path="/mao-francesa" element={<MaoFrancesa />} />
+        <Route path="/prateleira" element={<PrateleiraMaoFrancesa />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

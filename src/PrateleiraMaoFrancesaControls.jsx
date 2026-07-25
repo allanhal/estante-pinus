@@ -1,0 +1,341 @@
+import { useEffect, useState } from "react";
+import { ArrowRight, Grid, Info, Layers, Ruler, Scissors, Settings, Truck } from "lucide-react";
+import { FRETE_FIXO_CARRO, FRETE_FIXO_MOTO } from "./App";
+import {
+  ESPESSURA,
+  LARGURA_PECA,
+  RIPA_ALTURA,
+  RIPA_LARGURA,
+  calculatePrateleiraMaoFrancesaBillOfMaterials,
+  getSupportComprimento,
+} from "./PrateleiraMaoFrancesa";
+
+const CUSTO_INSTALACAO = 35;
+
+const calculateFrete = (width) => (width >= 100 ? FRETE_FIXO_CARRO : FRETE_FIXO_MOTO);
+
+const PrateleiraMaoFrancesaControls = ({
+  width,
+  height,
+  depth,
+  slatsPerShelf,
+  showBom,
+  setWidth,
+  setHeight,
+  setDepth,
+  setSlatsPerShelf,
+  minWidth,
+  maxWidth,
+  minHeight,
+  maxHeight,
+  minDepth,
+  maxDepth,
+  minSlatsPerShelf,
+  price,
+}) => {
+  const [maxSlatsPerShelf, setMaxSlatsPerShelf] = useState(
+    Math.floor(depth / RIPA_LARGURA)
+  );
+  const [includeInstalacao, setIncludeInstalacao] = useState(false);
+  const [includeFrete, setIncludeFrete] = useState(false);
+
+  useEffect(() => {
+    const newMaxSlats = Math.floor(depth / RIPA_LARGURA);
+    setMaxSlatsPerShelf(newMaxSlats);
+
+    if (slatsPerShelf > newMaxSlats) {
+      setSlatsPerShelf(newMaxSlats);
+    }
+  }, [depth, slatsPerShelf, setSlatsPerShelf]);
+
+  const handleInputChange = (value, onChange, min, max) => {
+    const numValue = parseInt(value, 10);
+    if (!isNaN(numValue)) {
+      if (numValue < min) onChange(min);
+      else if (numValue > max) onChange(max);
+      else onChange(numValue);
+    }
+  };
+
+  const buttonConfigs = [
+    { label: "P", w: 60, h: 20, d: 18, s: 4 },
+    { label: "M", w: 80, h: 25, d: 20, s: 4 },
+    { label: "G", w: 120, h: 30, d: 25, s: 5 },
+  ];
+
+  const instalacaoValue = CUSTO_INSTALACAO;
+  const freteValue = calculateFrete(width);
+  const totalValue =
+    price +
+    (includeInstalacao ? instalacaoValue : 0) +
+    (includeFrete ? freteValue : 0);
+
+  const billOfMaterials = calculatePrateleiraMaoFrancesaBillOfMaterials({
+    width,
+    height,
+    depth,
+    slatsPerShelf,
+  });
+  const totalLinearMeters = billOfMaterials.reduce(
+    (sum, item) => sum + (item.comprimento * item.quantidade) / 100,
+    0
+  );
+
+  const dimensionControls = [
+    {
+      label: "Largura",
+      value: width,
+      setValue: setWidth,
+      min: minWidth,
+      max: maxWidth,
+      hint: "Comprimento total da prateleira",
+    },
+    {
+      label: "Profundidade",
+      value: depth,
+      setValue: setDepth,
+      min: minDepth,
+      max: maxDepth,
+      hint: "Avanço da prateleira a partir da parede",
+    },
+    {
+      label: "Altura",
+      value: height,
+      setValue: setHeight,
+      min: minHeight,
+      max: maxHeight,
+      hint: "Altura das mãos-francesas",
+    },
+    {
+      label: "Ripas por prateleira",
+      value: slatsPerShelf,
+      setValue: setSlatsPerShelf,
+      min: minSlatsPerShelf,
+      max: maxSlatsPerShelf,
+      hint: "Mesmo modelo de prateleira da estante",
+      unit: "un",
+    },
+  ];
+
+  return (
+    <div className="space-y-10 pb-20 lg:pb-0">
+      <section>
+        <div className="flex items-center gap-3 mb-6">
+          <Settings className="text-amber-800 dark:text-amber-500" size={20} />
+          <h2 className="text-xl font-bold text-amber-900 dark:text-amber-400 tracking-tight">Sugestões</h2>
+        </div>
+        <div className="flex gap-2 w-full">
+          {buttonConfigs.map((config) => (
+            <button
+              key={config.label}
+              onClick={() => {
+                setWidth(config.w);
+                setHeight(config.h);
+                setDepth(config.d);
+                setSlatsPerShelf(config.s);
+              }}
+              className="flex-1 flex flex-col items-center justify-center py-2 px-1 glass-card rounded-xl border border-white dark:border-stone-700 hover:border-amber-200 dark:hover:border-amber-600 hover:shadow-md transition-all active:scale-95 group text-center min-w-0"
+            >
+              <span className="text-[10px] font-black text-amber-900 dark:text-amber-400 uppercase tracking-tight group-hover:text-amber-700 dark:group-hover:text-amber-300 transition-colors truncate w-full px-1">
+                {config.label}
+              </span>
+              <span className="text-[9px] font-medium text-amber-900/40 dark:text-amber-500/40 leading-none mt-0.5 whitespace-nowrap">
+                {config.w}×{config.d}
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-8">
+        <div className="flex items-center gap-3 mb-6">
+          <Ruler className="text-amber-800 dark:text-amber-500" size={20} />
+          <h2 className="text-xl font-bold text-amber-900 dark:text-amber-400 tracking-tight">Dimensões da Prateleira</h2>
+        </div>
+
+        {dimensionControls.map(({ label, value, setValue, min, max, hint, unit = "cm" }) => (
+          <div key={label} className="space-y-4">
+            <div className="flex justify-between items-end">
+              <div className="flex flex-col">
+                <span className="text-sm font-bold text-amber-900/50 dark:text-amber-500/50 uppercase tracking-widest italic leading-none pb-1">
+                  {label}
+                </span>
+                <span className="text-[10px] font-medium text-amber-900/30 dark:text-amber-500/30">
+                  {hint}
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <input
+                  type="number"
+                  value={value}
+                  onChange={(e) => handleInputChange(e.target.value, setValue, min, max)}
+                  className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 dark:text-amber-400 p-0 leading-none"
+                />
+                <span className="text-sm font-medium text-amber-900/40 dark:text-amber-500/40">{unit}</span>
+              </div>
+            </div>
+            <input
+              type="range"
+              min={min}
+              max={max}
+              value={value}
+              step={1}
+              onChange={(e) => setValue(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
+        ))}
+
+        <div className="flex justify-between items-end opacity-70">
+          <div className="flex flex-col">
+            <span className="text-sm font-bold text-amber-900/50 dark:text-amber-500/50 uppercase tracking-widest italic leading-none pb-1">
+              Suporte
+            </span>
+            <span className="text-[10px] font-medium text-amber-900/30 dark:text-amber-500/30">
+              Calculado: 2 peças com corte 45°
+            </span>
+          </div>
+          <div className="flex items-baseline gap-1">
+            <span className="text-3xl font-black text-amber-900 dark:text-amber-400 leading-none">
+              {getSupportComprimento(height, depth)}
+            </span>
+            <span className="text-sm font-medium text-amber-900/40 dark:text-amber-500/40">cm</span>
+          </div>
+        </div>
+      </section>
+
+      {showBom && (
+        <section>
+          <div className="flex items-center gap-3 mb-6">
+            <Scissors className="text-amber-800 dark:text-amber-500" size={20} />
+            <h2 className="text-xl font-bold text-amber-900 dark:text-amber-400 tracking-tight">Lista de Corte</h2>
+          </div>
+          <div className="overflow-x-auto rounded-2xl border border-amber-900/10 dark:border-stone-700/30">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-amber-900/50 dark:text-amber-500/50 uppercase text-xs tracking-widest">
+                  <th className="py-2 px-3 font-bold">Peça</th>
+                  <th className="py-2 px-3 font-bold text-right">Comp. (cm)</th>
+                  <th className="py-2 px-3 font-bold text-right">Qtd</th>
+                </tr>
+              </thead>
+              <tbody>
+                {billOfMaterials.map((item) => (
+                  <tr key={item.nome} className="border-t border-amber-900/5 dark:border-stone-700/30">
+                    <td className="py-2 px-3 text-amber-900 dark:text-amber-400 font-medium">{item.nome}</td>
+                    <td className="py-2 px-3 text-right text-amber-900/70 dark:text-amber-400/70">{item.comprimento}</td>
+                    <td className="py-2 px-3 text-right text-amber-900/70 dark:text-amber-400/70">{item.quantidade}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="text-xs font-medium text-amber-900/40 dark:text-amber-500/40 mt-2">
+            Total: {totalLinearMeters.toFixed(1)}m lineares em ripas {RIPA_LARGURA}×{RIPA_ALTURA}cm e mãos-francesas {LARGURA_PECA}×{ESPESSURA}cm
+          </p>
+        </section>
+      )}
+
+      <section className="mt-12 bg-amber-900 dark:bg-stone-800 rounded-[32px] p-8 text-white shadow-2xl relative overflow-hidden group">
+        <div className="relative z-10">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-lg font-black tracking-tight italic">Resumo do Pedido</h3>
+          </div>
+
+          <div className="space-y-6">
+            <div className="flex justify-between items-center group/item hover:translate-x-1 transition-transform cursor-pointer">
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={includeInstalacao}
+                  onChange={(e) => setIncludeInstalacao(e.target.checked)}
+                  className="rounded-lg border-white/20 bg-white/10 accent-amber-500 focus:ring-0 h-4 w-4"
+                />
+                <span className="text-sm font-medium text-amber-100">Instalação na parede</span>
+              </div>
+              <span className="text-sm font-bold">
+                {instalacaoValue.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center group/item hover:translate-x-1 transition-transform cursor-pointer">
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={includeFrete}
+                  onChange={(e) => setIncludeFrete(e.target.checked)}
+                  className="rounded-lg border-white/20 bg-white/10 accent-amber-500 focus:ring-0 h-4 w-4"
+                />
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium text-amber-100">Entrega Especial</span>
+                  <span className="text-[10px] text-amber-300/50 uppercase tracking-widest font-black italic">
+                    {width >= 100 ? "Carro" : "Moto"}
+                  </span>
+                </div>
+              </div>
+              <span className="text-sm font-bold">
+                {freteValue.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </span>
+            </div>
+
+            <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
+              <div className="flex justify-between items-end">
+                <p className="text-[10px] font-black uppercase tracking-[3px] text-amber-400">Valor Total</p>
+                <p className="text-4xl font-black text-white leading-none">
+                  {totalValue.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </p>
+              </div>
+              <a
+                href={`https://api.whatsapp.com/send?phone=5585992820404&text=${encodeURIComponent(
+                  "Olá, gostaria de fazer o pedido de uma prateleira com mão-francesa de pinus:\n\n" +
+                    `Prateleira: ${width} x ${depth} cm (Largura x Profundidade), com ${slatsPerShelf} ripas\n` +
+                    `Mãos-francesas: 2 unidades de ${height} x ${depth} cm\n` +
+                    "\n" +
+                    `Total: ${totalValue.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}\n` +
+                    `Instalação: ${includeInstalacao ? "Sim" : "Não"}\n` +
+                    `Frete: ${includeFrete ? "Sim" : "Não"}`
+                )}`}
+                target="_blank"
+                className="flex items-center justify-center gap-2 w-full bg-amber-400 text-amber-950 font-black py-4 px-8 rounded-2xl hover:bg-amber-300 active:scale-95 transition-all shadow-xl shadow-amber-950/20"
+              >
+                Pedir agora <ArrowRight size={20} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="pt-8 border-t border-amber-900/5 dark:border-stone-700/30 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {[
+          { text: "2 mãos-francesas", icon: <Layers size={14} className="text-amber-800 dark:text-amber-500" /> },
+          { text: "Prateleira superior", icon: <Grid size={14} className="text-amber-800 dark:text-amber-500" /> },
+          { text: "Entrega em Fortaleza-CE", icon: <Truck size={14} className="text-amber-800 dark:text-amber-500" /> },
+          { text: "Artesanal em Pinus", icon: <Info size={14} className="text-amber-800 dark:text-amber-500" /> },
+        ].map((item) => (
+          <div key={item.text} className="flex items-center gap-3 text-xs font-bold text-amber-800/40 dark:text-amber-500/40 uppercase tracking-widest italic">
+            <span className="w-6 h-6 rounded-lg bg-amber-50 dark:bg-stone-800 flex items-center justify-center">{item.icon}</span>
+            {item.text}
+          </div>
+        ))}
+      </div>
+
+      <button
+        id="button-prateleira-mao-francesa"
+        className="opacity-10 hover:opacity-100 transition-opacity text-[10px] fixed bottom-2 right-2 uppercase font-black tracking-widest text-amber-900 dark:text-amber-400"
+      >
+        Exportar STL
+      </button>
+    </div>
+  );
+};
+
+export default PrateleiraMaoFrancesaControls;
