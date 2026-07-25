@@ -3,14 +3,20 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import "./App.css";
 
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./App";
+import Luminaria from "./Luminaria";
+import MaoFrancesa from "./MaoFrancesa";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/luminaria" element={<Luminaria />} />
+        <Route path="/mao-francesa" element={<MaoFrancesa />} />
+      </Routes>
     </BrowserRouter>
   </React.StrictMode>
 );

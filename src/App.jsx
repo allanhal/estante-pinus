@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import Shelf3D from "./Shelf3D";
 import Controls from "./Controls";
+import ProductTabs from "./ProductTabs";
+import { useDarkMode } from "./useDarkMode";
 
 export const FRETE_FIXO_CAMINHAO = 70;
 export const FRETE_FIXO_CARRO = 40;
@@ -91,16 +93,7 @@ function App() {
   const [spacePerShelf, setSpacePerShelf] = useState(DISTANCIA_ENTRE_PRATELEIRAS);
   const [pernasLateral, setPernasLateral] = useState(true);
   const [showBom, setShowBom] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => {
-    const saved = localStorage.getItem("darkMode");
-    if (saved !== null) return saved === "true";
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
-  });
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", darkMode);
-    localStorage.setItem("darkMode", darkMode);
-  }, [darkMode]);
+  const [darkMode, setDarkMode] = useDarkMode();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -145,21 +138,24 @@ function App() {
   return (
     <div className="h-screen lg:h-auto lg:min-h-screen bg-[var(--background)] flex flex-col overflow-hidden lg:overflow-visible transition-colors duration-300">
       {/* Header / Hero */}
-      <header className="hidden lg:flex pt-10 pb-6 px-6 lg:px-20 items-center justify-between">
+      <header className="hidden lg:flex pt-10 pb-6 px-6 lg:px-20 items-center justify-between gap-6">
         <h1 className="text-4xl md:text-6xl font-black text-amber-900 dark:text-amber-400 leading-tight" style={{ fontFamily: "'Outfit', sans-serif" }}>
           Estante Pinus Fortaleza
         </h1>
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="p-3 rounded-2xl glass-card hover:scale-105 active:scale-95 transition-all text-amber-900 dark:text-amber-400"
-          aria-label={darkMode ? "Ativar modo claro" : "Ativar modo escuro"}
-        >
-          {darkMode ? <Sun size={22} /> : <Moon size={22} />}
-        </button>
+        <div className="flex items-center gap-3">
+          <ProductTabs />
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-3 rounded-2xl glass-card hover:scale-105 active:scale-95 transition-all text-amber-900 dark:text-amber-400"
+            aria-label={darkMode ? "Ativar modo claro" : "Ativar modo escuro"}
+          >
+            {darkMode ? <Sun size={22} /> : <Moon size={22} />}
+          </button>
+        </div>
       </header>
 
-      <div className="lg:hidden bg-gradient-to-r from-amber-800 via-amber-700 to-amber-800 dark:from-amber-950 dark:via-amber-900 dark:to-amber-950 px-4 py-2.5 text-center shrink-0 shadow-md flex items-center justify-between">
-        <span className="text-amber-50 tracking-wide font-bold" style={{ fontFamily: "'Outfit', sans-serif" }}>Estante Pinus Fortaleza</span>
+      <div className="lg:hidden bg-gradient-to-r from-amber-800 via-amber-700 to-amber-800 dark:from-amber-950 dark:via-amber-900 dark:to-amber-950 px-4 py-2.5 shrink-0 shadow-md flex items-center justify-between gap-2">
+        <ProductTabs />
         <button
           onClick={() => setDarkMode(!darkMode)}
           className="p-1.5 rounded-lg text-amber-200 hover:text-amber-50 transition-colors"
