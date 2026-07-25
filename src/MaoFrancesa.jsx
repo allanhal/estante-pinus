@@ -100,10 +100,10 @@ function MaoFrancesa() {
     <div className="h-screen lg:h-auto lg:min-h-screen bg-[var(--background)] flex flex-col overflow-hidden lg:overflow-visible transition-colors duration-300">
       {/* Header / Hero */}
       <header className="hidden lg:flex pt-10 pb-6 px-6 lg:px-20 items-center justify-between gap-6">
-        <h1 className="text-4xl md:text-6xl font-black text-amber-900 dark:text-amber-400 leading-tight" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        <h1 className="min-w-0 text-4xl md:text-6xl font-black text-amber-900 dark:text-amber-400 leading-tight" style={{ fontFamily: "'Outfit', sans-serif" }}>
           Mão Francesa Pinus Fortaleza
         </h1>
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 items-center justify-end gap-3 flex-wrap">
           <ProductTabs />
           <button
             onClick={() => setDarkMode(!darkMode)}
