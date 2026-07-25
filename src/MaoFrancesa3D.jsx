@@ -5,7 +5,7 @@ import SceneInit from "./lib/SceneInit";
 import { ESPESSURA, LARGURA_PECA, getSupportRun } from "./MaoFrancesa";
 
 const BOX_MATERIAL = new THREE.MeshStandardMaterial({
-  color: 0xd9b382,
+  color: 0x92400e,
   roughness: 0.7,
   metalness: 0.05,
 });

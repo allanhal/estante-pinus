@@ -12,7 +12,7 @@ const WOOD_MATERIAL = new THREE.MeshStandardMaterial({
 });
 
 const SUPPORT_MATERIAL = new THREE.MeshStandardMaterial({
-  color: 0xd9b382,
+  color: 0x92400e,
   roughness: 0.7,
   metalness: 0.05,
 });
@@ -215,6 +215,21 @@ function PrateleiraMaoFrancesa3D({
 
     const addDimensionLine = (start, end, label, scaleFactor, lineRadius) => {
       addRod(start, end, lineRadius);
+
+      const dir = new THREE.Vector3(...end).sub(new THREE.Vector3(...start)).normalize();
+      const tickSize = 3 * scaleFactor;
+      const up = new THREE.Vector3(0, 1, 0);
+      let perp = new THREE.Vector3().crossVectors(dir, up).normalize();
+
+      if (perp.length() < 0.1) {
+        perp = new THREE.Vector3().crossVectors(dir, new THREE.Vector3(1, 0, 0)).normalize();
+      }
+
+      [new THREE.Vector3(...start), new THREE.Vector3(...end)].forEach((point) => {
+        const t1 = point.clone().add(perp.clone().multiplyScalar(tickSize));
+        const t2 = point.clone().add(perp.clone().multiplyScalar(-tickSize));
+        addRod([t1.x, t1.y, t1.z], [t2.x, t2.y, t2.z], lineRadius);
+      });
 
       const mid = new THREE.Vector3(...start)
         .add(new THREE.Vector3(...end))

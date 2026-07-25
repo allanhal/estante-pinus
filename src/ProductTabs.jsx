@@ -1,9 +1,9 @@
 import { NavLink } from "react-router-dom";
-import { Library, Lightbulb, PanelTop, Ruler } from "lucide-react";
+import { Library, PanelTop, Ruler } from "lucide-react";
 
 const TABS = [
   { to: "/", label: "Estante", icon: Library },
-  { to: "/luminaria", label: "Luminária", icon: Lightbulb },
+  // { to: "/luminaria", label: "Luminária", icon: Lightbulb },
   { to: "/mao-francesa", label: "Mão Francesa", icon: Ruler },
   { to: "/prateleira", label: "Prateleira", icon: PanelTop },
 ];
