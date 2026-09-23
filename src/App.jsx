@@ -6,8 +6,8 @@ import Controls from "./Controls";
 import ProductTabs from "./ProductTabs";
 import { useDarkMode } from "./useDarkMode";
 
-export const FRETE_FIXO_CAMINHAO = 70;
-export const FRETE_FIXO_CARRO = 40;
+export const FRETE_FIXO_CAMINHAO = 90;
+export const FRETE_FIXO_CARRO = 50;
 export const FRETE_FIXO_MOTO = 20;
 export const CUSTO_FIXO_MONTAGEM_ESTANTE = 10;
 
@@ -23,7 +23,7 @@ const PRATELEIRAS = 4;
 const TIRAS_POR_PRATELEIRA = 4;
 
 const LARGURA_MINIMA = 30;
-const LARGURA_MAXIMA = 200;
+const LARGURA_MAXIMA = 250;
 
 const ALTURA_MAXIMA = 250;
 
