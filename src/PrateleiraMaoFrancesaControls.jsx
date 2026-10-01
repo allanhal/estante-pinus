@@ -221,7 +221,7 @@ const PrateleiraMaoFrancesaControls = ({
               <thead>
                 <tr className="text-left text-amber-900/50 dark:text-amber-500/50 uppercase text-xs tracking-widest">
                   <th className="py-2 px-3 font-bold">Peça</th>
-                  <th className="py-2 px-3 font-bold text-right">Comp. (cm)</th>
+                  <th className="py-2 px-3 font-bold text-right">Comp.</th>
                   <th className="py-2 px-3 font-bold text-right">Qtd</th>
                 </tr>
               </thead>
@@ -229,7 +229,7 @@ const PrateleiraMaoFrancesaControls = ({
                 {billOfMaterials.map((item) => (
                   <tr key={item.nome} className="border-t border-amber-900/5 dark:border-stone-700/30">
                     <td className="py-2 px-3 text-amber-900 dark:text-amber-400 font-medium">{item.nome}</td>
-                    <td className="py-2 px-3 text-right text-amber-900/70 dark:text-amber-400/70">{item.comprimento}</td>
+                    <td className="py-2 px-3 text-right text-amber-900/70 dark:text-amber-400/70">{item.comprimento}cm</td>
                     <td className="py-2 px-3 text-right text-amber-900/70 dark:text-amber-400/70">{item.quantidade}</td>
                   </tr>
                 ))}
