@@ -41,6 +41,10 @@ const Controls = ({
   spacePerShelf,
   pernasLateral,
   showBom,
+  includeMontagem,
+  includeFrete,
+  setIncludeMontagem,
+  setIncludeFrete,
 
   setWidth,
   setHeight,
@@ -65,8 +69,6 @@ const Controls = ({
   const [maxSlatsPerShelfState, setMaxSlatsPerShelfState] = useState(
     Math.floor(depth / RIPA_LARGURA)
   );
-  const [includeMontagem, setIncludeMontagem] = useState(false);
-  const [includeFrete, setIncludeFrete] = useState(false);
   const [isSummarizing, setIsSummarizing] = useState(false);
 
   useEffect(() => {

@@ -47,6 +47,8 @@ function Luminaria() {
   const [height, setHeight] = useState(ALTURA);
   const [depth, setDepth] = useState(PROFUNDIDADE);
   const [showBom, setShowBom] = useState(false);
+  const [includeInstalacao, setIncludeInstalacao] = useState(false);
+  const [includeFrete, setIncludeFrete] = useState(false);
   const [darkMode, setDarkMode] = useDarkMode();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -55,6 +57,8 @@ function Luminaria() {
     const altura = searchParams.get("altura");
     const profundidade = searchParams.get("profundidade");
     const bom = searchParams.get("bom");
+    const instalacao = searchParams.get("instalacao");
+    const frete = searchParams.get("frete");
 
     // URL pode vir com valor fora de faixa; trava nos limites antes de modelar.
     const clamp = (valor, min, max) => Math.min(Math.max(valor, min), max);
@@ -64,6 +68,8 @@ function Luminaria() {
       setDepth(clamp(parseInt(profundidade, 10), PROFUNDIDADE_MINIMA, PROFUNDIDADE_MAXIMA));
     }
     if (bom) setShowBom(bom === "true");
+    if (instalacao) setIncludeInstalacao(instalacao === "true");
+    if (frete) setIncludeFrete(frete === "true");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -74,9 +80,11 @@ function Luminaria() {
     };
 
     if (showBom) params.bom = "true";
+    if (includeInstalacao) params.instalacao = "true";
+    if (includeFrete) params.frete = "true";
 
     setSearchParams(params, { replace: true });
-  }, [height, depth, showBom, setSearchParams]);
+  }, [height, depth, showBom, includeInstalacao, includeFrete, setSearchParams]);
 
   const price = useMemo(
     () => calculateLuminariaPrice({ height, depth }),
@@ -131,6 +139,10 @@ function Luminaria() {
               height={height}
               depth={depth}
               showBom={showBom}
+              includeInstalacao={includeInstalacao}
+              includeFrete={includeFrete}
+              setIncludeInstalacao={setIncludeInstalacao}
+              setIncludeFrete={setIncludeFrete}
               setHeight={setHeight}
               setDepth={setDepth}
               minHeight={ALTURA_MINIMA}

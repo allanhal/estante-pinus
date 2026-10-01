@@ -93,6 +93,8 @@ function App() {
   const [spacePerShelf, setSpacePerShelf] = useState(DISTANCIA_ENTRE_PRATELEIRAS);
   const [pernasLateral, setPernasLateral] = useState(true);
   const [showBom, setShowBom] = useState(false);
+  const [includeMontagem, setIncludeMontagem] = useState(false);
+  const [includeFrete, setIncludeFrete] = useState(false);
   const [darkMode, setDarkMode] = useDarkMode();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -104,6 +106,9 @@ function App() {
     const ripas_por_prateleira = searchParams.get("ripas_por_prateleira");
     const espaco_entre_prateleiras = searchParams.get("espaco_entre_prateleiras");
     const bom = searchParams.get("bom");
+    const pernas = searchParams.get("pernas");
+    const montagem = searchParams.get("montagem");
+    const frete = searchParams.get("frete");
 
     if (altura) setHeight(parseInt(altura, 10));
     if (largura) setWidth(parseInt(largura, 10));
@@ -111,6 +116,9 @@ function App() {
     if (ripas_por_prateleira) setSlatsPerShelf(parseInt(ripas_por_prateleira, 10));
     if (espaco_entre_prateleiras) setSpacePerShelf(parseInt(espaco_entre_prateleiras, 10));
     if (bom) setShowBom(bom === "true");
+    if (pernas) setPernasLateral(pernas !== "frente");
+    if (montagem) setIncludeMontagem(montagem === "true");
+    if (frete) setIncludeFrete(frete === "true");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -124,9 +132,12 @@ function App() {
     };
 
     if (showBom) params.bom = "true";
+    if (!pernasLateral) params.pernas = "frente";
+    if (includeMontagem) params.montagem = "true";
+    if (includeFrete) params.frete = "true";
 
     setSearchParams(params, { replace: true });
-  }, [height, width, depth, slatsPerShelf, spacePerShelf, showBom, setSearchParams]);
+  }, [height, width, depth, slatsPerShelf, spacePerShelf, showBom, pernasLateral, includeMontagem, includeFrete, setSearchParams]);
 
   const price = useMemo(
     () =>
@@ -196,6 +207,10 @@ function App() {
               spacePerShelf={spacePerShelf}
               pernasLateral={pernasLateral}
               showBom={showBom}
+              includeMontagem={includeMontagem}
+              includeFrete={includeFrete}
+              setIncludeMontagem={setIncludeMontagem}
+              setIncludeFrete={setIncludeFrete}
               setWidth={setWidth}
               setHeight={setHeight}
               setDepth={setDepth}

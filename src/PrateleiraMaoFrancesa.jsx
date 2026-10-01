@@ -75,6 +75,8 @@ function PrateleiraMaoFrancesa() {
   const [depth, setDepth] = useState(PROFUNDIDADE);
   const [slatsPerShelf, setSlatsPerShelf] = useState(TIRAS_POR_PRATELEIRA);
   const [showBom, setShowBom] = useState(false);
+  const [includeInstalacao, setIncludeInstalacao] = useState(false);
+  const [includeFrete, setIncludeFrete] = useState(false);
   const [darkMode, setDarkMode] = useDarkMode();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -85,6 +87,8 @@ function PrateleiraMaoFrancesa() {
     const profundidade = searchParams.get("profundidade");
     const ripas_por_prateleira = searchParams.get("ripas_por_prateleira");
     const bom = searchParams.get("bom");
+    const instalacao = searchParams.get("instalacao");
+    const frete = searchParams.get("frete");
     const clamp = (valor, min, max) => Math.min(Math.max(valor, min), max);
 
     if (largura) setWidth(clamp(parseInt(largura, 10), LARGURA_MINIMA, LARGURA_MAXIMA));
@@ -102,6 +106,8 @@ function PrateleiraMaoFrancesa() {
       );
     }
     if (bom) setShowBom(bom === "true");
+    if (instalacao) setIncludeInstalacao(instalacao === "true");
+    if (frete) setIncludeFrete(frete === "true");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -114,9 +120,11 @@ function PrateleiraMaoFrancesa() {
     };
 
     if (showBom) params.bom = "true";
+    if (includeInstalacao) params.instalacao = "true";
+    if (includeFrete) params.frete = "true";
 
     setSearchParams(params, { replace: true });
-  }, [width, height, depth, slatsPerShelf, showBom, setSearchParams]);
+  }, [width, height, depth, slatsPerShelf, showBom, includeInstalacao, includeFrete, setSearchParams]);
 
   const price = useMemo(
     () => calculatePrateleiraMaoFrancesaPrice({ width, height, depth, slatsPerShelf }),
@@ -175,6 +183,10 @@ function PrateleiraMaoFrancesa() {
               depth={depth}
               slatsPerShelf={slatsPerShelf}
               showBom={showBom}
+              includeInstalacao={includeInstalacao}
+              includeFrete={includeFrete}
+              setIncludeInstalacao={setIncludeInstalacao}
+              setIncludeFrete={setIncludeFrete}
               setWidth={setWidth}
               setHeight={setHeight}
               setDepth={setDepth}

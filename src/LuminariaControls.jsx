@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Settings,
   Ruler,
@@ -25,6 +24,10 @@ const LuminariaControls = ({
   height,
   depth,
   showBom,
+  includeInstalacao,
+  includeFrete,
+  setIncludeInstalacao,
+  setIncludeFrete,
 
   setHeight,
   setDepth,
@@ -36,8 +39,6 @@ const LuminariaControls = ({
 
   price,
 }) => {
-  const [includeInstalacao, setIncludeInstalacao] = useState(false);
-  const [includeFrete, setIncludeFrete] = useState(false);
 
   const handleInputChange = (value, onChange, min, max) => {
     const numValue = parseInt(value);

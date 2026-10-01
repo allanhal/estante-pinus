@@ -55,6 +55,8 @@ function MaoFrancesa() {
   const [depth, setDepth] = useState(PROFUNDIDADE);
   const [quantity, setQuantity] = useState(QUANTIDADE);
   const [showBom, setShowBom] = useState(false);
+  const [includeInstalacao, setIncludeInstalacao] = useState(false);
+  const [includeFrete, setIncludeFrete] = useState(false);
   const [darkMode, setDarkMode] = useDarkMode();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -64,6 +66,8 @@ function MaoFrancesa() {
     const profundidade = searchParams.get("profundidade");
     const quantidade = searchParams.get("quantidade");
     const bom = searchParams.get("bom");
+    const instalacao = searchParams.get("instalacao");
+    const frete = searchParams.get("frete");
 
     // URL pode vir com valor fora de faixa; trava nos limites antes de modelar.
     const clamp = (valor, min, max) => Math.min(Math.max(valor, min), max);
@@ -76,6 +80,8 @@ function MaoFrancesa() {
       setQuantity(clamp(parseInt(quantidade, 10), QUANTIDADE_MINIMA, QUANTIDADE_MAXIMA));
     }
     if (bom) setShowBom(bom === "true");
+    if (instalacao) setIncludeInstalacao(instalacao === "true");
+    if (frete) setIncludeFrete(frete === "true");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -87,9 +93,11 @@ function MaoFrancesa() {
     };
 
     if (showBom) params.bom = "true";
+    if (includeInstalacao) params.instalacao = "true";
+    if (includeFrete) params.frete = "true";
 
     setSearchParams(params, { replace: true });
-  }, [height, depth, quantity, showBom, setSearchParams]);
+  }, [height, depth, quantity, showBom, includeInstalacao, includeFrete, setSearchParams]);
 
   const price = useMemo(
     () => calculateMaoFrancesaPrice({ height, depth, quantity }),
@@ -145,6 +153,10 @@ function MaoFrancesa() {
               depth={depth}
               quantity={quantity}
               showBom={showBom}
+              includeInstalacao={includeInstalacao}
+              includeFrete={includeFrete}
+              setIncludeInstalacao={setIncludeInstalacao}
+              setIncludeFrete={setIncludeFrete}
               setHeight={setHeight}
               setDepth={setDepth}
               setQuantity={setQuantity}

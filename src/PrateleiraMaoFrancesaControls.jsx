@@ -20,6 +20,10 @@ const PrateleiraMaoFrancesaControls = ({
   depth,
   slatsPerShelf,
   showBom,
+  includeInstalacao,
+  includeFrete,
+  setIncludeInstalacao,
+  setIncludeFrete,
   setWidth,
   setHeight,
   setDepth,
@@ -36,8 +40,6 @@ const PrateleiraMaoFrancesaControls = ({
   const [maxSlatsPerShelf, setMaxSlatsPerShelf] = useState(
     Math.floor(depth / RIPA_LARGURA)
   );
-  const [includeInstalacao, setIncludeInstalacao] = useState(false);
-  const [includeFrete, setIncludeFrete] = useState(false);
 
   useEffect(() => {
     const newMaxSlats = Math.floor(depth / RIPA_LARGURA);
