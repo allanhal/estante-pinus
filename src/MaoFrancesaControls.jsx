@@ -225,7 +225,7 @@ const MaoFrancesaControls = ({
           <p className="text-xs font-medium text-amber-900/40 dark:text-amber-500/40 mt-2">
             Total: {totalLinearMeters.toFixed(1)}m lineares em ripa {LARGURA_PECA}×{ESPESSURA}cm
           </p>
-          <PlanoDeCorte items={billOfMaterials} />
+          <PlanoDeCorte items={billOfMaterials} bitola={`${LARGURA_PECA}×${ESPESSURA}`} />
         </section>
       )}
 

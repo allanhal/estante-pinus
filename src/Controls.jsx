@@ -339,7 +339,7 @@ const Controls = ({
           <p className="text-xs font-medium text-amber-900/40 dark:text-amber-500/40 mt-2">
             Total: {totalLinearMeters.toFixed(1)}m lineares em ripa 4×2cm
           </p>
-          <PlanoDeCorte items={billOfMaterials} />
+          <PlanoDeCorte items={billOfMaterials} bitola="4×2" mostrarCusto />
         </section>
       )}
 

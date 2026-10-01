@@ -214,7 +214,7 @@ const LuminariaControls = ({
             Total: {totalLinearMeters.toFixed(1)}m lineares em ripa {LARGURA_PECA}×{ESPESSURA}cm + kit elétrico
             ({KIT_ELETRICO.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })})
           </p>
-          <PlanoDeCorte items={billOfMaterials} />
+          <PlanoDeCorte items={billOfMaterials} bitola={`${LARGURA_PECA}×${ESPESSURA}`} />
         </section>
       )}
 

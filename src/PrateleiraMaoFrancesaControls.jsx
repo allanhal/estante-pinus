@@ -239,8 +239,8 @@ const PrateleiraMaoFrancesaControls = ({
           <p className="text-xs font-medium text-amber-900/40 dark:text-amber-500/40 mt-2">
             Total: {totalLinearMeters.toFixed(1)}m lineares em ripas {RIPA_LARGURA}×{RIPA_ALTURA}cm e mãos-francesas {LARGURA_PECA}×{ESPESSURA}cm
           </p>
-          <PlanoDeCorte items={ripasPrateleira} titulo={`Ripa ${RIPA_LARGURA}×${RIPA_ALTURA}cm`} />
-          <PlanoDeCorte items={pecasMaoFrancesa} titulo={`Ripa ${LARGURA_PECA}×${ESPESSURA}cm`} />
+          <PlanoDeCorte items={ripasPrateleira} bitola={`${RIPA_LARGURA}×${RIPA_ALTURA}`} />
+          <PlanoDeCorte items={pecasMaoFrancesa} bitola={`${LARGURA_PECA}×${ESPESSURA}`} />
         </section>
       )}
 
