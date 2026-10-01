@@ -19,3 +19,24 @@ export const getSupportRun = (height, depth) =>
 // Comprimento de corte medido na ponta longa (as duas pontas saem em esquadria).
 export const getSupportComprimento = (height, depth) =>
   Math.round(getSupportRun(height, depth) * Math.SQRT2 + ESPESSURA);
+
+// Ripas vendidas em barras de 280cm; cada corte perde a espessura da serra.
+export const COMPRIMENTO_BARRA = 280;
+export const ESPESSURA_SERRA = 0.3;
+
+// First-fit decreasing: encaixa cada peça (da maior para a menor) na primeira
+// barra com sobra suficiente. Retorna quantas barras inteiras são necessárias.
+export const calculateBarrasNecessarias = (items) => {
+  const pecas = items
+    .flatMap((item) => Array(item.quantidade).fill(item.comprimento))
+    .sort((a, b) => b - a);
+  const sobras = [];
+
+  for (const peca of pecas) {
+    const index = sobras.findIndex((sobra) => sobra >= peca);
+    if (index === -1) sobras.push(COMPRIMENTO_BARRA - peca - ESPESSURA_SERRA);
+    else sobras[index] -= peca + ESPESSURA_SERRA;
+  }
+
+  return sobras.length;
+};
