@@ -85,19 +85,20 @@ export const calculateBillOfMaterials = ({ width, height, depth, shelves, slatsP
 };
 
 function App() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [width, setWidth] = useState(LARGURA);
   const [height, setHeight] = useState(ALTURA);
   const [depth, setDepth] = useState(PROFUNDIDADE);
   const [shelves, setShelves] = useState(PRATELEIRAS);
   const [slatsPerShelf, setSlatsPerShelf] = useState(TIRAS_POR_PRATELEIRA);
   const [spacePerShelf, setSpacePerShelf] = useState(DISTANCIA_ENTRE_PRATELEIRAS);
-  const [pernasLateral, setPernasLateral] = useState(true);
-  const [showBom, setShowBom] = useState(false);
-  const [includeMontagem, setIncludeMontagem] = useState(false);
-  const [includeFrete, setIncludeFrete] = useState(false);
+  // Flags lidas da URL já no primeiro render: se viessem por efeito, a sincronização
+  // da URL rodaria antes com o valor padrão e apagaria o parâmetro.
+  const [pernasLateral, setPernasLateral] = useState(() => searchParams.get("pernas") !== "frente");
+  const [showBom, setShowBom] = useState(() => searchParams.get("bom") === "true");
+  const [includeMontagem, setIncludeMontagem] = useState(() => searchParams.get("montagem") === "true");
+  const [includeFrete, setIncludeFrete] = useState(() => searchParams.get("frete") === "true");
   const [darkMode, setDarkMode] = useDarkMode();
-
-  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     const altura = searchParams.get("altura");
@@ -105,20 +106,12 @@ function App() {
     const profundidade = searchParams.get("profundidade");
     const ripas_por_prateleira = searchParams.get("ripas_por_prateleira");
     const espaco_entre_prateleiras = searchParams.get("espaco_entre_prateleiras");
-    const bom = searchParams.get("bom");
-    const pernas = searchParams.get("pernas");
-    const montagem = searchParams.get("montagem");
-    const frete = searchParams.get("frete");
 
     if (altura) setHeight(parseInt(altura, 10));
     if (largura) setWidth(parseInt(largura, 10));
     if (profundidade) setDepth(parseInt(profundidade, 10));
     if (ripas_por_prateleira) setSlatsPerShelf(parseInt(ripas_por_prateleira, 10));
     if (espaco_entre_prateleiras) setSpacePerShelf(parseInt(espaco_entre_prateleiras, 10));
-    if (bom) setShowBom(bom === "true");
-    if (pernas) setPernasLateral(pernas !== "frente");
-    if (montagem) setIncludeMontagem(montagem === "true");
-    if (frete) setIncludeFrete(frete === "true");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -44,21 +44,19 @@ export const calculateLuminariaPrice = ({ height, depth }) => {
 };
 
 function Luminaria() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [height, setHeight] = useState(ALTURA);
   const [depth, setDepth] = useState(PROFUNDIDADE);
-  const [showBom, setShowBom] = useState(false);
-  const [includeInstalacao, setIncludeInstalacao] = useState(false);
-  const [includeFrete, setIncludeFrete] = useState(false);
+  // Flags lidas da URL já no primeiro render: se viessem por efeito, a sincronização
+  // da URL rodaria antes com o valor padrão e apagaria o parâmetro.
+  const [showBom, setShowBom] = useState(() => searchParams.get("bom") === "true");
+  const [includeInstalacao, setIncludeInstalacao] = useState(() => searchParams.get("instalacao") === "true");
+  const [includeFrete, setIncludeFrete] = useState(() => searchParams.get("frete") === "true");
   const [darkMode, setDarkMode] = useDarkMode();
-
-  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     const altura = searchParams.get("altura");
     const profundidade = searchParams.get("profundidade");
-    const bom = searchParams.get("bom");
-    const instalacao = searchParams.get("instalacao");
-    const frete = searchParams.get("frete");
 
     // URL pode vir com valor fora de faixa; trava nos limites antes de modelar.
     const clamp = (valor, min, max) => Math.min(Math.max(valor, min), max);
@@ -67,9 +65,6 @@ function Luminaria() {
     if (profundidade) {
       setDepth(clamp(parseInt(profundidade, 10), PROFUNDIDADE_MINIMA, PROFUNDIDADE_MAXIMA));
     }
-    if (bom) setShowBom(bom === "true");
-    if (instalacao) setIncludeInstalacao(instalacao === "true");
-    if (frete) setIncludeFrete(frete === "true");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -195,8 +195,8 @@ const LuminariaControls = ({
               <thead>
                 <tr className="text-left text-amber-900/50 dark:text-amber-500/50 uppercase text-xs tracking-widest">
                   <th className="py-2 px-3 font-bold">Peça</th>
-                  <th className="py-2 px-3 font-bold text-right">Comp.</th>
-                  <th className="py-2 px-3 font-bold text-right">Qtd</th>
+                  <th className="py-2 px-3 font-bold text-right">Comprimento</th>
+                  <th className="py-2 px-3 font-bold text-right">Quantidade</th>
                 </tr>
               </thead>
               <tbody>

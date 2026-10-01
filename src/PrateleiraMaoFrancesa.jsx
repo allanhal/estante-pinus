@@ -70,25 +70,23 @@ export const calculatePrateleiraMaoFrancesaPrice = ({ width, height, depth, slat
 };
 
 function PrateleiraMaoFrancesa() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [width, setWidth] = useState(LARGURA);
   const [height, setHeight] = useState(ALTURA);
   const [depth, setDepth] = useState(PROFUNDIDADE);
   const [slatsPerShelf, setSlatsPerShelf] = useState(TIRAS_POR_PRATELEIRA);
-  const [showBom, setShowBom] = useState(false);
-  const [includeInstalacao, setIncludeInstalacao] = useState(false);
-  const [includeFrete, setIncludeFrete] = useState(false);
+  // Flags lidas da URL já no primeiro render: se viessem por efeito, a sincronização
+  // da URL rodaria antes com o valor padrão e apagaria o parâmetro.
+  const [showBom, setShowBom] = useState(() => searchParams.get("bom") === "true");
+  const [includeInstalacao, setIncludeInstalacao] = useState(() => searchParams.get("instalacao") === "true");
+  const [includeFrete, setIncludeFrete] = useState(() => searchParams.get("frete") === "true");
   const [darkMode, setDarkMode] = useDarkMode();
-
-  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     const largura = searchParams.get("largura");
     const altura = searchParams.get("altura");
     const profundidade = searchParams.get("profundidade");
     const ripas_por_prateleira = searchParams.get("ripas_por_prateleira");
-    const bom = searchParams.get("bom");
-    const instalacao = searchParams.get("instalacao");
-    const frete = searchParams.get("frete");
     const clamp = (valor, min, max) => Math.min(Math.max(valor, min), max);
 
     if (largura) setWidth(clamp(parseInt(largura, 10), LARGURA_MINIMA, LARGURA_MAXIMA));
@@ -105,9 +103,6 @@ function PrateleiraMaoFrancesa() {
         )
       );
     }
-    if (bom) setShowBom(bom === "true");
-    if (instalacao) setIncludeInstalacao(instalacao === "true");
-    if (frete) setIncludeFrete(frete === "true");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
