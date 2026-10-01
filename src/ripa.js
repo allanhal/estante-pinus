@@ -22,21 +22,38 @@ export const getSupportComprimento = (height, depth) =>
 
 // Ripas vendidas em barras de 280cm; cada corte perde a espessura da serra.
 export const COMPRIMENTO_BARRA = 280;
-export const ESPESSURA_SERRA = 0.3;
+export const ESPESSURA_SERRA = 0.5;
 
-// First-fit decreasing: encaixa cada peça (da maior para a menor) na primeira
-// barra com sobra suficiente. Retorna quantas barras inteiras são necessárias.
-export const calculateBarrasNecessarias = (items) => {
+// Best-fit decreasing: encaixa cada peça (da maior para a menor) no recorte
+// que sobrar mais justo, aproveitando as sobras antes de abrir barra nova.
+// Peça que usa exatamente o que resta da barra não precisa de corte.
+export const calculatePlanoDeCorte = (items) => {
   const pecas = items
     .flatMap((item) => Array(item.quantidade).fill(item.comprimento))
     .sort((a, b) => b - a);
-  const sobras = [];
+  const barras = [];
 
   for (const peca of pecas) {
-    const index = sobras.findIndex((sobra) => sobra >= peca);
-    if (index === -1) sobras.push(COMPRIMENTO_BARRA - peca - ESPESSURA_SERRA);
-    else sobras[index] -= peca + ESPESSURA_SERRA;
+    let melhor = null;
+    for (const barra of barras) {
+      if (barra.sobra >= peca && (!melhor || barra.sobra < melhor.sobra)) melhor = barra;
+    }
+    if (!melhor) {
+      melhor = { pecas: [], sobra: COMPRIMENTO_BARRA };
+      barras.push(melhor);
+    }
+    melhor.pecas.push(peca);
+    melhor.sobra = Math.max(melhor.sobra - peca - ESPESSURA_SERRA, 0);
   }
 
-  return sobras.length;
+  // Agrupa barras com o mesmo padrão de corte.
+  const padroes = new Map();
+  for (const barra of barras) {
+    const chave = barra.pecas.join("+");
+    const padrao = padroes.get(chave) ?? { pecas: barra.pecas, sobra: barra.sobra, quantidade: 0 };
+    padrao.quantidade += 1;
+    padroes.set(chave, padrao);
+  }
+
+  return { barras: barras.length, padroes: [...padroes.values()] };
 };

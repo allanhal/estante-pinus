@@ -9,7 +9,7 @@ import {
   calculatePrateleiraMaoFrancesaBillOfMaterials,
   getSupportComprimento,
 } from "./PrateleiraMaoFrancesa";
-import { COMPRIMENTO_BARRA, calculateBarrasNecessarias } from "./ripa";
+import PlanoDeCorte from "./PlanoDeCorte";
 
 const CUSTO_INSTALACAO = 35;
 
@@ -84,12 +84,8 @@ const PrateleiraMaoFrancesaControls = ({
     0
   );
   // Ripas da prateleira e mãos-francesas usam bitolas diferentes: barras separadas.
-  const barrasPrateleira = calculateBarrasNecessarias(
-    billOfMaterials.filter((item) => item.nome === "Ripas da prateleira")
-  );
-  const barrasMaoFrancesa = calculateBarrasNecessarias(
-    billOfMaterials.filter((item) => item.nome !== "Ripas da prateleira")
-  );
+  const ripasPrateleira = billOfMaterials.filter((item) => item.nome === "Ripas da prateleira");
+  const pecasMaoFrancesa = billOfMaterials.filter((item) => item.nome !== "Ripas da prateleira");
 
   const dimensionControls = [
     {
@@ -241,8 +237,10 @@ const PrateleiraMaoFrancesaControls = ({
             </table>
           </div>
           <p className="text-xs font-medium text-amber-900/40 dark:text-amber-500/40 mt-2">
-            Total: {totalLinearMeters.toFixed(1)}m lineares em ripas {RIPA_LARGURA}×{RIPA_ALTURA}cm ({barrasPrateleira} barra(s) de {COMPRIMENTO_BARRA}cm) e mãos-francesas {LARGURA_PECA}×{ESPESSURA}cm ({barrasMaoFrancesa} barra(s) de {COMPRIMENTO_BARRA}cm)
+            Total: {totalLinearMeters.toFixed(1)}m lineares em ripas {RIPA_LARGURA}×{RIPA_ALTURA}cm e mãos-francesas {LARGURA_PECA}×{ESPESSURA}cm
           </p>
+          <PlanoDeCorte items={ripasPrateleira} titulo={`Ripa ${RIPA_LARGURA}×${RIPA_ALTURA}cm`} />
+          <PlanoDeCorte items={pecasMaoFrancesa} titulo={`Ripa ${LARGURA_PECA}×${ESPESSURA}cm`} />
         </section>
       )}
 

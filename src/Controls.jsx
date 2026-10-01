@@ -21,7 +21,7 @@ import {
   calculateBillOfMaterials,
 } from "./App";
 import { useEffect, useState } from "react";
-import { COMPRIMENTO_BARRA, calculateBarrasNecessarias } from "./ripa";
+import PlanoDeCorte from "./PlanoDeCorte";
 
 const convertPixelsToMeters = (pixels) => pixels;
 const convertMetersToPixels = (meters) => meters;
@@ -337,8 +337,9 @@ const Controls = ({
             </table>
           </div>
           <p className="text-xs font-medium text-amber-900/40 dark:text-amber-500/40 mt-2">
-            Total: {totalLinearMeters.toFixed(1)}m lineares em ripa 4×2cm ({calculateBarrasNecessarias(billOfMaterials)} barra(s) de {COMPRIMENTO_BARRA}cm)
+            Total: {totalLinearMeters.toFixed(1)}m lineares em ripa 4×2cm
           </p>
+          <PlanoDeCorte items={billOfMaterials} />
         </section>
       )}
 
