@@ -45,6 +45,7 @@ function Shelf3D({
   slatsPerShelf = 6,
   spacePerShelf,
   pernasLateral = true,
+  reforcada = false,
 }) {
   const sceneRef = useRef(null);
   const modelGroupRef = useRef(null);
@@ -196,6 +197,27 @@ function Shelf3D({
       }
     };
 
+    // Vigas em pé sob as travessas, na frente e no fundo de cada andar,
+    // aparafusadas nas pernas, e uma travessa no meio de cada vão apoiada nas
+    // vigas (sem perna), segurando as ripas no meio do vão.
+    const addReforco = () => {
+      const vigaGeometry = new THREE.BoxGeometry(RIPA_ALTURA, RIPA_LARGURA, width - RIPA_LARGURA);
+      const travessaGeometry = new THREE.BoxGeometry(depth, RIPA_ALTURA, RIPA_LARGURA);
+      const x = depth / 2 - RIPA_ALTURA / 2;
+      const bordas = [-width / 2, ...apoiosZ, width / 2];
+      const meiosZ = bordas.slice(1).map((z, i) => (bordas[i] + z) / 2);
+
+      for (let andar = 0; andar < shelves; andar += 1) {
+        const y = andar * spacePerShelf - RIPA_ALTURA * 1.5 - RIPA_LARGURA / 2;
+        addMeshWithEdges(vigaGeometry, [x, y, 0]);
+        addMeshWithEdges(vigaGeometry, [-x, y, 0]);
+
+        meiosZ.forEach((z) => {
+          addMeshWithEdges(travessaGeometry, [0, -RIPA_ALTURA + andar * spacePerShelf, z]);
+        });
+      }
+    };
+
     const createTextSprite = (text, scaleFactor) => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
@@ -271,6 +293,7 @@ function Shelf3D({
     addPrateleiras();
     addPes();
     addApoiosCentrais();
+    if (reforcada) addReforco();
 
     const box = new THREE.Box3().setFromObject(modelGroup);
     const center = box.getCenter(new THREE.Vector3());
@@ -341,7 +364,7 @@ function Shelf3D({
       const link = document.createElement("a");
 
       link.href = URL.createObjectURL(blob);
-      link.download = "estante-pinus.stl";
+      link.download = reforcada ? "estante-pinus-reforcada.stl" : "estante-pinus.stl";
       link.click();
       URL.revokeObjectURL(link.href);
     };
@@ -352,7 +375,7 @@ function Shelf3D({
     return () => {
       exportBtn?.removeEventListener("click", handleExport);
     };
-  }, [width, height, depth, shelves, slatsPerShelf, spacePerShelf, pernasLateral]);
+  }, [width, height, depth, shelves, slatsPerShelf, spacePerShelf, pernasLateral, reforcada]);
 
   return (
     <div className="w-full h-full relative">

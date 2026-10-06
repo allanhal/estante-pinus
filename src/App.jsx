@@ -62,7 +62,14 @@ export const calculateApoiosCentraisPrice = ({ width, height, depth, shelves }) 
   return Math.round((legsLength + runnersLength) * MATERIAL_RATE);
 };
 
-export const calculateBillOfMaterials = ({ width, height, depth, shelves, slatsPerShelf }) => {
+export const calculateBillOfMaterials = ({
+  width,
+  height,
+  depth,
+  shelves,
+  slatsPerShelf,
+  reforcada = false,
+}) => {
   const numApoiosCentrais = getNumApoiosCentrais(width);
 
   const items = [
@@ -81,10 +88,31 @@ export const calculateBillOfMaterials = ({ width, height, depth, shelves, slatsP
     quantidade: shelves * (2 + numApoiosCentrais),
   });
 
+  if (reforcada) {
+    items.push({
+      nome: "Vigas frente/fundo",
+      comprimento: width - RIPA_LARGURA,
+      quantidade: shelves * 2,
+    });
+    items.push({
+      nome: "Travessas do meio",
+      comprimento: depth,
+      quantidade: shelves * (numApoiosCentrais + 1),
+    });
+  }
+
   return items;
 };
 
-function App() {
+// Reforço = vigas frente/fundo + travessa no meio de cada vão (apoiada nas
+// vigas, sem perna), cobrados na mesma taxa de material do preço base.
+export const calculateReforcoPrice = ({ width, depth, shelves }) => {
+  const vigas = shelves * 2 * (width - RIPA_LARGURA);
+  const travessasDoMeio = shelves * (getNumApoiosCentrais(width) + 1) * depth;
+  return Math.round((vigas + travessasDoMeio) * MATERIAL_RATE);
+};
+
+function App({ reforcada = false }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [width, setWidth] = useState(LARGURA);
   const [height, setHeight] = useState(ALTURA);
@@ -135,8 +163,11 @@ function App() {
   const price = useMemo(
     () =>
       calculateShelfBasePrice({ width, height, shelves, slatsPerShelf }) +
-      calculateApoiosCentraisPrice({ width, height, depth, shelves }),
-    [width, height, depth, shelves, slatsPerShelf]
+      calculateApoiosCentraisPrice({ width, height, depth, shelves }) +
+      (reforcada
+        ? calculateReforcoPrice({ width, depth, shelves })
+        : 0),
+    [width, height, depth, shelves, slatsPerShelf, reforcada]
   );
 
   return (
@@ -180,6 +211,7 @@ function App() {
             slatsPerShelf={slatsPerShelf}
             spacePerShelf={spacePerShelf}
             pernasLateral={pernasLateral}
+            reforcada={reforcada}
           />
           <div className="absolute bottom-6 left-6 z-20 hidden lg:block">
             <div className="glass-card px-4 py-2 rounded-full text-xs font-bold text-amber-900 dark:text-amber-400 uppercase tracking-widest">
@@ -221,6 +253,7 @@ function App() {
               minSpacePerShelf={ESPACO_POR_PRATELEIRA_MINIMO}
               maxSpacePerShelf={ESPACO_POR_PRATELEIRA_MAXIMO}
               price={price}
+              reforcada={reforcada}
             />
           </div>
         </div>

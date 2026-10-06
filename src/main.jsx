@@ -15,6 +15,7 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/estante-reforcada" element={<App key="reforcada" reforcada />} />
         <Route path="/luminaria" element={<Luminaria />} />
         <Route path="/mao-francesa" element={<MaoFrancesa />} />
         <Route path="/prateleira" element={<PrateleiraMaoFrancesa />} />

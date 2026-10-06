@@ -66,6 +66,7 @@ const Controls = ({
   maxSpacePerShelf,
 
   price,
+  reforcada = false,
 }) => {
   const [maxSlatsPerShelfState, setMaxSlatsPerShelfState] = useState(
     Math.floor(depth / RIPA_LARGURA)
@@ -106,7 +107,14 @@ const Controls = ({
     (includeMontagem ? montagem(shelves) : 0) +
     (includeFrete ? frete(shelves, width) : 0);
 
-  const billOfMaterials = calculateBillOfMaterials({ width, height, depth, shelves, slatsPerShelf });
+  const billOfMaterials = calculateBillOfMaterials({
+    width,
+    height,
+    depth,
+    shelves,
+    slatsPerShelf,
+    reforcada,
+  });
   const totalLinearMeters = billOfMaterials.reduce(
     (sum, item) => sum + (item.comprimento * item.quantidade) / 100,
     0
@@ -415,7 +423,7 @@ const Controls = ({
               </div>
               <a
                 href={`https://api.whatsapp.com/send?phone=5585992820404&text=${encodeURIComponent(
-                  "Olá, gostaria de fazer o pedido de uma estante de pinus personalizada:\n\n" +
+                  `Olá, gostaria de fazer o pedido de uma estante de pinus${reforcada ? " reforçada" : ""} personalizada:\n\n` +
                     `📐 Dimensões: ${width} x ${height} x ${depth} cm (Largura x Altura x Profundidade)\n` +
                     `📦 Prateleiras: ${shelves} unid.\n` +
                     `🪵 Ripas por prateleira: ${slatsPerShelf}\n` +

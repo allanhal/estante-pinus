@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom";
-import { PanelTop, Rows3, TriangleRight } from "lucide-react";
+import { PanelTop, Rows3, Shield, TriangleRight } from "lucide-react";
 
 const TABS = [
   { to: "/", label: "Estante", icon: Rows3 },
+  { to: "/estante-reforcada", label: "Reforçada", icon: Shield },
   { to: "/mao-francesa", label: "Mão Francesa", icon: TriangleRight },
   { to: "/prateleira", label: "Prateleira", icon: PanelTop },
 ];
@@ -12,6 +13,7 @@ const ProductTabs = () => (
     {TABS.map(({ to, label, icon: Icon }) => (
       <NavLink
         key={to}
+        aria-label={label}
         to={to}
         end
         className={({ isActive }) =>
@@ -23,8 +25,13 @@ const ProductTabs = () => (
           ].join(" ")
         }
       >
-        <Icon size={16} />
-        {label}
+        {({ isActive }) => (
+          <>
+            <Icon size={16} />
+            {/* No celular só a aba ativa mostra o nome, senão as abas não cabem. */}
+            <span className={isActive ? "" : "hidden lg:inline"}>{label}</span>
+          </>
+        )}
       </NavLink>
     ))}
   </nav>
