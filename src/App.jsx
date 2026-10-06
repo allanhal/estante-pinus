@@ -38,6 +38,22 @@ const DISTANCIA_ENTRE_PRATELEIRAS = 20; // Distância entre as prateleiras
 const ESPACO_POR_PRATELEIRA_MINIMO = 10;
 const ESPACO_POR_PRATELEIRA_MAXIMO = 50;
 
+// Na reforçada a primeira prateleira fica rente ao chão (a viga de baixo fica
+// só esse vão acima do piso), o que deixa a estante mais estável.
+const VAO_CHAO_REFORCADA = 2;
+
+// Distância do chão (pé da perna) até a primeira prateleira.
+export const getAlturaPrimeiraPrateleira = (spacePerShelf, reforcada) =>
+  reforcada ? VAO_CHAO_REFORCADA + RIPA_ALTURA * 1.5 + RIPA_LARGURA : spacePerShelf;
+
+// Quantas prateleiras cabem: a primeira na altura acima e as demais a cada
+// espaçamento, sem passar do topo das pernas.
+export const getNumPrateleiras = ({ height, spacePerShelf, reforcada }) =>
+  Math.max(
+    Math.floor((height - getAlturaPrimeiraPrateleira(spacePerShelf, reforcada)) / spacePerShelf) + 1,
+    1
+  );
+
 export const getNumApoiosCentrais = (width) =>
   Math.max(Math.ceil(width / SPAN_MAXIMO) - 1, 0);
 

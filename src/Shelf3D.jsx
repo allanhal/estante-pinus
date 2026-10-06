@@ -2,7 +2,12 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
 import SceneInit from "./lib/SceneInit";
-import { RIPA_ALTURA, RIPA_LARGURA, getNumApoiosCentrais } from "./App";
+import {
+  RIPA_ALTURA,
+  RIPA_LARGURA,
+  getAlturaPrimeiraPrateleira,
+  getNumApoiosCentrais,
+} from "./App";
 
 const BOX_MATERIAL = new THREE.MeshStandardMaterial({
   color: 0x92400e,
@@ -116,6 +121,8 @@ function Shelf3D({
     };
 
     const numApoiosCentrais = getNumApoiosCentrais(width);
+    // Prateleira 0 fica em y = 0; o pé das pernas fica alturaBase abaixo.
+    const alturaBase = getAlturaPrimeiraPrateleira(spacePerShelf, reforcada);
     const apoiosZ = Array.from({ length: numApoiosCentrais }, (_, index) => {
       const i = index + 1;
       return -width / 2 + (width * i) / (numApoiosCentrais + 1);
@@ -157,10 +164,10 @@ function Shelf3D({
     const addPes = () => {
       const geometry = new THREE.BoxGeometry(legDepthThickness, height, legWidthThickness);
       const positions = [
-        [legBackX, height / 2 - spacePerShelf, legRightZ],
-        [legBackX, height / 2 - spacePerShelf, legLeftZ],
-        [legFrontX, height / 2 - spacePerShelf, legLeftZ],
-        [legFrontX, height / 2 - spacePerShelf, legRightZ],
+        [legBackX, height / 2 - alturaBase, legRightZ],
+        [legBackX, height / 2 - alturaBase, legLeftZ],
+        [legFrontX, height / 2 - alturaBase, legLeftZ],
+        [legFrontX, height / 2 - alturaBase, legRightZ],
       ];
 
       positions.forEach((position) => addMeshWithEdges(geometry, position));
@@ -170,8 +177,8 @@ function Shelf3D({
       const geometry = new THREE.BoxGeometry(RIPA_ALTURA, height, RIPA_LARGURA);
 
       apoiosZ.forEach((z) => {
-        addMeshWithEdges(geometry, [-depth / 2 - RIPA_ALTURA / 2, height / 2 - spacePerShelf, z]);
-        addMeshWithEdges(geometry, [depth / 2 + RIPA_ALTURA / 2, height / 2 - spacePerShelf, z]);
+        addMeshWithEdges(geometry, [-depth / 2 - RIPA_ALTURA / 2, height / 2 - alturaBase, z]);
+        addMeshWithEdges(geometry, [depth / 2 + RIPA_ALTURA / 2, height / 2 - alturaBase, z]);
       });
     };
 
@@ -305,8 +312,8 @@ function Shelf3D({
     const totalHeight = size.y + offset * 2 + 10;
     const totalWidth = (size.x + size.z) * 0.7 + offset * 2 + 10;
 
-    const legBottom = -spacePerShelf;
-    const legTop = height - spacePerShelf;
+    const legBottom = -alturaBase;
+    const legTop = height - alturaBase;
     const frontX = depth / 2;
     const rightZ = width / 2;
     const leftZ = -width / 2;

@@ -19,6 +19,8 @@ import {
   RIPA_ALTURA,
   RIPA_LARGURA,
   calculateBillOfMaterials,
+  getAlturaPrimeiraPrateleira,
+  getNumPrateleiras,
 } from "./App";
 import { useEffect, useState } from "react";
 import PlanoDeCorte from "./PlanoDeCorte";
@@ -72,11 +74,11 @@ const Controls = ({
     Math.floor(depth / RIPA_LARGURA)
   );
   const [isSummarizing, setIsSummarizing] = useState(false);
+  const alturaMinima = getAlturaPrimeiraPrateleira(spacePerShelf, reforcada);
 
   useEffect(() => {
-    const newMaxShelves = Math.floor(height / spacePerShelf);
-    setShelves(newMaxShelves);
-  }, [height, spacePerShelf, setShelves]);
+    setShelves(getNumPrateleiras({ height, spacePerShelf, reforcada }));
+  }, [height, spacePerShelf, reforcada, setShelves]);
 
   useEffect(() => {
     const newMaxSlats = Math.floor(depth / RIPA_LARGURA);
@@ -167,7 +169,7 @@ const Controls = ({
               <input
                 type="number"
                 value={height}
-                onChange={(e) => handleInputChange(e.target.value, setHeight, spacePerShelf, maxHeight)}
+                onChange={(e) => handleInputChange(e.target.value, setHeight, alturaMinima, maxHeight)}
                 className="w-16 text-right bg-transparent border-0 focus:ring-0 text-3xl font-black text-amber-900 dark:text-amber-400 p-0 leading-none"
               />
               <span className="text-sm font-medium text-amber-900/40 dark:text-amber-500/40">cm</span>
@@ -175,7 +177,7 @@ const Controls = ({
           </div>
           <input
             type="range"
-            min={spacePerShelf}
+            min={alturaMinima}
             max={maxHeight}
             value={height}
             step={5}
