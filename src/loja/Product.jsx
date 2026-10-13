@@ -22,7 +22,7 @@ export default function Product() {
 
   return (
     <div className="grid gap-8 md:grid-cols-2">
-      <img src={productImage(p.image)} alt={p.name} className="h-80 w-full rounded-3xl object-cover shadow-xl md:h-[28rem]" />
+      <img src={productImage(p.slug)} alt={p.name} className="h-80 w-full rounded-3xl object-cover shadow-xl md:h-[28rem]" />
       <div className="space-y-5">
         <Link to="/loja" className={`text-sm underline ${muted}`}>← Todos os produtos</Link>
         <h1 className={h1}>{p.name}</h1>

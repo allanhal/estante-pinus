@@ -268,6 +268,7 @@ function Shelf3D({
     };
 
     const addDimensionLine = (start, end, label, scaleFactor, lineRadius) => {
+      if (window.__SHOT__ || new URLSearchParams(window.location.search).get("shot") === "1") return; // modo foto: sem cotas
       addRod(start, end, lineRadius);
 
       const dir = new THREE.Vector3(...end)
