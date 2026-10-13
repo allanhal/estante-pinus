@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
 import SceneInit from "./lib/SceneInit";
+import { isShot, applyShotCamera } from "./lib/shot";
 import { ESPESSURA, LARGURA_PECA, getSupportRun } from "./MaoFrancesa";
 
 const BOX_MATERIAL = new THREE.MeshStandardMaterial({
@@ -212,6 +213,16 @@ function MaoFrancesa3D({ height = 25, depth = 25 }) {
     addTop();
     addSupport();
 
+    if (isShot()) {
+      const qty = Math.max(1, Math.min(8, Number(window.__SHOT_QTY__) || parseInt(new URLSearchParams(window.location.search).get("quantidade"), 10) || 1));
+      const gap = width * 1.7;
+      const original = modelGroup.children.slice();
+      for (let i = 1; i < qty; i++) {
+        original.forEach((c) => { const cl = c.clone(); cl.position.z += i * gap; modelGroup.add(cl); });
+      }
+      modelGroup.children.forEach((c) => { c.position.z -= ((qty - 1) * gap) / 2; });
+    }
+
     const box = new THREE.Box3().setFromObject(modelGroup);
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
@@ -244,6 +255,9 @@ function MaoFrancesa3D({ height = 25, depth = 25 }) {
     const fitDist = Math.max(distForHeight, distForWidth) * 1.15;
     const camDir = new THREE.Vector3(1, 0.35, 1).normalize();
 
+    if (isShot()) {
+      applyShotCamera(sceneObject, box, camDir, 60, { floorAnchored: false });
+    } else {
     sceneObject.camera.position.set(
       center.x + camDir.x * fitDist,
       center.y + camDir.y * fitDist,
@@ -253,6 +267,7 @@ function MaoFrancesa3D({ height = 25, depth = 25 }) {
     sceneObject.controls.target.copy(center);
     sceneObject.controls.update();
     sceneObject.render();
+    }
 
     const exportBtn = document.getElementById("button-mao-francesa");
 

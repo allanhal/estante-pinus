@@ -12,7 +12,9 @@ export default function StoreLayout() {
   const { pathname } = useLocation();
   const count = lines.reduce((s, l) => s + l.qty, 0);
 
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const toggle = (
     <button

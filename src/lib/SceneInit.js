@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { isShot, SHOT_BG } from "./shot";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export default class SceneInit {
@@ -48,7 +49,8 @@ export default class SceneInit {
 
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(width, height);
-    this.renderer.setClearColor(0x000000, 0); // Transparent background for glass look
+    if (isShot()) this.renderer.setClearColor(SHOT_BG, 1);
+    else this.renderer.setClearColor(0x000000, 0); // Transparent background for glass look
 
     this.clock = new THREE.Clock();
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);

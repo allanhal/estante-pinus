@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
 import SceneInit from "./lib/SceneInit";
+import { isShot, applyShotCamera } from "./lib/shot";
 import { RIPA_ALTURA, RIPA_LARGURA } from "./App";
 import { ESPESSURA, LARGURA_PECA, getSupportRun } from "./ripa";
 
@@ -286,6 +287,9 @@ function PrateleiraMaoFrancesa3D({
     const fitDist = Math.max(distForHeight, distForWidth) * 1.18;
     const camDir = new THREE.Vector3(1, 0.45, 1).normalize();
 
+    if (isShot()) {
+      applyShotCamera(sceneObject, box, new THREE.Vector3(1, 0.8, 1), 145, { floorAnchored: false });
+    } else {
     sceneObject.camera.position.set(
       center.x + camDir.x * fitDist,
       center.y + camDir.y * fitDist,
@@ -295,6 +299,7 @@ function PrateleiraMaoFrancesa3D({
     sceneObject.controls.target.copy(center);
     sceneObject.controls.update();
     sceneObject.render();
+    }
 
     const exportBtn = document.getElementById("button-prateleira-mao-francesa");
 

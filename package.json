@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "thumbs": "node scripts/gen-thumbs.mjs",
     "migrate": "node --env-file=.env scripts/migrate.mjs",
     "test:pague": "node --env-file=.env scripts/test-pague.mjs"
@@ -23,13 +25,18 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.2.2",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.8",
     "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.4.27",
+    "jsdom": "30.1.2",
     "playwright": "^1.64.0",
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.2",
     "vite": "^8.0.0",
-    "vite-plugin-fonts": "^0.7.0"
+    "vite-plugin-fonts": "^0.7.0",
+    "vitest": "5.0.4"
   },
   "engines": {
     "node": ">=22.0.0"

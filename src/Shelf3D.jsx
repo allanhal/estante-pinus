@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
 import SceneInit from "./lib/SceneInit";
+import { isShot, applyShotCamera } from "./lib/shot";
 import {
   RIPA_ALTURA,
   RIPA_LARGURA,
@@ -349,6 +350,9 @@ function Shelf3D({
     const fitDist = Math.max(distForHeight, distForWidth) * 1.15;
     const camDir = new THREE.Vector3(1, 0.4, 1).normalize();
 
+    if (isShot()) {
+      applyShotCamera(sceneObject, box, camDir, 300, { floorAnchored: true });
+    } else {
     sceneObject.camera.position.set(
       center.x + camDir.x * fitDist,
       center.y + camDir.y * fitDist,
@@ -358,6 +362,7 @@ function Shelf3D({
     sceneObject.controls.target.copy(center);
     sceneObject.controls.update();
     sceneObject.render();
+    }
 
     const exportBtn = document.getElementById("button");
 
