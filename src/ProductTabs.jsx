@@ -1,21 +1,23 @@
 import { NavLink } from "react-router-dom";
-import { PanelTop, Rows3, Shield, TriangleRight } from "lucide-react";
+import { PanelTop, Rows3, Shield, ShoppingBag, TriangleRight } from "lucide-react";
 
 const TABS = [
   { to: "/", label: "Estante", icon: Rows3 },
   { to: "/estante-reforcada", label: "Reforçada", icon: Shield },
   { to: "/mao-francesa", label: "Mão Francesa", icon: TriangleRight },
   { to: "/prateleira", label: "Prateleira", icon: PanelTop },
+  // Sem `end`: continua ativa em /loja/produto/..., /loja/carrinho etc.
+  { to: "/loja", label: "Loja", icon: ShoppingBag, nested: true },
 ];
 
 const ProductTabs = () => (
   <nav className="flex w-full lg:w-auto min-w-0 flex-nowrap justify-center lg:justify-end gap-1 rounded-2xl bg-white/55 dark:bg-stone-900/55 p-1 border border-amber-900/5 dark:border-stone-700/40 shadow-sm">
-    {TABS.map(({ to, label, icon: Icon }) => (
+    {TABS.map(({ to, label, icon: Icon, nested }) => (
       <NavLink
         key={to}
         aria-label={label}
         to={to}
-        end
+        end={!nested}
         className={({ isActive }) =>
           [
             "flex shrink-0 items-center justify-center gap-1.5 px-2.5 lg:px-3 py-2 rounded-xl text-[10px] lg:text-[11px] font-black uppercase tracking-[0.1em] whitespace-nowrap transition-all active:scale-95",

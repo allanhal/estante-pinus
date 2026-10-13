@@ -8,16 +8,14 @@ import { useDarkMode } from "./useDarkMode";
 import {
   ESPESSURA,
   LARGURA_PECA,
-  PRECO_POR_METRO,
-  getSupportComprimento,
 } from "./ripa";
+import { calculateMaoFrancesaPrice } from "./pricing.js";
 
 export { ESPESSURA, LARGURA_PECA, getSupportRun, getSupportComprimento } from "./ripa";
 
 const ALTURA = 30;
 const PROFUNDIDADE = 20;
 const QUANTIDADE = 1;
-const MAO_FRANCESA_MARKUP = 1.2;
 
 export const ALTURA_MINIMA = 15;
 export const ALTURA_MAXIMA = 30;
@@ -28,27 +26,7 @@ export const PROFUNDIDADE_MAXIMA = 30;
 export const QUANTIDADE_MINIMA = 1;
 export const QUANTIDADE_MAXIMA = 12;
 
-export const calculateMaoFrancesaBillOfMaterials = ({ height, depth, quantity = 1 }) => [
-  // O top apoia sobre o wall, então a altura total desconta a espessura da ripa.
-  { nome: "Wall", comprimento: height - ESPESSURA, quantidade: quantity },
-  { nome: "Top", comprimento: depth, quantidade: quantity },
-  {
-    nome: "Suporte",
-    comprimento: getSupportComprimento(height, depth),
-    quantidade: quantity,
-  },
-];
-
-export const calculateMaoFrancesaPrice = ({ height, depth, quantity }) => {
-  const totalLength = calculateMaoFrancesaBillOfMaterials({
-    height,
-    depth,
-    quantity,
-  }).reduce((sum, item) => sum + item.comprimento * item.quantidade, 0);
-  const material = (totalLength / 100) * PRECO_POR_METRO;
-
-  return Math.round(material * 2 * MAO_FRANCESA_MARKUP);
-};
+export { calculateMaoFrancesaBillOfMaterials, calculateMaoFrancesaPrice } from "./pricing.js";
 
 function MaoFrancesa() {
   const [searchParams, setSearchParams] = useSearchParams();

@@ -5,16 +5,29 @@ import Shelf3D from "./Shelf3D";
 import Controls from "./Controls";
 import ProductTabs from "./ProductTabs";
 import { useDarkMode } from "./useDarkMode";
+import {
+  calculateShelfBasePrice,
+  calculateApoiosCentraisPrice,
+  calculateReforcoPrice,
+  getNumPrateleiras,
+} from "./pricing.js";
 
-export const FRETE_FIXO_CAMINHAO = 90;
-export const FRETE_FIXO_CARRO = 50;
-export const FRETE_FIXO_MOTO = 20;
-export const CUSTO_FIXO_MONTAGEM_ESTANTE = 10;
-
-export const RIPA_LARGURA = 4;
-export const RIPA_ALTURA = 2;
-
-export const SPAN_MAXIMO = 150;
+export {
+  FRETE_FIXO_CAMINHAO,
+  FRETE_FIXO_CARRO,
+  FRETE_FIXO_MOTO,
+  CUSTO_FIXO_MONTAGEM_ESTANTE,
+  RIPA_LARGURA,
+  RIPA_ALTURA,
+  SPAN_MAXIMO,
+  getAlturaPrimeiraPrateleira,
+  getNumPrateleiras,
+  getNumApoiosCentrais,
+  calculateShelfBasePrice,
+  calculateApoiosCentraisPrice,
+  calculateBillOfMaterials,
+  calculateReforcoPrice,
+} from "./pricing.js";
 
 const ALTURA = 60;
 const LARGURA = 40;
@@ -37,96 +50,6 @@ const TIRAS_POR_PRATELEIRA_MINIMO = 3;
 const DISTANCIA_ENTRE_PRATELEIRAS = 20; // Distância entre as prateleiras
 const ESPACO_POR_PRATELEIRA_MINIMO = 10;
 const ESPACO_POR_PRATELEIRA_MAXIMO = 50;
-
-// Na reforçada a primeira prateleira fica rente ao chão (a viga de baixo fica
-// só esse vão acima do piso), o que deixa a estante mais estável.
-const VAO_CHAO_REFORCADA = 2;
-
-// Distância do chão (pé da perna) até a primeira prateleira.
-export const getAlturaPrimeiraPrateleira = (spacePerShelf, reforcada) =>
-  reforcada ? VAO_CHAO_REFORCADA + RIPA_ALTURA * 1.5 + RIPA_LARGURA : spacePerShelf;
-
-// Quantas prateleiras cabem: a primeira na altura acima e as demais a cada
-// espaçamento, sem passar do topo das pernas.
-export const getNumPrateleiras = ({ height, spacePerShelf, reforcada }) =>
-  Math.max(
-    Math.floor((height - getAlturaPrimeiraPrateleira(spacePerShelf, reforcada)) / spacePerShelf) + 1,
-    1
-  );
-
-export const getNumApoiosCentrais = (width) =>
-  Math.max(Math.ceil(width / SPAN_MAXIMO) - 1, 0);
-
-const MATERIAL_RATE = 10 / 300; // mesma taxa usada no preço base: R$10 a cada 300cm de material
-
-export const calculateShelfBasePrice = ({ width, height, shelves, slatsPerShelf }) => {
-  const totalSlatLength = shelves * slatsPerShelf * (width - RIPA_LARGURA);
-  const totalLegLength = height * 4;
-  const totalLength = totalSlatLength + totalLegLength;
-
-  return Math.round(totalLength / 300) * 10 + 10;
-};
-
-export const calculateApoiosCentraisPrice = ({ width, height, depth, shelves }) => {
-  const numApoiosCentrais = getNumApoiosCentrais(width);
-
-  if (numApoiosCentrais === 0) return 0;
-
-  const legsLength = height * numApoiosCentrais * 2;
-  const runnersLength = depth * numApoiosCentrais * shelves;
-
-  return Math.round((legsLength + runnersLength) * MATERIAL_RATE);
-};
-
-export const calculateBillOfMaterials = ({
-  width,
-  height,
-  depth,
-  shelves,
-  slatsPerShelf,
-  reforcada = false,
-}) => {
-  const numApoiosCentrais = getNumApoiosCentrais(width);
-
-  const items = [
-    { nome: "Pernas", comprimento: height, quantidade: 4 + numApoiosCentrais * 2 },
-  ];
-
-  items.push({
-    nome: "Ripas das prateleiras",
-    comprimento: width - RIPA_LARGURA,
-    quantidade: shelves * slatsPerShelf,
-  });
-
-  items.push({
-    nome: "Travessas da base",
-    comprimento: depth,
-    quantidade: shelves * (2 + numApoiosCentrais),
-  });
-
-  if (reforcada) {
-    items.push({
-      nome: "Vigas frente/fundo",
-      comprimento: width - RIPA_LARGURA,
-      quantidade: shelves * 2,
-    });
-    items.push({
-      nome: "Travessas do meio",
-      comprimento: depth,
-      quantidade: shelves * (numApoiosCentrais + 1),
-    });
-  }
-
-  return items;
-};
-
-// Reforço = vigas frente/fundo + travessa no meio de cada vão (apoiada nas
-// vigas, sem perna), cobrados na mesma taxa de material do preço base.
-export const calculateReforcoPrice = ({ width, depth, shelves }) => {
-  const vigas = shelves * 2 * (width - RIPA_LARGURA);
-  const travessasDoMeio = shelves * (getNumApoiosCentrais(width) + 1) * depth;
-  return Math.round((vigas + travessasDoMeio) * MATERIAL_RATE);
-};
 
 function App({ reforcada = false }) {
   const [searchParams, setSearchParams] = useSearchParams();

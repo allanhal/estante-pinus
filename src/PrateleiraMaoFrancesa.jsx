@@ -12,9 +12,8 @@ import {
 import {
   ESPESSURA,
   LARGURA_PECA,
-  PRECO_POR_METRO,
-  getSupportComprimento,
 } from "./ripa";
+import { calculatePrateleiraMaoFrancesaPrice } from "./pricing.js";
 
 export { ESPESSURA, LARGURA_PECA, getSupportRun, getSupportComprimento } from "./ripa";
 export { RIPA_ALTURA, RIPA_LARGURA } from "./App";
@@ -23,8 +22,6 @@ const LARGURA = 80;
 const ALTURA = 25;
 const PROFUNDIDADE = 20;
 const TIRAS_POR_PRATELEIRA = 4;
-const QUANTIDADE_MAOS_FRANCESAS = 2;
-const PRATELEIRA_MARKUP = 1.25;
 
 export const LARGURA_MINIMA = 50;
 export const LARGURA_MAXIMA = 160;
@@ -37,37 +34,10 @@ export const PROFUNDIDADE_MAXIMA = 30;
 
 export const TIRAS_POR_PRATELEIRA_MINIMO = 3;
 
-export const calculatePrateleiraMaoFrancesaBillOfMaterials = ({
-  width,
-  height,
-  depth,
-  slatsPerShelf,
-}) => [
-  {
-    nome: "Ripas da prateleira",
-    comprimento: width - RIPA_LARGURA,
-    quantidade: slatsPerShelf,
-  },
-  { nome: "Wall", comprimento: height - ESPESSURA, quantidade: QUANTIDADE_MAOS_FRANCESAS },
-  { nome: "Top", comprimento: depth, quantidade: QUANTIDADE_MAOS_FRANCESAS },
-  {
-    nome: "Suporte",
-    comprimento: getSupportComprimento(height, depth),
-    quantidade: QUANTIDADE_MAOS_FRANCESAS,
-  },
-];
-
-export const calculatePrateleiraMaoFrancesaPrice = ({ width, height, depth, slatsPerShelf }) => {
-  const totalLength = calculatePrateleiraMaoFrancesaBillOfMaterials({
-    width,
-    height,
-    depth,
-    slatsPerShelf,
-  }).reduce((sum, item) => sum + item.comprimento * item.quantidade, 0);
-  const material = (totalLength / 100) * PRECO_POR_METRO;
-
-  return Math.round(material * 2 * PRATELEIRA_MARKUP);
-};
+export {
+  calculatePrateleiraMaoFrancesaBillOfMaterials,
+  calculatePrateleiraMaoFrancesaPrice,
+} from "./pricing.js";
 
 function PrateleiraMaoFrancesa() {
   const [searchParams, setSearchParams] = useSearchParams();
