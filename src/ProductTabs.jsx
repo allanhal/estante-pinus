@@ -12,7 +12,7 @@ const TABS = [
 ];
 
 const ProductTabs = () => (
-  <nav className="flex w-full lg:w-auto min-w-0 flex-nowrap items-center justify-center lg:justify-end gap-1 rounded-2xl bg-white/55 dark:bg-stone-900/55 p-1 border border-amber-900/5 dark:border-stone-700/40 shadow-sm">
+  <nav className="flex min-w-0 max-w-full flex-1 lg:flex-none flex-nowrap items-center justify-start min-[420px]:justify-center lg:justify-end gap-0.5 min-[420px]:gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-2xl bg-white/55 dark:bg-stone-900/55 p-1.5 border border-amber-900/5 dark:border-stone-700/40 shadow-sm">
     {TABS.map(({ to, label, icon: Icon, nested, highlight }) => (
       <NavLink
         key={to}
@@ -22,7 +22,7 @@ const ProductTabs = () => (
         className={({ isActive }) =>
           [
             "flex shrink-0 items-center justify-center gap-1.5 rounded-xl text-[10px] lg:text-[11px] font-black uppercase tracking-[0.1em] whitespace-nowrap transition-all active:scale-95",
-            highlight ? "px-3 lg:px-4 py-2" : "px-2.5 lg:px-3 py-2",
+            highlight ? "px-2.5 min-[420px]:px-3 lg:px-4 py-2" : "px-2 min-[420px]:px-2.5 lg:px-3 py-2",
             highlight
               // Aba de compra: sempre preenchida e chamativa (emerald), mais forte quando ativa.
               ? [
@@ -41,7 +41,7 @@ const ProductTabs = () => (
           <>
             <Icon size={16} />
             {/* No celular só a aba ativa mostra o nome — exceto a Loja, que sempre aparece. */}
-            <span className={isActive || highlight ? "" : "hidden lg:inline"}>{label}</span>
+            <span className={isActive ? "hidden min-[380px]:inline" : highlight ? "hidden min-[420px]:inline" : "hidden lg:inline"}>{label}</span>
           </>
         )}
       </NavLink>
