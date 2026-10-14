@@ -11,8 +11,16 @@ const TABS = [
   { to: "/loja", label: "Loja", icon: ShoppingBag, nested: true, highlight: true },
 ];
 
+// Largura-base do wrapper (12rem) >= nav só com ícones, então nunca estoura.
+// Os rótulos aparecem conforme o ESPAÇO REAL do wrapper (container query), não
+// conforme a viewport: o título grande da loja rouba espaço em qualquer largura.
+//   < 16rem  : só ícones
+//   >= 16rem : + rótulo da Loja
+//   >= 24rem : + rótulo da aba ativa
+//   >= 40rem : todos os rótulos
 const ProductTabs = () => (
-  <nav className="flex min-w-0 max-w-full flex-1 lg:flex-none flex-nowrap items-center justify-start min-[420px]:justify-center lg:justify-end gap-0.5 min-[420px]:gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-2xl bg-white/55 dark:bg-stone-900/55 p-1.5 border border-amber-900/5 dark:border-stone-700/40 shadow-sm">
+  <div className="@container min-w-0 grow basis-[12rem]">
+  <nav className="ml-auto flex w-max max-w-full flex-nowrap items-center gap-0.5 @min-[24rem]:gap-1 rounded-2xl bg-white/55 dark:bg-stone-900/55 p-1.5 border border-amber-900/5 dark:border-stone-700/40 shadow-sm">
     {TABS.map(({ to, label, icon: Icon, nested, highlight }) => (
       <NavLink
         key={to}
@@ -21,8 +29,8 @@ const ProductTabs = () => (
         end={!nested}
         className={({ isActive }) =>
           [
-            "flex shrink-0 items-center justify-center gap-1.5 rounded-xl text-[10px] lg:text-[11px] font-black uppercase tracking-[0.1em] whitespace-nowrap transition-all active:scale-95",
-            highlight ? "px-2.5 min-[420px]:px-3 lg:px-4 py-2" : "px-2 min-[420px]:px-2.5 lg:px-3 py-2",
+            "flex shrink-0 items-center justify-center gap-1.5 rounded-xl text-[10px] @min-[40rem]:text-[11px] font-black uppercase tracking-[0.1em] whitespace-nowrap transition-all active:scale-95",
+            highlight ? "px-2.5 @min-[40rem]:px-4 py-2" : "px-2 @min-[40rem]:px-3 py-2",
             highlight
               // Aba de compra: sempre preenchida e chamativa (emerald), mais forte quando ativa.
               ? [
@@ -40,13 +48,14 @@ const ProductTabs = () => (
         {({ isActive }) => (
           <>
             <Icon size={16} />
-            {/* No celular só a aba ativa mostra o nome — exceto a Loja, que sempre aparece. */}
-            <span className={isActive ? "hidden min-[380px]:inline" : highlight ? "hidden min-[420px]:inline" : "hidden lg:inline"}>{label}</span>
+            {/* Rótulos por container query (ver acima); a Loja é a última a perder o nome. */}
+            <span className={isActive ? "hidden @min-[24rem]:inline" : highlight ? "hidden @min-[16rem]:inline" : "hidden @min-[40rem]:inline"}>{label}</span>
           </>
         )}
       </NavLink>
     ))}
   </nav>
+  </div>
 );
 
 export default ProductTabs;

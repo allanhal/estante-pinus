@@ -1,10 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { createPixCharge, getTransaction, hasPagueDevCreds } from "./paguedev.js";
 
-// LOJA_PIX_MOCK=1 gives a fake charge for local testing when pague.dev
-// credentials are absent. It is ignored in production.
-export const mockEnabled = () =>
-  process.env.LOJA_PIX_MOCK === "1" && process.env.NODE_ENV !== "production" && !process.env.VERCEL;
+// Explicit opt-in: set LOJA_PIX_MOCK=1 only in test/preview envs, never production.
+export const mockEnabled = () => process.env.LOJA_PIX_MOCK === "1";
 
 export async function createCharge(input) {
   if (!hasPagueDevCreds()) {

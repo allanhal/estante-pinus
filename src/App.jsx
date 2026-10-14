@@ -112,11 +112,11 @@ function App({ reforcada = false }) {
   return (
     <div className="h-screen lg:h-auto lg:min-h-screen bg-[var(--background)] flex flex-col overflow-hidden lg:overflow-visible transition-colors duration-300">
       {/* Header / Hero */}
-      <header className="hidden lg:flex pt-10 pb-6 px-6 lg:px-20 items-center justify-between gap-6">
-        <h1 className="min-w-0 text-4xl md:text-6xl font-black text-amber-900 dark:text-amber-400 leading-tight" style={{ fontFamily: "'Outfit', sans-serif" }}>
+      <header className="hidden lg:flex pt-10 pb-6 px-6 lg:px-20 flex-wrap items-center justify-between gap-x-6 gap-y-3">
+        <h1 className="min-w-0 max-w-full line-clamp-2 text-4xl md:text-6xl font-black text-amber-900 dark:text-amber-400 leading-tight" style={{ fontFamily: "'Outfit', sans-serif" }}>
           Estante Pinus Fortaleza
         </h1>
-        <div className="flex min-w-0 items-center justify-end gap-3 flex-wrap">
+        <div className="flex min-w-0 max-w-full grow basis-[48rem] flex-wrap items-center justify-end gap-3">
           <ProductTabs />
           <button
             onClick={() => setDarkMode(!darkMode)}

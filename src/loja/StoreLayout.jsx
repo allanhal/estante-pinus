@@ -42,15 +42,15 @@ export default function StoreLayout() {
 
   return (
     <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
-      <header className="flex flex-wrap items-center justify-between gap-4 px-4 pt-4 pb-4 md:px-12 lg:px-20 lg:pt-10">
+      <header className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 pt-4 pb-4 md:px-12 lg:px-20 lg:pt-10">
         <Link
           to="/loja"
-          className="min-w-0 text-2xl md:text-4xl lg:text-6xl font-black text-amber-900 dark:text-amber-400 leading-tight"
+          className="min-w-0 max-w-full line-clamp-2 text-2xl md:text-4xl lg:text-6xl font-black text-amber-900 dark:text-amber-400 leading-tight"
           style={{ fontFamily: "'Outfit', sans-serif" }}
         >
           Estante Pinus Fortaleza
         </Link>
-        <div className="flex min-w-0 items-center justify-end gap-3 flex-wrap">
+        <div className="flex min-w-0 max-w-full grow basis-[48rem] flex-wrap items-center justify-end gap-3">
           <ProductTabs />
           {cart}
           {toggle}
